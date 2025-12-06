@@ -4,10 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Henson Brix A. Arroyo — Full-Stack Developer</title>
-  <meta name="description" content="Junior Full-Stack Developer with hands-on experience building web and mobile applications using PERN stack and Flutter. Skilled in enhancing system efficiency, optimizing workflows, and integrating user-focused features, with a track record of improving performance and usability.">
+  <meta name="description" content="Junior Full-Stack Developer with hands-on experience building web and mobile applications using PERN stack and Flutter. Skilled in enhancing system efficiency, optimizing workflows, and integrating user-focused features, with a track record of improving performance and usability. Tailored for Accenture's innovative tech solutions, highlighting full-stack expertise in Node.js, React, Python, and database management.">
 
-  <!-- Tailwind + DaisyUI -->
+  <!-- Tailwind Play CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Playfair Display', 'serif'],
+          },
+        },
+      },
+    }
+  </script>
+
+  <!-- DaisyUI -->
   <script src="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.js"></script>
 
   <!-- AOS Animation -->
@@ -20,376 +35,577 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"/>
 
-  <style>
-    * { cursor: none !important; }
-    html, body {
-      font-family: 'Inter', sans-serif;
-      background: #0a0a0d;
-      color: #e2e8f0;
-      margin: 0; padding: 0;
-      overflow-x: hidden;
-    }
+<style>
+  * { cursor: none !important; }
+  html, body {
+    font-family: 'Inter', sans-serif;
+    background: #0a0a0d;
+    color: #e2e8f0;
+    margin: 0; padding: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
 
-    /* Custom Cursor */
-    .cursor {
-      width: 36px; height: 36px;
-      border: 2px solid #a78bfa;
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 99999;
-      left: 0; top: 0;
-      transition: transform 0.12s ease, border-color 0.3s ease;
-      transform: translate(-50%, -50%);
+  /* ===== Scrollbar hiding – works on every browser in 2025 ===== */
+  html {
+    -ms-overflow-style: none;     /* IE & old Edge */
+    scrollbar-width: none;        /* Firefox */
+  }
+  html::-webkit-scrollbar {
+    display: none;                /* Chrome, Safari, new Edge */
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    width: 36px; height: 36px;
+    border: 2px solid #a78bfa;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 99999;
+    left: 0; top: 0;
+    transition: transform 0.12s ease, border-color 0.3s ease;
+    transform: translate(-50%, -50%);
+  }
+  .cursor::after {
+    content: '';
+    position: absolute;
+    width: 10px; height: 10px;
+    background: #a78bfa;
+    border-radius: 50%;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease;
+  }
+  .cursor.hover { transform: translate(-50%, -50%) scale(1.8); border-color: #e9d5ff; }
+  .cursor.hover::after { transform: translate(-50%, -50%) scale(0); }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 4.8rem;
+    font-weight: 900;
+    text-align: center;
+    letter-spacing: -2px;
+    margin: 7rem 0 5rem;
+    background: linear-gradient(to right, #c084fc, #e9d5ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+  }
+
+  .gradient-text {
+    background: linear-gradient(to right, #c084fc, #e9d5ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Card base */
+  .hover-card {
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background: rgba(167, 139, 250, 0.08);
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 0 10px 30px rgba(0,0,0,0.5);
+    position: relative;
+    height: 560px;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+  .hover-card:hover {
+    transform: translateY(-16px) scale(1.02);
+    border-color: #a78bfa;
+    box-shadow: 0 30px 70px rgba(167,139,250,0.25);
+  }
+
+  /* Projects Grid */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #0a0a0d;
+  }
+  @media (min-width: 768px) {
+    .projects-grid {
+      grid-template-columns: repeat(2, 1fr);
     }
-    .cursor::after {
-      content: '';
-      position: absolute;
-      width: 10px; height: 10px;
-      background: #a78bfa;
-      border-radius: 50%;
+  }
+
+  /* Project image */
+  .project-card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    transition: filter 0.35s ease;
+  }
+
+  /* Bottom content */
+  .project-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2.5rem;
+    background: linear-gradient(to top, rgba(10,10,13,0.98) 0%, rgba(10,10,13,0.9) 40%, transparent 100%);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    z-index: 2;
+    text-align: left;
+  }
+
+  .project-content h3,
+  .project-content p,
+  .project-content a,
+  .project-content .tech-tag {
+    text-align: left;
+  }
+
+  .project-content h3 { margin: 0 0 0.5rem 0; }
+  .project-content p { margin: 0 0 1rem 0; line-height: 1.5; }
+  .project-content .flex { margin: 1rem 0; }
+  .project-content a { display: inline-block; margin-top: 0.5rem; }
+
+  /* Hover details */
+  .project-details {
+    position: absolute;
+    inset: 0;
+    background: rgba(17, 17, 24, 0.92);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease;
+    z-index: 10;
+    overflow-y: auto;
+    text-align: left;
+  }
+  .project-card:hover .project-details {
+    opacity: 1;
+    visibility: visible;
+  }
+  .project-card:hover img {
+    filter: blur(5px) brightness(0.6);
+  }
+
+  /* Skills Grid */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  @media (min-width: 768px) {
+    .skills-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .skill-category {
+    background: rgba(167, 139, 250, 0.08);
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    transition: all 0.4s ease;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    text-align: center;
+  }
+  .skill-category:hover {
+    background: rgba(167, 139, 250, 0.15);
+    border-color: #a78bfa;
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(167,139,250,0.2);
+  }
+  .skill-category h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #e9d5ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+  .skill-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: left;
+  }
+  .skill-item {
+    font-size: 1rem;
+    padding: 0.5rem 0;
+    color: #e2e8f0;
+  }
+
+  /* Education */
+  .education-card {
+    background: rgba(167, 139, 250, 0.08);
+    border: 1px solid rgba(167, 139, 250, 0.2);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    transition: all 0.4s ease;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  .education-card:hover {
+    background: rgba(167, 139, 250, 0.15);
+    border-color: #a78bfa;
+    transform: translateY(-8px);
+  }
+  .education-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+  .education-card .education-content {
+    text-align: left;
+  }
+  .education-card h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  .education-card .specialization {
+    font-size: 1.1rem;
+    color: #c084fc;
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+  }
+  .education-card .school {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .education-card .year {
+    opacity: 0.7;
+    font-size: 1rem;
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    * { cursor: auto !important; }
+    .cursor { display: none !important; }
+    .section-title { font-size: 3.6rem; margin: 5rem 0 3rem; }
+    .hover-card { height: 520px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .project-details {
+      position: fixed;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      transition: transform 0.2s ease;
-    }
-    .cursor.hover { transform: translate(-50%, -50%) scale(1.8); border-color: #e9d5ff; }
-    .cursor.hover::after { transform: translate(-50%, -50%) scale(0); }
-
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 4.8rem;
-      font-weight: 900;
-      text-align: center;
-      letter-spacing: -2px;
-      margin: 7rem 0 5rem;
-      background: linear-gradient(to right, #c084fc, #e9d5ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      line-height: 1;
-    }
-
-    .hover-card {
-      transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-      background: #111118;
-      border: 1px solid #22222e;
+      width: 92%;
+      max-width: 420px;
+      max-height: 80vh;
       border-radius: 1.5rem;
-      overflow: hidden;
-      box-shadow: 0 0 10px 30px rgba(0,0,0,0.5);
-      position: relative;
     }
-    .hover-card:hover {
-      transform: translateY(-16px) scale(1.02);
-      border-color: #a78bfa;
-      box-shadow: 0 30px 70px rgba(167,139,250,0.25);
-    }
-
-    /* Glassmorphism overlay on project hover */
-    .project-card .project-details {
-      position: absolute;
-      inset: 0;
-      background: rgba(17, 17, 24, 0.82);
-      -webkit-backdrop-filter: blur(10px);
-      backdrop-filter: blur(10px);
-      border-radius: 1.5rem;
-      padding: 2rem;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.35s ease;
-      z-index: 10;
-      overflow-y: auto;
-    }
-    .project-card:hover .project-details {
-      opacity: 1;
-      visibility: visible;
-    }
-    .project-card:hover img {
-      filter: blur(5px) brightness(0.6);
-    }
-
-    /* Skill tags with hover effect */
-    .tech-tag {
-      background: #1a0d2e;
-      border: 1px solid #6b46c1;
-      padding: 1rem;
-      border-radius: 1.5rem;
-      text-align: center;
-      transition: all 0.4s ease;
-    }
-    .tech-tag:hover {
-      transform: translateY(-8px) scale(1.05);
-      background: #111118;
-      border-color: #a78bfa;
-      box-shadow: 0 15px 30px rgba(167,139,250,0.25);
-    }
-    .tech-tag:hover i {
-      color: #e9d5ff !important;
-      transform: scale(1.15);
-    }
-
-    @media (max-width: 768px) {
-      * { cursor: auto !important; }
-      .cursor { display: none !important; }
-      .section-title { font-size: 3.6rem; margin: 5rem 0 3rem; }
-      .project-details {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 92%;
-        max-width: 420px;
-        height: auto;
-        max-height: 80vh;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body class="min-h-screen">
 
   <!-- Custom Cursor -->
   <div class="cursor"></div>
 
-  <!-- Hero -->
-  <header class="pt-32 pb-20 text-center px-6">
-    <div class="max-w-5xl mx-auto">
-      <img src="assets/images/mypicture.png" alt="Henson Brix A. Arroyo" class="w-52 h-52 rounded-full mx-auto mb-10 border-8 border-purple-500/20 shadow-2xl object-cover ring-4 ring-purple-500/20">
-      <h1 class="text-6xl md:text-8xl font-black text-white mb-4 tracking-tight">HENSON BRIX</h1>
-      <p class="text-2xl md:text-4xl text-purple-300 font-light mb-8">Junior Full-Stack Developer</p>
-      <p class="text-lg md:text-xl max-w-3xl mx-auto leading-relaxed opacity-90">
-        Junior Full-Stack Developer with hands-on experience building web and mobile applications using PERN stack and Flutter. Skilled in enhancing system efficiency, optimizing workflows, and integrating user-focused features, with a track record of improving performance and usability.
+<!-- Hero – pushed down a bit more -->
+<header class="pt-40 pb-32 px-6 lg:pt-72 lg:pb-40">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+
+    <!-- Left: Name Block -->
+    <div class="text-right md:text-right flex flex-col justify-center order-2 md:order-1">
+      <div class="inline-block">
+        <h1 class="font-display font-black tracking-tighter leading-[0.85] gradient-text"
+            style="font-size: clamp(4rem, 10vw, 9rem);">
+          HENSON BRIX
+        </h1>
+        <p class="font-display font-black tracking-tighter leading-[0.85] gradient-text -mt-2 md:-mt-4"
+           style="font-size: clamp(4rem, 10vw, 9rem);">
+          ARROYO
+        </p>
+      </div>
+      <p class="text-2xl md:text-3xl lg:text-4xl text-purple-300 font-light mt-8 tracking-wide">
+        JUNIOR FULL-STACK DEVELOPER
+      </p>
+    </div>
+
+    <!-- Right: Content -->
+    <div class="space-y-6 md:space-y-8 order-1 md:order-2">
+      <p class="text-lg md:text-xl lg:text-2xl leading-relaxed opacity-90">
+        Junior Full-Stack Developer with hands-on experience building web and mobile applications using PERN stack and Flutter. Skilled in enhancing system efficiency, optimizing workflows, and integrating user-focused features, with a track record of improving performance and usability. Tailored for Accenture's innovative tech solutions, highlighting full-stack expertise in Node.js, React, Python, and database management.
       </p>
 
-      <div class="flex flex-wrap justify-center gap-6 mt-12 text-lg">
+      <div class="flex flex-wrap gap-x-10 gap-y-4 text-lg">
         <a href="mailto:arroyobrix@gmail.com" class="flex items-center gap-3 hover:text-purple-400 transition">
           <i data-lucide="mail" class="w-6 h-6"></i> arroyobrix@gmail.com
         </a>
         <a href="tel:+639663148788" class="flex items-center gap-3 hover:text-purple-400 transition">
           <i data-lucide="phone" class="w-6 h-6"></i> +63-966-314-8788
         </a>
-        <a href="https://github.com/Xhenzouu" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 hover:text-purple-400 transition">
-          <i data-lucide="github" class="w-6 h-6"></i> github.com/Xhenzouu
-        </a>
       </div>
 
-      <div class="flex justify-center gap-8 mt-12 text-4xl">
-        <a href="https://www.facebook.com/lioasuno" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="hover:text-purple-400 transition"><i data-lucide="facebook"></i><span class="sr-only">Facebook</span></a>
-        <a href="https://www.instagram.com/xhenzouu/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="hover:text-purple-400 transition"><i data-lucide="instagram"></i><span class="sr-only">Instagram</span></a>
-        <a href="https://x.com/lioasuno" target="_blank" rel="noopener noreferrer" aria-label="X" class="hover:text-purple-400 transition"><i data-lucide="x"></i><span class="sr-only">X</span></a>
-        <a href="https://www.linkedin.com/in/arroyohensonbrix/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="hover:text-purple-400 transition"><i data-lucide="linkedin"></i><span class="sr-only">LinkedIn</span></a>
+      <div class="flex gap-10 text-4xl">
+        <a href="https://github.com/Xhenzouu" target="_blank" rel="noopener noreferrer"
+          aria-label="GitHub" class="hover:text-purple-400 transition"><i data-lucide="github"></i></a>
+        <a href="https://www.linkedin.com/in/arroyohensonbrix/" target="_blank" rel="noopener noreferrer"
+          aria-label="LinkedIn" class="hover:text-purple-400 transition"><i data-lucide="linkedin"></i></a>
+        <a href="https://www.facebook.com/lioasuno" target="_blank" rel="noopener noreferrer"
+          aria-label="Facebook" class="hover:text-purple-400 transition"><i data-lucide="facebook"></i></a>
+        <a href="https://www.instagram.com/xhenzouu/" target="_blank" rel="noopener noreferrer"
+          aria-label="Instagram" class="hover:text-purple-400 transition"><i data-lucide="instagram"></i></a>
+        <a href="https://x.com/lioasuno" target="_blank" rel="noopener noreferrer"
+          aria-label="X" class="hover:text-purple-400 transition"><i data-lucide="x"></i></a>
       </div>
     </div>
-  </header>
+  </div>
+</header>
 
   <main class="max-w-7xl mx-auto px-6 pb-32">
 
-    <!-- Technical Skills -->
-    <section id="skills" class="my-40">
-      <h2 class="section-title" data-aos="fade-up">Technical Skills</h2>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
-        <div class="tech-tag"><i data-lucide="layout" class="w-8 h-8 mb-2 block mx-auto text-purple-400"></i> React.js</div>
-        <div class="tech-tag"><i data-lucide="smartphone" class="w-8 h-8 mb-2 block mx-auto text-purple-400"></i> Flutter/Dart</div>
-        <div class="tech-tag"><i data-lucide="server" class="w-8 h-8 mb-2 block mx-auto text-purple-400"></i> Node.js/Express</div>
-        <div class="tech-tag"><i data-lucide="flask-conical" class="w-8 h-8 mb-2 block mx-auto text-purple-400"></i> Flask</div>
-        <div class="tech-tag"><i data-lucide="database" class="w-8 h-8 mb-2 block mx-auto text-purple-400"></i> PostgreSQL</div>
-        <div class="tech-tag"><i data-lucide="cpu" class="w-8 h-8 mb-2 block mx-auto text-purple-400"></i> C# .NET/WinForms</div>
-        <div class="tech-tag"><i data-lucide="circuit-board" class="w-8 h-8 mb-2 block mx-auto text-purple-400"></i> Arduino/ESP8266</div>
-        <div class="tech-tag"><i data-lucide="git-branch" class="w-8 h-8 mb-2 block mx-auto text-purple-400"></i> Git/Agile</div>
-        <div class="tech-tag"><i data-lucide="link" class="w-8 h-8 mb-2 block mx-auto text-purple-400"></i> REST APIs</div>
-        <div class="tech-tag"><i data-lucide="zap" class="w-8 h-8 mb-2 block mx-auto text-purple-400"></i> Websockets/Realtime</div>
-        <div class="tech-tag"><i data-lucide="brain-circuit" class="w-8 h-8 mb-2 block mx-auto text-purple-400"></i> AI/NLP Basics</div>
-        <div class="tech-tag"><i data-lucide="test-tube" class="w-8 h-8 mb-2 block mx-auto text-purple-400"></i> Testing/Optimization</div>
+<!-- Technical Skills -->
+<section id="skills" class="my-40">
+  <h2 class="section-title" data-aos="fade-up">Technical Skills</h2>
+  <div class="skills-grid">
+    <div class="skill-category" data-aos="fade-up" data-aos-delay="100">
+      <h3><i data-lucide="code-2" class="w-8 h-8"></i> Frontend & UI/UX</h3>
+      <div class="skill-list">
+        <div class="skill-item">React.js</div>
+        <div class="skill-item">Flutter / Dart</div>
+        <div class="skill-item">Responsive Design</div>
+        <div class="skill-item">Clean Architecture</div>
       </div>
-    </section>
-
-    <!-- Projects -->
-    <section id="projects" class="my-40">
-      <h2 class="section-title" data-aos="fade-up">Featured Projects</h2>
-      <div class="grid md:grid-cols-2 gap-12">
-        <!-- Lynville Homes 8 -->
-        <div class="hover-card project-card relative" data-aos="fade-up" data-aos-delay="100">
-          <img src="assets/images/landing-page-lynville-homes-8.png" alt="Lynville Homes 8" class="w-full h-80 object-cover rounded-t-2xl">
-          <div class="p-10">
-            <h3 class="text-3xl font-bold text-white mb-3">Lynville Homes 8</h3>
-            <p class="text-purple-300 text-sm mb-4">Community Management Platform • March 2025 – Present</p>
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span class="tech-tag">PERN Stack</span><span class="tech-tag">Railway</span>
-            </div>
-            <a href="https://lynvillehomes8.me" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:underline">lynvillehomes8.me</a>
-          </div>
-          <div class="project-details">
-            <p class="text-purple-300 font-semibold mb-4">Full-Stack Developer • March 2025 – Present</p>
-            <p class="mb-6"><a href="https://lynvillehomes8.me" target="_blank" rel="noopener noreferrer" class="text-purple-400 underline">lynvillehomes8.me</a></p>
-            <ul class="list-disc pl-6 space-y-3 text-gray-300 text-sm">
-              <li>Built a full web platform for HOA community management using PostgreSQL, Express, React, and Node.</li>
-              <li>Handles system upkeep, updates, bug fixes, and overall performance optimization.</li>
-              <li>Integrated authentication, role-based access, real-time alerts, and admin tools.</li>
-              <li>Collaborated closely with HOA officers to gather requirements and deliver user-focused features.</li>
-              <li>Deployed using Railway; implemented secure API routes and system monitoring.</li>
-              <li>Streamlined administrative workflows through automated tools and structured data processing.</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Chairable -->
-        <div class="hover-card project-card relative" data-aos="fade-up" data-aos-delay="200">
-          <img src="assets/images/landing-screen-desktop-chairable.webp" alt="Chairable" class="w-full h-80 object-cover rounded-t-2xl hidden md:block">
-          <img src="assets/images/landing-screen-mobile-chairable.webp" alt="Chairable Mobile" class="w-full h-80 object-cover rounded-t-2xl md:hidden">
-          <div class="p-10">
-            <h3 class="text-3xl font-bold text-white mb-3">Chairable</h3>
-            <p class="text-purple-300 text-sm mb-4">Cross-Platform E-Commerce System • Sept 2024 – May 2025</p>
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span class="tech-tag">Flutter</span><span class="tech-tag">Flask</span><span class="tech-tag">PostgreSQL</span>
-            </div>
-          </div>
-          <div class="project-details">
-            <p class="text-purple-300 font-semibold mb-6">Full-Stack Developer • Sept 2024 – May 2025</p>
-            <ul class="list-disc pl-6 space-y-3 text-gray-300 text-sm">
-              <li>Designed a multi-role platform supporting customers, sellers, admins, and riders across Web and mobile.</li>
-              <li>Implemented secure role-based access, inventory controls, order workflows, and delivery coordination.</li>
-              <li>Built an administrative backend with user management, commission tracking, and actionable dashboard analytics.</li>
-              <li>Designed API integrations enabling smooth transactions, order updates, and courier operations.</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- GamingRigz -->
-        <div class="hover-card project-card relative" data-aos="fade-up" data-aos-delay="300">
-          <img src="assets/images/dashboard-screen-gamingrigz.png" alt="GamingRigz POS" class="w-full h-80 object-cover rounded-t-2xl">
-          <div class="p-10">
-            <h3 class="text-3xl font-bold text-white mb-3">GamingRigz</h3>
-            <p class="text-purple-300 text-sm mb-4">Point-of-Sale System (Desktop Application) • Nov 2023 – Dec 2023</p>
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span class="tech-tag">C# .NET</span><span class="tech-tag">WinForms</span>
-            </div>
-          </div>
-          <div class="project-details">
-            <p class="text-purple-300 font-semibold mb-6">Full-Stack Developer • Nov 2023 – Dec 2023</p>
-            <ul class="list-disc pl-6 space-y-3 text-gray-300 text-sm">
-              <li>Built a desktop application in C# (Windows Forms) with embedded local database for stable offline operations.</li>
-              <li>Designed a structured stock management system with color-coded categories.</li>
-              <li>Implemented inventory controls, checkout operations, automated payment calculations, change handling, restock tracking, and low-stock alerts.</li>
-              <li>Generated automated sales reports with daily/weekly summaries and formatted receipts.</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- IoT Assistive Device -->
-        <div class="hover-card project-card relative border-4 border-purple-600/40" data-aos="fade-up" data-aos-delay="400">
-          <img src="assets/images/IoT-nodeMCU-image.jpg" alt="IoT Ultrasonic Distance Sensor Assistive Device" class="w-full h-80 object-cover rounded-t-2xl">
-          <div class="p-10">
-            <h3 class="text-3xl font-bold text-white mb-3">IoT Ultrasonic Distance Sensor Assistive Device</h3>
-            <p class="text-purple-300 text-sm mb-4">For the Visually Impaired • Oct 2023 – Dec 2023</p>
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span class="tech-tag">NodeMCU ESP8266</span><span class="tech-tag">Arduino IoT Cloud</span>
-            </div>
-          </div>
-          <div class="project-details">
-            <p class="text-purple-300 font-semibold mb-6">Embedded Systems & IoT Developer • Oct 2023 – Dec 2023</p>
-            <ul class="list-disc pl-6 space-y-3 text-gray-300 text-sm">
-              <li>Designed and built a low-cost, cane-mounted obstacle detection system using NodeMCU ESP8266.</li>
-              <li>Integrated HC-SR04 ultrasonic sensor for real-time distance measurement (up to 4 m).</li>
-              <li>RGB LED + buzzer feedback system with multiple alert levels.</li>
-              <li>Full remote monitoring via Arduino IoT Cloud and mobile app.</li>
-              <li>Programmed in Arduino IDE (C/C++), achieving less than 5% error and power-efficient operation.</li>
-            </ul>
-          </div>
-        </div>
+    </div>
+    <div class="skill-category" data-aos="fade-up" data-aos-delay="200">
+      <h3><i data-lucide="server" class="w-8 h-8"></i> Backend & APIs</h3>
+      <div class="skill-list">
+        <div class="skill-item">Node.js / Express</div>
+        <div class="skill-item">Flask (Python)</div>
+        <div class="skill-item">RESTful APIs</div>
+        <div class="skill-item">Websockets / Realtime</div>
       </div>
-    </section>
+    </div>
+    <div class="skill-category" data-aos="fade-up" data-aos-delay="300">
+      <h3><i data-lucide="database" class="w-8 h-8"></i> Databases & Data</h3>
+      <div class="skill-list">
+        <div class="skill-item">PostgreSQL</div>
+        <div class="skill-item">Embedded Databases</div>
+        <div class="skill-item">Database Optimization</div>
+        <div class="skill-item">Data Modeling</div>
+      </div>
+    </div>
+    <div class="skill-category" data-aos="fade-up" data-aos-delay="400">
+      <h3><i data-lucide="circuit-board" class="w-8 h-8"></i> Systems & DevOps</h3>
+      <div class="skill-list">
+        <div class="skill-item">C# .NET / WinForms</div>
+        <div class="skill-item">Arduino / ESP8266</div>
+        <div class="skill-item">IoT Cloud Integration</div>
+        <div class="skill-item">Railway / Deployment</div>
+      </div>
+    </div>
+    <div class="skill-category" data-aos="fade-up" data-aos-delay="500">
+      <h3><i data-lucide="git-branch" class="w-8 h-8"></i> Tools & Practices</h3>
+      <div class="skill-list">
+        <div class="skill-item">Git & Agile</div>
+        <div class="skill-item">Code Refactoring</div>
+        <div class="skill-item">Automated Testing</div>
+        <div class="skill-item">Performance Optimization</div>
+      </div>
+    </div>
+    <div class="skill-category" data-aos="fade-up" data-aos-delay="600">
+      <h3><i data-lucide="zap" class="w-8 h-8"></i> Emerging Tech</h3>
+      <div class="skill-list">
+        <div class="skill-item">Basic AI/NLP</div>
+        <div class="skill-item">Real-time Notifications</div>
+        <div class="skill-item">Hardware Prototyping</div>
+        <div class="skill-item">Embedded Systems</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- About Me + Certifications + Badge -->
-    <section id="about" class="my-40 grid md:grid-cols-2 gap-16 max-w-6xl mx-auto">
-      <!-- Left: About Me -->
-      <div data-aos="fade-right">
-        <h2 class="section-title text-5xl mb-12">About Me</h2>
-        
-        <p class="text-lg leading-relaxed opacity-90 mb-6">
-            21-year-old developer from the Philippines. I wrote my first line of code at 18 and never stopped learning. 
-            I love turning ideas into real, impactful products whether it’s a full-blown community platform for 500+ memebers or a low-cost IoT cane that helps the visually impaired navigate the world.
-        </p>
-
-        <p class="text-lg leading-relaxed opacity-90 mb-10">
-            When I’m not coding, you’ll find me binge-watching fantasy/dystopian series, reading Tolkien (and anything with dragons or rings), queuing for Dota 2 or Apex Legends, or enjoying a clean, no-nonsense espresso/Americano.
-        </p>
-
-        <!-- Linux Essentials Badge -->
-        <div class="mt-10">
-            <p class="text-purple-300 font-semibold mb-4 text-lg">Official Certification Badge</p>
-            <img src="assets/images/linux-essentials-badge.png" 
-                alt="Linux Essentials Certification Badge" 
-                class="w-32 rounded-xl shadow-2xl border border-purple-600/30">
+<!-- Projects -->
+<section id="projects" class="my-40">
+  <h2 class="section-title" data-aos="fade-up">Featured Projects</h2>
+  <div class="projects-grid">
+    <!-- Project cards here (2x2 grid) -->
+    <div class="hover-card project-card relative" data-aos="fade-up">
+      <img src="assets/images/lynville-homes-8-logo.png" alt="Lynville Homes 8">
+      <div class="project-content">
+        <h3 class="text-3xl font-bold text-white">Lynville Homes 8</h3>
+        <p class="text-purple-300 text-sm">Community Management Platform • March 2025 – Present</p>
+        <div class="flex flex-wrap gap-2 mt-3">
+          <span class="tech-tag text-xs px-3 py-1">PERN Stack</span>
+          <span class="tech-tag text-xs px-3 py-1">Railway</span>
         </div>
-        </div>
-
-      <!-- Right: Hobbies + Certifications List -->
-      <div data-aos="fade-left">
-        <h2 class="section-title text-5xl mb-12">Beyond Code</h2>
-        <ul class="space-y-6 text-lg mb-12">
-            <li class="flex items-center gap-4"><i data-lucide="clapperboard" class="w-6 h-6 text-purple-400"></i> Fantasy & dystopian movies/series</li>
-            <li class="flex items-center gap-4"><i data-lucide="swords" class="w-6 h-6 text-purple-400"></i> Dota 2 & Apex Legends</li>
-            <li class="flex items-center gap-4"><i data-lucide="book-open" class="w-6 h-6 text-purple-400"></i> Tolkien books & high fantasy</li>
-            <li class="flex items-center gap-4"><i data-lucide="coffee" class="w-6 h-6 text-purple-400"></i> Straight espresso / Americano purist</li>
-        </ul>
-
-        <h3 class="text-2xl font-bold mb-6 text-purple-300">Certifications</h3>
-        <ul class="space-y-3 text-lg">
-          <li>Cybersecurity for ICT Professionals — DICT Region V (2025)</li>
-          <li>Design Thinking: Ideation Wednesdays — DICT Caraga (2025)</li>
-          <li>Linux Essentials — Cisco Networking Academy / NDG (70 hrs, 2025)</li>
+        <a href="https://lynvillehomes8.me" target="_blank" rel="noopener noreferrer" class="text-purple-400 hover:underline">lynvillehomes8.me</a>
+      </div>
+      <div class="project-details">
+        <p class="text-purple-300 font-semibold mb-4">Full-Stack Developer • March 2025 – Present</p>
+        <p class="mb-6"><a href="https://lynvillehomes8.me" target="_blank" rel="noopener noreferrer" class="text-purple-400 underline">lynvillehomes8.me</a></p>
+        <ul class="list-disc pl-6 space-y-3 text-gray-300 text-sm">
+          <li>Built a full web platform for HOA community management using PostgreSQL, Express, React, and Node.</li>
+          <li>Handles system upkeep, updates, bug fixes, and overall performance optimization.</li>
+          <li>Integrated authentication, role-based access, real-time alerts, and admin tools.</li>
+          <li>Collaborated closely with HOA officers to gather requirements and deliver user-focused features.</li>
+          <li>Deployed using Railway; implemented secure API routes and system monitoring.</li>
+          <li>Streamlined administrative workflows through automated tools and structured data processing.</li>
         </ul>
       </div>
+    </div>
 
-    </section>
-
-    <!-- Education -->
-    <section id="education" class="my-40">
-      <h2 class="section-title" data-aos="fade-up">Education</h2>
-      <div class="space-y-16 max-w-4xl mx-auto">
-        <div class="hover-card p-10 rounded-3xl flex flex-col md:flex-row items-center gap-10" data-aos="fade-up">
-          <img src="assets/images/lspu-logo.webp" alt="LSPU Logo" class="w-32 h-32 object-contain">
-          <div>
-            <h3 class="text-4xl font-bold">Bachelor of Science in Information Technology</h3>
-            <p class="text-xl text-purple-300">Specialization: Web & Mobile Application Development</p>
-            <p class="text-2xl font-semibold">Laguna State Polytechnic University Santa Cruz Main Campus</p>
-            <p class="opacity-70">2022 – Present</p>
-          </div>
-        </div>
-        <div class="hover-card p-10 rounded-3xl flex flex-col md:flex-row items-center gap-10" data-aos="fade-up" data-aos-delay="200">
-          <img src="assets/images/AMA-University-and-Colleges-main-logo.png" alt="AMA Logo" class="w-32 h-32 object-contain">
-          <div>
-            <h3 class="text-4xl font-bold">Senior High School – STEM Strand</h3>
-            <p class="text-2xl font-semibold">AMA Computer College — Santa Cruz, Laguna</p>
-            <p class="opacity-70">2020 – 2022</p>
-          </div>
+    <div class="hover-card project-card relative" data-aos="fade-up" data-aos-delay="100">
+      <img src="assets/images/chairable-logo.png" alt="Chairable">
+      <div class="project-content">
+        <h3 class="text-3xl font-bold text-white">Chairable</h3>
+        <p class="text-purple-300 text-sm">Cross-Platform E-Commerce • Sept 2024 – May 2025</p>
+        <div class="flex flex-wrap gap-2 mt-3">
+          <span class="tech-tag text-xs px-3 py-1">Flutter</span>
+          <span class="tech-tag text-xs px-3 py-1">Flask</span>
+          <span class="tech-tag text-xs px-3 py-1">PostgreSQL</span>
         </div>
       </div>
-    </section>
+      <div class="project-details">
+        <p class="text-purple-300 font-semibold mb-6">Full-Stack Developer • Sept 2024 – May 2025</p>
+        <ul class="list-disc pl-6 space-y-3 text-gray-300 text-sm">
+          <li>Designed a multi-role platform supporting customers, sellers, admins, and riders across Web and mobile.</li>
+          <li>Implemented secure role-based access, inventory controls, order workflows, and delivery coordination.</li>
+          <li>Built an administrative backend with user management, commission tracking, and actionable dashboard analytics.</li>
+          <li>Designed API integrations enabling smooth transactions, order updates, and courier operations.</li>
+        </ul>
+      </div>
+    </div>
 
-    <!-- Footer -->
-    <footer class="text-center py-20 border-t border-purple-900/30 mt-40">
-      <p class="text-lg mb-8">Let's build something awesome together</p>
-      <a href="mailto:arroyobrix@gmail.com" class="inline-block bg-purple-600 hover:bg-purple-700 transition px-10 py-4 rounded-full text-xl font-medium">
-        Get in touch
-      </a>
-      <p class="mt-12 text-sm opacity-50">© 2025 Henson Brix A. Arroyo • Built with Tailwind</p>
-    </footer>
-  </main>
+    <div class="hover-card project-card relative" data-aos="fade-up" data-aos-delay="200">
+      <img src="assets/images/gaming-rigz-logo.png" alt="GamingRigz POS">
+      <div class="project-content">
+        <h3 class="text-3xl font-bold text-white">GamingRigz</h3>
+        <p class="text-purple-300 text-sm">Point-of-Sale System • Nov 2023 – Dec 2023</p>
+        <div class="flex flex-wrap gap-2 mt-3">
+          <span class="tech-tag text-xs px-3 py-1">C# .NET</span>
+          <span class="tech-tag text-xs px-3 py-1">WinForms</span>
+        </div>
+      </div>
+      <div class="project-details">
+        <p class="text-purple-300 font-semibold mb-6">Full-Stack Developer • Nov 2023 – Dec 2023</p>
+        <ul class="list-disc pl-6 space-y-3 text-gray-300 text-sm">
+          <li>Built a desktop application in C# (Windows Forms) with embedded local database for stable offline operations.</li>
+          <li>Designed a structured stock management system with color-coded categories.</li>
+          <li>Implemented inventory controls, checkout operations, automated payment calculations, change handling, restock tracking, and low-stock alerts.</li>
+          <li>Generated automated sales reports with daily/weekly summaries and formatted receipts.</li>
+        </ul>
+      </div>
+    </div>
 
-  <!-- Back to Top -->
-  <button 
-    onclick="window.scrollTo({top:0,behavior:'smooth'})" 
-    aria-label="Back to top"
-    class="fixed bottom-10 right-10 bg-purple-600/30 backdrop-blur border border-purple-500/50 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl z-50 hover:bg-purple-600/50 transition">
-    <i data-lucide="arrow-up" class="w-8 h-8"></i>
-    <span class="sr-only">Back to top</span>
-  </button>
+    <div class="hover-card project-card relative" data-aos="fade-up" data-aos-delay="300">
+      <img src="assets/images/IoT-nodeMCU-diagram.png" alt="IoT Assistive Device">
+      <div class="project-content">
+        <h3 class="text-3xl font-bold text-white">IoT Assistive Device</h3>
+        <p class="text-purple-300 text-sm">For the Visually Impaired • Oct 2023 – Dec 2023</p>
+        <div class="flex flex-wrap gap-2 mt-3">
+          <span class="tech-tag text-xs px-3 py-1">NodeMCU ESP8266</span>
+          <span class="tech-tag text-xs px-3 py-1">Arduino IoT Cloud</span>
+        </div>
+      </div>
+      <div class="project-details">
+        <p class="text-purple-300 font-semibold mb-6">Embedded Systems & IoT Developer • Oct 2023 – Dec 2023</p>
+        <ul class="list-disc pl-6 space-y-3 text-gray-300 text-sm">
+          <li>Designed and built a low-cost, cane-mounted obstacle detection system using NodeMCU ESP8266.</li>
+          <li>Integrated HC-SR04 ultrasonic sensor for real-time distance measurement (up to 4 m).</li>
+          <li>RGB LED + buzzer feedback system with multiple alert levels.</li>
+          <li>Full remote monitoring via Arduino IoT Cloud and mobile app.</li>
+          <li>Programmed in Arduino IDE (C/C++), achieving less than 5% error and power-efficient operation.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <!-- Toast -->
-  <div id="toast" class="fixed bottom-10 left-1/2 -translate-x-1/2 bg-purple-900/95 backdrop-blur text-white px-8 py-4 rounded-full opacity-0 transition-opacity z-50 shadow-2xl">
-    Email copied!
+<!-- About Me + Certifications -->
+<section id="about" class="my-40 grid md:grid-cols-2 gap-16 max-w-6xl mx-auto">
+  <div data-aos="fade-right">
+    <h2 class="section-title text-5xl mb-12">About Me</h2>
+    <p class="text-lg leading-relaxed opacity-90 mb-6">
+      21-year-old developer from the Philippines. I wrote my first line of code at 18 and never stopped learning. 
+      I love turning ideas into real, impactful products whether it’s a full-blown community platform for 500+ members or a low-cost IoT cane that helps the visually impaired navigate the world.
+    </p>
+    <p class="text-lg leading-relaxed opacity-90 mb-10">
+      When I’m not coding, you’ll find me binge-watching fantasy/dystopian series, reading Tolkien (and anything with dragons or rings), queuing for Dota 2 or Apex Legends, or enjoying a clean, no-nonsense espresso/Americano.
+    </p>
   </div>
 
-  <script>
+  <div data-aos="fade-left">
+    <h2 class="section-title text-5xl mb-12">Beyond Code</h2>
+    <ul class="space-y-6 text-lg mb-12">
+      <li class="flex items-center gap-4"><i data-lucide="clapperboard" class="w-6 h-6 text-purple-400"></i> Fantasy & dystopian movies/series</li>
+      <li class="flex items-center gap-4"><i data-lucide="swords" class="w-6 h-6 text-purple-400"></i> Dota 2 & Apex Legends</li>
+      <li class="flex items-center gap-4"><i data-lucide="book-open" class="w-6 h-6 text-purple-400"></i> Tolkien books & high fantasy</li>
+      <li class="flex items-center gap-4"><i data-lucide="coffee" class="w-6 h-6 text-purple-400"></i> Straight espresso / Americano purist</li>
+    </ul>
+    <h3 class="text-2xl font-bold mb-6 text-purple-300">Certifications</h3>
+    <ul class="space-y-3 text-lg">
+      <li>Cybersecurity for ICT Professionals — DICT Region V (2025)</li>
+      <li>Design Thinking: Ideation Wednesdays — DICT Caraga (2025)</li>
+      <li>Linux Essentials — Cisco Networking Academy / NDG (70 hrs, 2025)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Education – much tighter vertical spacing -->
+<section id="education" class="my-20">  <!-- was my-40 → now my-20 -->
+  <h2 class="section-title" data-aos="fade-up">Education</h2>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">  <!-- gap-10 → gap-6 -->
+    
+    <div class="education-card flex items-start gap-5 p-6" data-aos="fade-up">  <!-- added tighter padding -->
+      <img src="assets/images/lspu-logo.webp" alt="LSPU Logo" class="w-20 h-20 object-contain flex-shrink-0">
+      
+      <div class="education-content space-y-2">  <!-- was default spacing → now space-y-2 (very tight) -->
+        <h3 class="text-2xl font-bold leading-tight">Bachelor of Science in Information Technology</h3>
+        <p class="specialization text-purple-300 font-medium">Specialization: Web & Mobile Application Development</p>
+        <p class="school text-lg font-semibold opacity-90">Laguna State Polytechnic University Santa Cruz Main Campus</p>
+        <p class="year text-sm opacity-70">2022 – Present</p>
+      </div>
+    </div>
+    
+    <div class="education-card flex items-start gap-5 p-6" data-aos="fade-up" data-aos-delay="200">
+      <img src="assets/images/AMA-University-and-Colleges-main-logo.png" alt="AMA Logo" class="w-20 h-20 object-contain flex-shrink-0">
+      
+      <div class="education-content space-y-2">
+        <h3 class="text-2xl font-bold leading-tight">Senior High School</h3>
+        <p class="specialization text-purple-300 font-medium">Science, Technology, Engineering, & Mathematics</p>
+        <p class="school text-lg font-semibold opacity-90">AMA Computer College — Santa Cruz, Laguna</p>
+        <p class="year text-sm opacity-70">2020 – 2022</p>
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="text-center py-20 border-t border-purple-900/30 mt-40">
+  <p class="text-lg mb-8">Let's build something awesome together</p>
+  <a href="mailto:arroyobrix@gmail.com" class="inline-block bg-purple-600 hover:bg-purple-700 transition px-10 py-4 rounded-full text-xl font-medium">
+    Get in touch
+  </a>
+  <p class="mt-12 text-sm opacity-50">© 2025 Henson Brix A. Arroyo • Built with Tailwind</p>
+</footer>  </main>
+
+  <!-- Back to Top -->
+  <button onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top"
+    class="fixed bottom-10 right-10 bg-purple-600/30 backdrop-filter backdrop-blur-lg border border-purple-500/50 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl z-50 hover:bg-purple-600/50 transition">
+    <i data-lucide="arrow-up" class="w-8 h-8"></i>
+  </button>  <script>
     AOS.init({ duration: 1000, easing: 'ease-out-cubic', once: true });
     lucide.createIcons();
 
@@ -399,7 +615,7 @@
       cursor.style.left = e.clientX + 'px';
       cursor.style.top = e.clientY + 'px';
     });
-    document.querySelectorAll('a, button, .project-card, .hover-card, .tech-tag').forEach(el => {
+    document.querySelectorAll('a, button, .project-card, .hover-card, .tech-tag, .skill-category, .education-card').forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
