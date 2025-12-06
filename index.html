@@ -37,23 +37,23 @@
 
 <style>
   * { cursor: none !important; }
-  html, body {
-    font-family: 'Inter', sans-serif;
-    background: #0a0a0d;
-    color: #e2e8f0;
-    margin: 0; padding: 0;
-    overflow-x: hidden;
-    overflow-y: hidden;
-  }
+    html, body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0d;
+      color: #e2e8f0;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;   /* keep horizontal scrolling hidden */
+      /* overflow-y: hidden;  remove this */
+    }
 
-  /* ===== Scrollbar hiding – works on every browser in 2025 ===== */
-  html {
-    -ms-overflow-style: none;     /* IE & old Edge */
-    scrollbar-width: none;        /* Firefox */
-  }
-  html::-webkit-scrollbar {
-    display: none;                /* Chrome, Safari, new Edge */
-  }
+    html {
+      -ms-overflow-style: none;     /* IE & Edge */
+      scrollbar-width: none;        /* Firefox */
+    }
+    html::-webkit-scrollbar {
+      display: none;                /* Chrome, Safari, new Edge */
+    }
 
   /* Custom Cursor */
   .cursor {
@@ -294,6 +294,36 @@
     font-size: 1rem;
   }
 
+    /* Initial hidden state */
+  .hero-animate {
+    opacity: 0;
+    transform: translateY(50px); /* slide up from below */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  /* Triggered state */
+  .hero-animate.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Optional: stagger effect for child elements */
+  .hero-animate .stagger {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .hero-animate.show .stagger {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .hero-animate .stagger:nth-child(1) { transition-delay: 0.2s; }
+  .hero-animate .stagger:nth-child(2) { transition-delay: 0.4s; }
+  .hero-animate .stagger:nth-child(3) { transition-delay: 0.6s; }
+  .hero-animate .stagger:nth-child(4) { transition-delay: 0.8s; }
+
   /* Mobile adjustments */
   @media (max-width: 768px) {
     * { cursor: auto !important; }
@@ -313,18 +343,18 @@
     }
   }
 </style>
+
 </head>
 <body class="min-h-screen">
 
   <!-- Custom Cursor -->
   <div class="cursor"></div>
 
-<!-- Hero – pushed down a bit more -->
-<header class="pt-40 pb-32 px-6 lg:pt-72 lg:pb-40">
+<header class="pt-40 pb-32 px-6 lg:pt-72 lg:pb-40 hero-animate">
   <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 
     <!-- Left: Name Block -->
-    <div class="text-right md:text-right flex flex-col justify-center order-2 md:order-1">
+    <div class="text-right md:text-right flex flex-col justify-center order-2 md:order-1 stagger">
       <div class="inline-block">
         <h1 class="font-display font-black tracking-tighter leading-[0.85] gradient-text"
             style="font-size: clamp(4rem, 10vw, 9rem);">
@@ -335,18 +365,18 @@
           ARROYO
         </p>
       </div>
-      <p class="text-2xl md:text-3xl lg:text-4xl text-purple-300 font-light mt-8 tracking-wide">
+      <p class="text-2xl md:text-3xl lg:text-4xl text-purple-300 font-light mt-8 tracking-wide stagger">
         JUNIOR FULL-STACK DEVELOPER
       </p>
     </div>
 
     <!-- Right: Content -->
-    <div class="space-y-6 md:space-y-8 order-1 md:order-2">
-      <p class="text-lg md:text-xl lg:text-2xl leading-relaxed opacity-90">
-        Junior Full-Stack Developer with hands-on experience building web and mobile applications using PERN stack and Flutter. Skilled in enhancing system efficiency, optimizing workflows, and integrating user-focused features, with a track record of improving performance and usability. Tailored for Accenture's innovative tech solutions, highlighting full-stack expertise in Node.js, React, Python, and database management.
-      </p>
+    <div class="space-y-6 md:space-y-8 order-1 md:order-2 stagger">
+    <p class="text-lg md:text-xl lg:text-2xl leading-relaxed opacity-90">
+      Junior Full-Stack Developer with hands-on experience building web and mobile applications using PERN stack and Flutter. Skilled in enhancing system efficiency, optimizing workflows, and integrating user-focused features, with a track record of improving performance and usability. Experienced in delivering end-to-end solutions across web, mobile, desktop, showcasing expertise in Node.js, React, Python, Flutter, and database management.
+    </p>
 
-      <div class="flex flex-wrap gap-x-10 gap-y-4 text-lg">
+      <div class="flex flex-wrap gap-x-10 gap-y-4 text-lg stagger">
         <a href="mailto:arroyobrix@gmail.com" class="flex items-center gap-3 hover:text-purple-400 transition">
           <i data-lucide="mail" class="w-6 h-6"></i> arroyobrix@gmail.com
         </a>
@@ -355,7 +385,7 @@
         </a>
       </div>
 
-      <div class="flex gap-10 text-4xl">
+      <div class="flex gap-10 text-4xl stagger">
         <a href="https://github.com/Xhenzouu" target="_blank" rel="noopener noreferrer"
           aria-label="GitHub" class="hover:text-purple-400 transition"><i data-lucide="github"></i></a>
         <a href="https://www.linkedin.com/in/arroyohensonbrix/" target="_blank" rel="noopener noreferrer"
@@ -605,7 +635,13 @@
   <button onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top"
     class="fixed bottom-10 right-10 bg-purple-600/30 backdrop-filter backdrop-blur-lg border border-purple-500/50 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl z-50 hover:bg-purple-600/50 transition">
     <i data-lucide="arrow-up" class="w-8 h-8"></i>
-  </button>  <script>
+  </button>  
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const hero = document.querySelector('.hero-animate');
+      hero.classList.add('show');
+    });
+
     AOS.init({ duration: 1000, easing: 'ease-out-cubic', once: true });
     lucide.createIcons();
 
