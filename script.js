@@ -141,3 +141,81 @@ function resetAll() {
     currentIcon = null;
   }
 }
+
+// Watch Demo tooltip
+const demoTooltip = document.getElementById('demo-tooltip');
+const demoTooltipText = document.getElementById('demo-tooltip-text');
+
+document.querySelectorAll('.watch-demo').forEach(link => {
+  link.addEventListener('mouseenter', (e) => {
+    const demoText = link.getAttribute('data-demo') || 'Demo';
+    demoTooltipText.textContent = demoText;
+
+    const rect = link.getBoundingClientRect();
+    demoTooltip.style.left = `${rect.left + rect.width / 2}px`;
+    demoTooltip.style.top  = `${rect.top - 40}px`; // above link
+    demoTooltip.classList.add('show');
+  });
+
+  link.addEventListener('mouseleave', () => {
+    demoTooltip.classList.remove('show');
+  });
+
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const videoSrc = link.getAttribute('data-video');
+    if (!videoSrc) return;
+
+    // Create a simple modal with video
+    const modal = document.createElement('div');
+    modal.className = 'video-modal fixed inset-0 bg-black/80 flex items-center justify-center z-50';
+    modal.innerHTML = `
+      <video src="${videoSrc}" controls autoplay class="max-w-full max-h-full rounded-xl shadow-2xl"></video>
+    `;
+    document.body.appendChild(modal);
+
+    modal.addEventListener('click', () => modal.remove());
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const watchDemos = document.querySelectorAll('.watch-demo');
+  const demoTooltip = document.getElementById('demo-tooltip');
+  const videoModal = document.getElementById('video-modal');
+  const closeVideo = document.getElementById('close-video');
+  const demoVideo = document.getElementById('demo-video');
+
+  watchDemos.forEach(link => {
+    link.addEventListener('mouseenter', (e) => {
+      demoTooltip.textContent = link.dataset.demo || 'Demo';
+      const rect = link.getBoundingClientRect();
+      demoTooltip.style.left = `${rect.left + rect.width / 2}px`;
+      demoTooltip.style.top = `${rect.top - 40}px`;
+      demoTooltip.classList.add('show');
+    });
+
+    link.addEventListener('mouseleave', () => {
+      demoTooltip.classList.remove('show');
+    });
+
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      videoModal.classList.remove('opacity-0', 'pointer-events-none');
+      demoVideo.currentTime = 0;
+      demoVideo.play();
+    });
+  });
+
+  closeVideo.addEventListener('click', () => {
+    videoModal.classList.add('opacity-0', 'pointer-events-none');
+    demoVideo.pause();
+  });
+
+  // Optional: close modal on click outside video
+  videoModal.addEventListener('click', (e) => {
+    if (e.target === videoModal) {
+      videoModal.classList.add('opacity-0', 'pointer-events-none');
+      demoVideo.pause();
+    }
+  });
+});

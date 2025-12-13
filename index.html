@@ -176,6 +176,12 @@
   </div>
 </section>
 
+      <!-- Watch Demo Tooltip -->
+      <div id="demo-tooltip" class="absolute pointer-events-none opacity-0 transition-all duration-300 transform scale-0 bg-gray-900/95 backdrop-blur-xl border border-purple-500/50 rounded-xl px-4 py-3 shadow-2xl text-white text-sm z-50">
+        <span id="demo-tooltip-text">Demo</span>
+      </div>
+
+
 <!-- Projects -->
 <section id="projects" class="my-40">
   <h2 class="section-title" data-aos="fade-up">Featured Projects</h2>
@@ -267,6 +273,11 @@
           <li>Full remote monitoring via Arduino IoT Cloud and mobile app.</li>
           <li>Programmed in Arduino IDE (C/C++), achieving less than 5% error and power-efficient operation.</li>
         </ul>
+        <p class="mb-6">
+          <a href="#" class="watch-demo text-purple-400 underline" data-demo="20-sec IoT demo">
+            Watch Demo
+          </a>
+        </p>
       </div>
     </div>
   </div>
@@ -349,6 +360,14 @@
     class="fixed bottom-10 right-10 bg-purple-600/30 backdrop-filter backdrop-blur-lg border border-purple-500/50 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-2xl z-50 hover:bg-purple-600/50 transition">
     <i data-lucide="arrow-up" class="w-8 h-8"></i>
   </button>  
+
+    <!-- Video Modal -->
+  <div id="video-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity z-50">
+    <div class="relative w-full max-w-3xl p-4">
+      <button id="close-video" class="absolute top-2 right-2 text-white text-2xl font-bold">&times;</button>
+      <video id="demo-video" src="assets/videos/Iot-Video-Demo.mp4" controls class="w-full rounded-xl"></video>
+    </div>
+  </div>
 
   <!-- External Script -->
   <script src="script.js"></script>
