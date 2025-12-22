@@ -1,0 +1,39 @@
+/* css/layout.css - Layout & Responsive */
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.education-card .education-content { text-align: left; }
+
+header.hero-animate {
+  padding-top: 10rem;
+  padding-bottom: 8rem;
+}
+@media (max-width: 768px) {
+  header.hero-animate {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  header.hero-animate .max-w-7xl { gap: 1.5rem; }
+  header.hero-animate .stagger { text-align: center; }
+  header.hero-animate .flex-wrap { gap: 0.75rem; }
+  header.hero-animate .flex.gap-10 { justify-content: center; }
+
+  .hover-card { height: 480px; }
+  .projects-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+
+  .project-content { padding: 1.5rem; }
+  .project-content h3 { font-size: 1.8rem; }
+  .project-details { padding: 2rem; }
+
+  footer { padding: 6rem 0; }
+}
+
+@media (min-width: 768px) {
+  .projects-grid { grid-template-columns: repeat(2, 1fr); }
+}

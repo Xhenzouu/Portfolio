@@ -1,0 +1,29 @@
+/* css/utilities.css - Reusable Utilities */
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 4.8rem;
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: -2px;
+  margin: 7rem 0 5rem;
+  background: linear-gradient(to right, #c084fc, #e9d5ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+
+.gradient-text {
+  background: linear-gradient(to right, #c084fc, #e9d5ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 3rem;
+    margin: 4rem 0 2.5rem;
+  }
+}

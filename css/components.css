@@ -1,0 +1,184 @@
+/* css/components.css - UI Components */
+
+.hover-card {
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  background: rgba(167, 139, 250, 0.08);
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 0 10px 30px rgba(0,0,0,0.5);
+  position: relative;
+  height: 560px;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.hover-card:hover {
+  transform: translateY(-16px) scale(1.02);
+  border-color: #a78bfa;
+  box-shadow: 0 30px 70px rgba(167,139,250,0.25);
+}
+
+.project-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  transition: filter 0.35s ease;
+}
+
+.project-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2.5rem;
+  background: linear-gradient(to top, rgba(10,10,13,0.98) 0%, rgba(10,10,13,0.9) 40%, transparent 100%);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  z-index: 2;
+  text-align: left;
+}
+
+.project-details {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 17, 24, 0.92);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease;
+  z-index: 10;
+  overflow-y: auto;
+  text-align: left;
+}
+.project-card:hover .project-details {
+  opacity: 1;
+  visibility: visible;
+}
+.project-card:hover img {
+  filter: blur(5px) brightness(0.6);
+}
+
+.skill-category, .education-card {
+  background: rgba(167, 139, 250, 0.08);
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  transition: all 0.4s ease;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.skill-category:hover, .education-card:hover {
+  background: rgba(167, 139, 250, 0.15);
+  border-color: #a78bfa;
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(167,139,250,0.2);
+}
+
+.education-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+.education-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* -------------------- SPHERE TOOLTIP -------------------- */
+#skill-tooltip {
+  position: absolute;
+  pointer-events: none;
+  z-index: 10000;
+  background: rgba(26, 25, 38, 0.96);
+  border: 1px solid #a78bfa;
+  border-radius: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  color: #e0e0e0; /* default description color */
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5),
+              0 0 30px rgba(167,139,250,0.3);
+  text-align: left;
+  width: 280px;        /* fixed width to avoid super wide tooltip */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -120%) scale(0.9);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  display: flex;
+  flex-wrap: wrap;     /* allow title and description to wrap */
+  gap: 0.25rem;        /* spacing between title and description */
+}
+
+#skill-tooltip.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -120%) scale(1);
+}
+
+/* Title inside tooltip */
+#tooltip-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #c084fc; /* purple for title */
+  display: inline;      /* <-- make inline */
+}
+
+/* Description inside tooltip */
+#tooltip-desc {
+  font-size: 0.95rem;
+  line-height: 1.3;
+  color: #e0e0e0; /* normal description color */
+  word-break: break-word; /* ensures long text wraps properly */
+  display: inline;     /* <-- make inline */
+  margin-left: 0.25rem; /* small space between title and description */
+}
+
+/* -------------------- DEMO TOOLTIP -------------------- */
+#demo-tooltip {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1000;
+  background: rgba(167, 139, 250, 0.15);
+  border: 1px solid #c084fc;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+#demo-tooltip.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.watch-demo {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #a78bfa;
+  border-radius: 0.75rem;
+  background: rgba(167,139,250,0.1);
+  color: #c084fc;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.watch-demo:hover {
+  background: rgba(167,139,250,0.3);
+  box-shadow: 0 0 20px rgba(167,139,250,0.6);
+  transform: translateY(-2px);
+}
+
+.video-modal video { outline: none; }
