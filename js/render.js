@@ -107,6 +107,8 @@ export function renderProjects() {
   grid.innerHTML = projectsData.map((proj, index) => `
     <div class="hover-card project-card relative" data-aos="fade-up" data-aos-delay="${index * 100}">
       <img src="${proj.image}" alt="${proj.title}">
+      
+      <!-- Project content -->
       <div class="project-content">
         <h3 class="text-3xl font-bold text-white">${proj.title}</h3>
         <p class="text-purple-300 text-sm">${proj.period}</p>
@@ -114,11 +116,14 @@ export function renderProjects() {
           ${proj.tech.map(tag => `<span class="tech-tag text-xs px-3 py-1">${tag}</span>`).join('')}
         </div>
       </div>
+      
+      <!-- Project details overlay -->
       <div class="project-details">
         <p class="text-purple-300 font-semibold mb-4">${proj.role}</p>
         <ul class="list-disc pl-6 space-y-3 text-gray-300 text-sm">
           ${proj.points.map(p => `<li>${p}</li>`).join('')}
         </ul>
+        ${proj.liveUrl ? `<a href="${proj.liveUrl}" target="_blank" class="watch-demo">Live Demo</a>` : ''}
       </div>
     </div>
   `).join('');

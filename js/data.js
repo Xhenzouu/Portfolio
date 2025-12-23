@@ -15,7 +15,7 @@ export const headerData = {
 };
 
 export const skillsData = {
-  description: `I build end-to-end solutions across web, mobile, and embedded systems using modern tools like React, Node.js, Flutter, PostgreSQL, and IoT platforms. From responsive frontends to secure backends and real-time features — I deliver fast, scalable, and user-focused applications.`,
+  description: `I build end-to-end solutions across web, mobile, and AI/ML projects using modern tools like React, Node.js, Flutter, PostgreSQL, and machine learning libraries. From responsive frontends to secure backends and real-time features — I deliver fast, scalable, and user-focused applications.`,
 
   categories: [
     {
@@ -41,7 +41,6 @@ export const skillsData = {
   ],
 
   // Maps card title → skill key for sphere highlighting
-  // Used in script.js to connect hover on mini cards to sphere icons
   sphereIcons: [
     { icon: "atom",        skill: "react" },
     { icon: "smartphone",  skill: "flutter" },
@@ -50,7 +49,7 @@ export const skillsData = {
     { icon: "pen-tool",    skill: "design" },
     { icon: "brain",       skill: "ai" },
     { icon: "train",       skill: "devops" },
-    { icon: "radio",       skill: "iot" },
+    { icon: "paw",         skill: "lostpet" },
     { icon: "git-branch",  skill: "git" },
     { icon: "sparkles",    skill: "emerging" }
   ],
@@ -61,9 +60,9 @@ export const skillsData = {
     backend:   { title: "Node.js & Express",        desc: "Designing scalable RESTful APIs, real-time systems, and secure backends." },
     postgres:  { title: "PostgreSQL",               desc: "Mastery of complex database design, query optimization, migrations, and reliability." },
     design:    { title: "Figma & UI/UX",            desc: "Turning ideas into pixel-perfect, interactive prototypes and user-centered designs." },
-    ai:        { title: "AI & Automation",          desc: "Integrating NLP, smart workflows, SMS gateways, and smart automation." },
+    ai:        { title: "AI & Automation",          desc: "Integrating NLP, smart workflows, SMS gateways, and automation pipelines." },
     devops:    { title: "DevOps & Git",             desc: "Deploying with Railway, managing Git workflows, tests, and CI/CD pipelines." },
-    iot:       { title: "IoT & Embedded",           desc: "Building real-world assistive devices using ESP8266, Arduino, and cloud systems." },
+    lostpet:   { title: "Lost Pet AI",              desc: "Machine learning web app predicting reunion probability for lost pets in Pila, Laguna." },
     git:       { title: "Git & Collaboration",      desc: "Advanced Git workflows, branching, code reviews, and team collaboration." },
     emerging:  { title: "Always Growing",           desc: "Expanding into C#, Linux, Cybersecurity, Design Thinking, and new tech." }
   }
@@ -118,29 +117,28 @@ export const projectsData = [
     hasDemo: false
   },
   {
-    image: "assets/images/IoT-nodeMCU-diagram.png",
-    title: "IoT Assistive Device",
-    period: "For the Visually Impaired • Oct 2023 – Dec 2023",
-    tech: ["NodeMCU ESP8266", "Arduino IoT Cloud"],
-    role: "Embedded Systems & IoT Developer • Oct 2023 – Dec 2023",
-    liveUrl: "",
+    image: "assets/images/lost-pet-ai.png",
+    title: "Lost Pet Reunion AI",
+    period: "Web App • Dec 2025 – Present",
+    tech: ["Python", "Streamlit", "Machine Learning"],
+    role: "Full-Stack Developer • Dec 2025 – Present",
+    liveUrl: "https://lost-pet-ai.streamlit.app/",
     points: [
-      "Designed and built a low-cost, cane-mounted obstacle detection system using NodeMCU ESP8266.",
-      "Integrated HC-SR04 ultrasonic sensor for real-time distance measurement (up to 4 m).",
-      "RGB LED + buzzer feedback system with multiple alert levels.",
-      "Full remote monitoring via Arduino IoT Cloud and mobile app.",
-      "Programmed in Arduino IDE (C/C++), achieving less than 5% error and power-efficient operation."
+      "Built a machine learning web app that predicts the likelihood of a lost pet being reunited with its owner in Pila, Laguna.",
+      "Supports any pet type and computes days_missing_bucket for better prediction accuracy.",
+      "Interactive, mobile-friendly UI with real-time probability and personalized advice.",
+      "Encourages best practices: posting on Facebook, placing flyers, asking neighbors."
     ],
     hasDemo: true,
-    demoText: "20-sec IoT demo"
+    demoText: "Try live demo"
   }
 ];
 
 export const aboutData = {
   bio: `21-year-old developer from the Philippines. I wrote my first line of code at 18 and never stopped learning. 
-I love turning ideas into real, impactful products whether it’s a full-blown community platform for 500+ members or a low-cost IoT cane that helps the visually impaired navigate the world.`,
+I love turning ideas into real, impactful products — from community platforms for 500+ members to AI-powered tools for local benefit.`,
 
-  hobbies: `When I’m not coding, you’ll find me binge-watching fantasy/dystopian series, reading Tolkien (and anything with dragons or rings), queuing for Dota 2 or Apex Legends, or enjoying a clean, no-nonsense espresso/Americano.`,
+  hobbies: `When I’m not coding, you’ll find me binge-watching fantasy/dystopian series, reading Tolkien, queuing for Dota 2 or Apex Legends, or enjoying a clean, no-nonsense espresso/Americano.`,
 
   interests: [
     { icon: "clapperboard", text: "Fantasy & dystopian movies/series" },
@@ -152,9 +150,9 @@ I love turning ideas into real, impactful products whether it’s a full-blown c
   certifications: [
     "Operating Systems Basics — Cisco Networking Academy (2025)",
     "Linux Essentials — Cisco Networking Academy / NDG (2025)",
-    "Internet of Things (IoT) in Smart Cities — DICT Caraga (2025)",
     "Cybersecurity for ICT Professionals — DICT Region V (2025)",
-    "Design Thinking: Ideation Wednesdays — DICT Caraga (2025)"
+    "Design Thinking: Ideation Wednesdays — DICT Caraga (2025)",
+    "Lost Pet AI Deployment & ML — Personal Project (2025)"
   ]
 };
 
