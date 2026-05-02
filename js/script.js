@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAOS();
   initLucide();
 
-  // Render all content
+  // Render all content FIRST
   renderHeader();
   renderSkills();
   renderProjects();
@@ -32,12 +32,17 @@ document.addEventListener('DOMContentLoaded', () => {
   renderEducation();
   renderFooter();
 
+  // ✅ FIX: run Lucide ONCE after all DOM is rendered
+  lucide.createIcons();
+
   // Initialize interactions
   initCustomCursor();
   initSkillSphere();
   initVideoModal();
   initHeroAnimation();
 
-  // Scroll roadmap
-  initScrollRoadmap();
+  // Scroll roadmap (if exists in your project)
+  if (typeof initScrollRoadmap === "function") {
+    initScrollRoadmap();
+  }
 });

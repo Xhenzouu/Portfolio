@@ -1,5 +1,3 @@
-// js/render.js - Rendering functions
-
 import { 
   headerData, 
   skillsData, 
@@ -33,26 +31,27 @@ export function renderHeader() {
       <p class="text-lg md:text-xl lg:text-2xl leading-relaxed opacity-90">
         ${headerData.description}
       </p>
+
       <div class="flex flex-wrap justify-center md:justify-start items-center gap-x-10 gap-y-4 text-lg stagger">
         <a href="mailto:${headerData.email}" class="flex items-center gap-3 hover:text-purple-400 transition">
           <i data-lucide="mail" class="w-6 h-6"></i> ${headerData.email}
         </a>
+
         <a href="tel:${headerData.phone.replace(/[^+\d]/g, '')}" class="flex items-center gap-3 hover:text-purple-400 transition">
           <i data-lucide="phone" class="w-6 h-6"></i> ${headerData.phone}
         </a>
       </div>
+
       <div class="flex gap-10 text-4xl stagger items-center">
         ${headerData.social.map(s => `
           <a href="${s.url}" target="_blank" rel="noopener noreferrer"
-             class="hover:text-purple-400 transition">
-            <i data-lucide="${s.icon}"></i>
+            class="hover:text-purple-400 transition">
+            <i class="fa-brands fa-${s.icon}"></i>
           </a>
         `).join('')}
       </div>
     </div>
   `;
-
-  lucide.createIcons();
 }
 
 export function renderSkills() {
@@ -64,6 +63,7 @@ export function renderSkills() {
         </h3>
         <p class="text-xl leading-relaxed opacity-90 max-w-2xl">${skillsData.description}</p>
       </div>
+
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-16 opacity-70">
         ${skillsData.categories.map(cat => `
           <div class="skill-category !text-left">
@@ -91,24 +91,19 @@ export function renderSkills() {
         </div>
       </div>
 
-      <!-- Tooltip (NOW SAFE) -->
       <div id="skill-tooltip" class="skill-tooltip">
         <div id="tooltip-title" class="font-bold text-purple-300"></div>
         <div id="tooltip-desc" class="text-sm opacity-90"></div>
       </div>
     </div>
   `;
-
-  lucide.createIcons();
 }
 
 export function renderProjects() {
-  const grid = document.getElementById('projects-grid');
-  grid.innerHTML = projectsData.map((proj, index) => `
+  document.getElementById('projects-grid').innerHTML = projectsData.map((proj, index) => `
     <div class="hover-card project-card relative" data-aos="fade-up" data-aos-delay="${index * 100}">
       <img src="${proj.image}" alt="${proj.title}">
-      
-      <!-- Project content -->
+
       <div class="project-content">
         <h3 class="text-3xl font-bold text-white">${proj.title}</h3>
         <p class="text-purple-300 text-sm">${proj.period}</p>
@@ -116,19 +111,20 @@ export function renderProjects() {
           ${proj.tech.map(tag => `<span class="tech-tag text-xs px-3 py-1">${tag}</span>`).join('')}
         </div>
       </div>
-      
-      <!-- Project details overlay -->
+
       <div class="project-details">
         <p class="text-purple-300 font-semibold mb-4">${proj.role}</p>
         <ul class="list-disc pl-6 space-y-3 text-gray-300 text-sm">
           ${proj.points.map(p => `<li>${p}</li>`).join('')}
         </ul>
-        ${proj.liveUrl ? `<a href="${proj.liveUrl}" target="_blank" class="watch-demo">Live Demo</a>` : ''}
+
+        ${proj.liveUrl ? `
+          <a href="${proj.liveUrl}" target="_blank" class="watch-demo">
+            Live Demo
+          </a>` : ''}
       </div>
     </div>
   `).join('');
-
-  lucide.createIcons();
 }
 
 export function renderAbout() {
@@ -153,8 +149,6 @@ export function renderAbout() {
       </ul>
     </div>
   `;
-
-  lucide.createIcons();
 }
 
 export function renderEducation() {

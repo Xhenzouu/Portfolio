@@ -1,70 +1,99 @@
-// data.js - Model (All portfolio content in one place)
+// data.js - Portfolio Content (2026 Edition)
 
 export const headerData = {
-  title: "JUNIOR FULL-STACK DEVELOPER",
-  description: `Junior Full-Stack Developer with hands-on experience building web and mobile applications using PERN stack and Flutter. Skilled in enhancing system efficiency, optimizing workflows, and integrating user-focused features, with a track record of improving performance and usability. Experienced in delivering end-to-end solutions across web, mobile, desktop, showcasing expertise in Node.js, React, Python, Flutter, and database management.`,
+  title: "FULL-STACK DEVELOPER",
+  description: `Full-Stack Developer focused on building practical, scalable, and user-centered systems. Experienced in developing web applications using React, Node.js, Express, PostgreSQL, and Python, with hands-on work in workflow automation, backend architecture, and system optimization. Comfortable leading projects, translating requirements into working solutions, and delivering software that solves real operational problems.`,
   email: "arroyobrix@gmail.com",
   phone: "+63-966-314-8788",
   social: [
-    { icon: "github",    url: "https://github.com/Xhenzouu" },
-    { icon: "linkedin",  url: "https://www.linkedin.com/in/arroyohensonbrix/" },
-    { icon: "facebook",  url: "https://www.facebook.com/lioasuno" },
+    { icon: "github", url: "https://github.com/Xhenzouu" },
+    { icon: "linkedin", url: "https://www.linkedin.com/in/arroyohensonbrix/" },
+    { icon: "facebook", url: "https://www.facebook.com/lioasuno" },
     { icon: "instagram", url: "https://www.instagram.com/xhenzouu/" },
-    { icon: "x",         url: "https://x.com/lioasuno" }
+    { icon: "x-twitter", url: "https://x.com/lioasuno" }
   ]
 };
 
 export const skillsData = {
-  description: `I build end-to-end solutions across web, mobile, and AI/ML projects using modern tools like React, Node.js, Flutter, PostgreSQL, and machine learning libraries. From responsive frontends to secure backends and real-time features — I deliver fast, scalable, and user-focused applications.`,
+  description: `I build modern full-stack applications with a strong focus on backend systems, database design, workflow automation, and clean user experiences. My work spans community platforms, management systems, and practical software solutions designed to improve operations and reduce manual effort.`,
 
   categories: [
     {
       title: "Frontend",
       icon: "monitor",
-      skills: "React.js • Flutter • Responsive Design"
+      skills: "React.js • JavaScript • Responsive UI"
     },
     {
       title: "Backend",
       icon: "server",
-      skills: "Node.js • Express • Flask • PERN"
+      skills: "Node.js • Express • Python • REST APIs"
     },
     {
-      title: "Databases",
+      title: "Database",
       icon: "database",
-      skills: "PostgreSQL • Optimization • Migrations"
+      skills: "PostgreSQL • Schema Design • Query Optimization"
     },
     {
-      title: "Mobile",
-      icon: "smartphone",
-      skills: "Flutter • Cross-platform Apps"
+      title: "Development",
+      icon: "code",
+      skills: "Git • Agile • System Design • Debugging"
     }
   ],
 
-  // Maps card title → skill key for sphere highlighting
   sphereIcons: [
-    { icon: "atom",        skill: "react" },
-    { icon: "smartphone",  skill: "flutter" },
-    { icon: "server",      skill: "backend" },
-    { icon: "database",    skill: "postgres" },
-    { icon: "pen-tool",    skill: "design" },
-    { icon: "brain",       skill: "ai" },
-    { icon: "train",       skill: "devops" },
-    { icon: "paw",         skill: "lostpet" },
-    { icon: "git-branch",  skill: "git" },
-    { icon: "sparkles",    skill: "emerging" }
+    { icon: "atom", skill: "react" },
+    { icon: "server", skill: "backend" },
+    { icon: "database", skill: "postgres" },
+    { icon: "git-branch", skill: "git" },
+    { icon: "layout-dashboard", skill: "systems" },
+    { icon: "brain", skill: "automation" },
+    { icon: "smartphone", skill: "mobile" },
+    { icon: "paw-print", skill: "lostpet" },
+    { icon: "shield", skill: "security" },
+    { icon: "sparkles", skill: "growth" }
   ],
 
   tooltips: {
-    react:     { title: "React.js",                 desc: "Building fast, reusable, component-driven UIs with React, hooks, and modern patterns." },
-    flutter:   { title: "Flutter",                  desc: "Crafting stunning, high-performance cross-platform mobile apps for iOS & Android." },
-    backend:   { title: "Node.js & Express",        desc: "Designing scalable RESTful APIs, real-time systems, and secure backends." },
-    postgres:  { title: "PostgreSQL",               desc: "Mastery of complex database design, query optimization, migrations, and reliability." },
-    design:    { title: "Figma & UI/UX",            desc: "Turning ideas into pixel-perfect, interactive prototypes and user-centered designs." },
-    ai:        { title: "AI & Automation",          desc: "Integrating NLP, smart workflows, SMS gateways, and automation pipelines." },
-    devops:    { title: "DevOps & Git",             desc: "Deploying with Railway, managing Git workflows, tests, and CI/CD pipelines." },
-    lostpet:   { title: "Lost Pet AI",              desc: "Machine learning web app predicting reunion probability for lost pets in Pila, Laguna." },
-    git:       { title: "Git & Collaboration",      desc: "Advanced Git workflows, branching, code reviews, and team collaboration." },
-    emerging:  { title: "Always Growing",           desc: "Expanding into C#, Linux, Cybersecurity, Design Thinking, and new tech." }
+    react: {
+      title: "React.js",
+      desc: "Building responsive, reusable, and modern frontend interfaces."
+    },
+    backend: {
+      title: "Backend Development",
+      desc: "Developing APIs, application logic, and scalable backend systems."
+    },
+    postgres: {
+      title: "PostgreSQL",
+      desc: "Database modeling, structured schemas, and efficient querying."
+    },
+    git: {
+      title: "Git & Collaboration",
+      desc: "Version control, branching workflows, and team collaboration."
+    },
+    systems: {
+      title: "Systems Development",
+      desc: "Designing software that improves operational workflows and efficiency."
+    },
+    automation: {
+      title: "Automation",
+      desc: "Building features that reduce repetitive work through smart workflows."
+    },
+    mobile: {
+      title: "Cross-Platform Development",
+      desc: "Experience building mobile-ready applications and responsive systems."
+    },
+    lostpet: {
+      title: "Machine Learning Project",
+      desc: "AI-powered web application focused on prediction and user guidance."
+    },
+    security: {
+      title: "Application Security",
+      desc: "Working with authentication, access control, and secure backend practices."
+    },
+    growth: {
+      title: "Continuous Learning",
+      desc: "Always improving through projects, internships, and new technologies."
+    }
   }
 };
 
@@ -72,62 +101,64 @@ export const projectsData = [
   {
     image: "assets/images/lynville-homes-8-logo.png",
     title: "Lynville Homes 8",
-    period: "Community Management Platform • March 2025 – Present",
-    tech: ["PERN Stack", "Railway"],
-    role: "Full-Stack Developer • March 2025 – Present",
+    period: "Community Management Platform • 2025 – Present",
+    tech: ["React", "Node.js", "Express", "PostgreSQL"],
+    role: "Full-Stack Developer",
     liveUrl: "https://lynvillehomes8.me",
     points: [
-      "Built a full web platform for HOA community management using PostgreSQL, Express, React, and Node.",
-      "Handles system upkeep, updates, bug fixes, and overall performance optimization.",
-      "Integrated authentication, role-based access, real-time alerts, and admin tools.",
-      "Collaborated closely with HOA officers to gather requirements and deliver user-focused features.",
-      "Deployed using Railway; implemented secure API routes and system monitoring.",
-      "Streamlined administrative workflows through automated tools and structured data processing."
+      "Built a full-featured community management platform for HOA operations.",
+      "Implemented authentication, role-based access, announcements, and administrative workflows.",
+      "Automated notifications and reporting processes to reduce manual work.",
+      "Provided ongoing maintenance, support, and feature improvements based on user feedback.",
+      "Focused on performance optimization, backend reliability, and practical usability."
     ],
     hasDemo: false
   },
+
   {
     image: "assets/images/chairable-logo.png",
     title: "Chairable",
-    period: "Cross-Platform E-Commerce • Sept 2024 – May 2025",
+    period: "Cross-Platform Commerce System • 2024 – 2025",
     tech: ["Flutter", "Flask", "PostgreSQL"],
-    role: "Full-Stack Developer • Sept 2024 – May 2025",
+    role: "Full-Stack Developer",
     liveUrl: "",
     points: [
-      "Designed a multi-role platform supporting customers, sellers, admins, and riders across Web and mobile.",
-      "Implemented secure role-based access, inventory controls, order workflows, and delivery coordination.",
-      "Built an administrative backend with user management, commission tracking, and actionable dashboard analytics.",
-      "Designed API integrations enabling smooth transactions, order updates, and courier operations."
+      "Developed a multi-role commerce platform supporting customers, sellers, administrators, and riders.",
+      "Built order workflows, inventory management, and secure access control systems.",
+      "Designed backend integrations for transactions, fulfillment, and operational coordination.",
+      "Focused on scalable architecture and practical business workflows."
     ],
     hasDemo: false
   },
+
   {
     image: "assets/images/gaming-rigz-logo.png",
     title: "GamingRigz",
-    period: "Point-of-Sale System • Nov 2023 – Dec 2023",
+    period: "Desktop POS & Inventory System • 2023",
     tech: ["C# .NET", "WinForms"],
-    role: "Full-Stack Developer • Nov 2023 – Dec 2023",
+    role: "Developer",
     liveUrl: "",
     points: [
-      "Built a desktop application in C# (Windows Forms) with embedded local database for stable offline operations.",
-      "Designed a structured stock management system with color-coded categories.",
-      "Implemented inventory controls, checkout operations, automated payment calculations, change handling, restock tracking, and low-stock alerts.",
-      "Generated automated sales reports with daily/weekly summaries and formatted receipts."
+      "Built a desktop point-of-sale and inventory management application.",
+      "Implemented stock monitoring, checkout workflows, payment handling, and reporting.",
+      "Designed stable offline-first functionality with structured local data storage.",
+      "Created practical admin tools for tracking sales and inventory movement."
     ],
     hasDemo: false
   },
+
   {
     image: "assets/images/lost-pet-ai.png",
     title: "Lost Pet Reunion AI",
-    period: "Web App • Dec 2025 – Present",
+    period: "Machine Learning Web Application • 2025 – Present",
     tech: ["Python", "Streamlit", "Machine Learning"],
-    role: "Full-Stack Developer • Dec 2025 – Present",
+    role: "Independent Developer",
     liveUrl: "https://lost-pet-ai.streamlit.app/",
     points: [
-      "Built a machine learning web app that predicts the likelihood of a lost pet being reunited with its owner in Pila, Laguna.",
-      "Supports any pet type and computes days_missing_bucket for better prediction accuracy.",
-      "Interactive, mobile-friendly UI with real-time probability and personalized advice.",
-      "Encourages best practices: posting on Facebook, placing flyers, asking neighbors."
+      "Built a prediction-based web application estimating pet reunion likelihood.",
+      "Developed feature engineering logic to improve prediction quality.",
+      "Designed a simple and mobile-friendly user experience with real-time outputs.",
+      "Combined machine learning with practical community use."
     ],
     hasDemo: true,
     demoText: "Try live demo"
@@ -135,24 +166,23 @@ export const projectsData = [
 ];
 
 export const aboutData = {
-  bio: `21-year-old developer from the Philippines. I wrote my first line of code at 18 and never stopped learning. 
-I love turning ideas into real, impactful products — from community platforms for 500+ members to AI-powered tools for local benefit.`,
+  bio: `I'm a developer from Laguna, Philippines, passionate about building software that solves real problems. My focus is on full-stack development, backend systems, and workflow automation—creating applications that are practical, scalable, and genuinely useful for the people who use them.`,
 
-  hobbies: `When I’m not coding, you’ll find me binge-watching fantasy/dystopian series, reading Tolkien, queuing for Dota 2 or Apex Legends, or enjoying a clean, no-nonsense espresso/Americano.`,
+  hobbies: `Outside development, I enjoy fantasy and dystopian series, strategy and competitive games, reading high fantasy, and occasionally appreciating a clean cup of espresso or Americano while working on ideas.`,
 
   interests: [
-    { icon: "clapperboard", text: "Fantasy & dystopian movies/series" },
-    { icon: "swords",       text: "Dota 2 & Apex Legends" },
-    { icon: "book-open",    text: "Tolkien books & high fantasy" },
-    { icon: "coffee",       text: "Straight espresso / Americano purist" }
+    { icon: "clapperboard", text: "Fantasy & dystopian series" },
+    { icon: "gamepad-2", text: "Dota 2 & competitive games" },
+    { icon: "book-open", text: "High fantasy & world-building" },
+    { icon: "coffee", text: "Espresso / Americano" }
   ],
 
   certifications: [
-    "Operating Systems Basics — Cisco Networking Academy (2025)",
-    "Linux Essentials — Cisco Networking Academy / NDG (2025)",
-    "Cybersecurity for ICT Professionals — DICT Region V (2025)",
-    "Design Thinking: Ideation Wednesdays — DICT Caraga (2025)",
-    "Lost Pet AI Deployment & ML — Personal Project (2025)"
+    "PHP Web Application Framework: CodeIgniter 4 (Intermediate)",
+    "Web Development Using MERN",
+    "Operating Systems Basics",
+    "Linux Essentials",
+    "Internet of Things (IoT) in Smart Cities"
   ]
 };
 
@@ -161,20 +191,20 @@ export const educationData = [
     logo: "assets/images/lspu-logo.webp",
     degree: "Bachelor of Science in Information Technology",
     specialization: "Specialization: Web & Mobile Application Development",
-    school: "Laguna State Polytechnic University Santa Cruz Main Campus",
-    year: "2022 – Present"
+    school: "Laguna State Polytechnic University – Santa Cruz Main Campus",
+    year: "2022 – 2026"
   },
   {
     logo: "assets/images/AMA-University-and-Colleges-main-logo.png",
     degree: "Senior High School",
     specialization: "Science, Technology, Engineering, & Mathematics",
-    school: "AMA Computer College — Santa Cruz, Laguna",
+    school: "AMA Computer College – Santa Cruz, Laguna",
     year: "2020 – 2022"
   }
 ];
 
 export const footerData = {
-  message: "Let's build something awesome together",
+  message: "Let's build something meaningful together",
   email: "arroyobrix@gmail.com",
-  copyright: "© 2025 Henson Brix A. Arroyo • Built with Tailwind"
+  copyright: "© 2026 Henson Brix A. Arroyo • Built with Tailwind"
 };
