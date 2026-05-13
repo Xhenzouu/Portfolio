@@ -128,27 +128,57 @@ export function renderProjects() {
 }
 
 export function renderAbout() {
-  document.getElementById('about-left').innerHTML = `
-    <div data-aos="fade-right">
-      <h2 class="section-title text-5xl mb-12">About Me</h2>
-      <p class="text-lg leading-relaxed opacity-90 mb-6">${aboutData.bio}</p>
-      <p class="text-lg leading-relaxed opacity-90 mb-10">${aboutData.hobbies}</p>
-    </div>
-  `;
+  const certs = aboutData.certifications || [];
 
-  document.getElementById('about-right').innerHTML = `
-    <div data-aos="fade-left">
-      <h2 class="section-title text-5xl mb-12">Beyond Code</h2>
-      <ul class="space-y-6 text-lg mb-12">
-        ${aboutData.interests.map(i => `
-          <li class="flex items-center gap-4">
-            <i data-lucide="${i.icon}" class="w-6 h-6 text-purple-400"></i>
-            ${i.text}
-          </li>
-        `).join('')}
-      </ul>
-    </div>
-  `;
+  const container = document.getElementById('about-left');
+  const right = document.getElementById('about-right');
+
+  container.innerHTML = "";
+  right.innerHTML = "";
+
+  const left = certs.slice(0, 4);
+  const rightList = certs.slice(4);
+
+  function createCard(cert, index) {
+    return `
+      <div class="cert-card group relative p-4 border border-purple-900/30 rounded-xl hover:border-purple-500 transition cursor-pointer"
+           data-index="${index}">
+
+        <div class="font-semibold text-purple-300">${cert.title}</div>
+        <div class="text-sm opacity-70">${cert.issuer}</div>
+
+        <!-- tooltip -->
+        <div class="cert-tooltip hidden absolute left-1/2 -translate-x-1/2 top-full mt-3 w-80 bg-[#111118] border border-purple-500 rounded-lg p-3 z-50 shadow-xl">
+          <img src="${cert.image}" class="w-full rounded mb-2" />
+          <div class="text-sm font-semibold text-purple-300">${cert.title}</div>
+          <div class="text-xs opacity-70 mb-1">${cert.issuer}</div>
+          <div class="text-xs opacity-60">${cert.level || ""}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  container.innerHTML = left.map((c, i) => createCard(c, i)).join("");
+  right.innerHTML = rightList.map((c, i) => createCard(c, i + 4)).join("");
+
+  // hover tooltip logic
+  document.querySelectorAll(".cert-card").forEach(card => {
+    const tooltip = card.querySelector(".cert-tooltip");
+
+    card.addEventListener("mouseenter", () => {
+      tooltip.classList.remove("hidden");
+    });
+
+    card.addEventListener("mouseleave", () => {
+      tooltip.classList.add("hidden");
+    });
+
+    // CLICK → OPEN MODAL
+    card.addEventListener("click", () => {
+      const index = Number(card.dataset.index);
+      openCertModal(index);
+    });
+  });
 }
 
 export function renderEducation() {

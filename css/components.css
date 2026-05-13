@@ -182,3 +182,19 @@
 }
 
 .video-modal video { outline: none; }
+
+.cert-card {
+  position: relative;
+}
+
+.cert-tooltip {
+  opacity: 0;
+  transform: translate(-50%, 10px);
+  transition: all 0.2s ease;
+  pointer-events: none;
+}
+
+.cert-card:hover .cert-tooltip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}

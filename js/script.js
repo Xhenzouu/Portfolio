@@ -19,6 +19,10 @@ import {
   initHeroAnimation 
 } from './init.js';
 
+import { aboutData } from './data.js';
+
+window.aboutData = aboutData;
+
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize libraries
   initAOS();

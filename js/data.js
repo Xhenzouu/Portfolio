@@ -166,23 +166,112 @@ export const projectsData = [
 ];
 
 export const aboutData = {
-  bio: `I'm a developer from Laguna, Philippines, passionate about building software that solves real problems. My focus is on full-stack development, backend systems, and workflow automation—creating applications that are practical, scalable, and genuinely useful for the people who use them.`,
 
-  hobbies: `Outside development, I enjoy fantasy and dystopian series, strategy and competitive games, reading high fantasy, and occasionally appreciating a clean cup of espresso or Americano while working on ideas.`,
+certifications: [
+  {
+    title: "Critical Career Skills – Generative AI Foundations",
+    issuer: "Certiport (Pearson VUE)",
+    level: "Artificial Intelligence / AI Literacy",
+    image: "assets/images/certificates/arroyo-generative-ai-foundations-certificate.jpg",
+    dateIssued: "May 11, 2026",
+    expires: "May 12, 2031",
+    badgeId: "3cb4c275-ed45-4d90-b8ff-a732643e5ca9",
+    featured: true,
+    highlights: [
+      "Understanding of generative AI concepts and models",
+      "Prompt engineering and responsible AI usage",
+      "Ethical and practical AI applications in real-world contexts"
+    ]
+  },
 
-  interests: [
-    { icon: "clapperboard", text: "Fantasy & dystopian series" },
-    { icon: "gamepad-2", text: "Dota 2 & competitive games" },
-    { icon: "book-open", text: "High fantasy & world-building" },
-    { icon: "coffee", text: "Espresso / Americano" }
-  ],
+  {
+    title: "OJT Completion (440 Hours) – IT Internship",
+    issuer: "C8nnect IT Solutions",
+    level: "Professional Experience",
+    image: "assets/images/certificates/arroyo-c8nnect-internship-completion-certification.jpg",
+    featured: true,
+    highlights: [
+      "Hands-on full-stack development exposure",
+      "Real-world workflow and system support experience",
+      "Collaboration in production-level development environment"
+    ]
+  },
 
-  certifications: [
-    "PHP Web Application Framework: CodeIgniter 4 (Intermediate)",
-    "Web Development Using MERN",
-    "Operating Systems Basics",
-    "Linux Essentials",
-    "Internet of Things (IoT) in Smart Cities"
+  {
+    title: "Web Development Using MERN",
+    issuer: "DICT Region III",
+    level: "Full-Stack Web Development",
+    image: "assets/images/certificates/arroyo-web-dev-using-mern-stack-certificate.jpg",
+    featured: true,
+    highlights: [
+      "Built applications using MongoDB, Express, React, Node.js",
+      "Developed RESTful APIs and backend integration",
+      "Full-stack application architecture and deployment concepts"
+    ]
+  },
+
+  {
+    title: "PHP Web Application Framework: CodeIgniter 4 (Intermediate)",
+    issuer: "DICT CALABARZON",
+    level: "Web Development",
+    image: "assets/images/certificates/arroyo-php-webapp-framework-codeigniter4-intermediate-certificate.jpg",
+    featured: true,
+    highlights: [
+      "MVC-based backend development using CodeIgniter 4",
+      "Routing, controllers, and database integration",
+      "Structured web application architecture"
+    ]
+  },
+
+  {
+    title: "Artificial Intelligence and Cybersecurity",
+    issuer: "Sorsogon State University Graduate School",
+    level: "Cybersecurity & AI",
+    image: "assets/images/certificates/arroyo-oplan-paskong-sigurado-certificate.jpg",
+    featured: true,
+    highlights: [
+      "AI applications in cybersecurity systems",
+      "Threat detection and digital risk awareness",
+      "Modern security challenges in AI-driven environments"
+    ]
+  },
+
+  {
+    title: "Linux Essentials",
+    issuer: "Cisco Networking Academy",
+    level: "Systems Administration",
+    image: "assets/images/certificates/arroyo-linux-essentials-certificate.jpg",
+    featured: true,
+    highlights: [
+      "Linux command-line fundamentals",
+      "File system navigation and permissions",
+      "Basic system administration tasks"
+    ]
+  },
+
+  {
+    title: "Operating Systems Basics",
+    issuer: "Cisco Networking Academy",
+    level: "Systems & Infrastructure",
+    image: "assets/images/certificates/arroyo-linux-os-basics-certificate.jpg",
+    highlights: [
+      "Core operating system principles",
+      "Process and memory management concepts",
+      "System architecture fundamentals"
+    ]
+  },
+
+  {
+    title: "Internet of Things (IoT) in Smart Cities",
+    issuer: "DICT Caraga",
+    level: "Emerging Technology",
+    image: "assets/images/certificates/arroyo-iot-in-smart-cities-certificate.jpg",
+    highlights: [
+      "IoT system architecture and connectivity",
+      "Smart city application scenarios",
+      "Integration of sensors and digital systems"
+    ]
+  }
   ]
 };
 

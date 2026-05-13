@@ -143,3 +143,53 @@ export function initVideoModal() {
     video.pause();
   });
 }
+
+let currentCertIndex = 0;
+
+window.openCertModal = function(index) {
+  currentCertIndex = index;
+  renderCert(index);
+
+  document.getElementById("cert-modal").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+};
+
+function renderCert(index) {
+  const cert = window.aboutData.certifications[index];
+
+  if (!cert) return;
+
+  document.getElementById("cert-image").src = cert.image;
+  document.getElementById("cert-title").textContent = cert.title;
+  document.getElementById("cert-issuer").textContent = cert.issuer;
+  document.getElementById("cert-level").textContent = cert.level || "";
+
+  const dates = [];
+  if (cert.dateIssued) dates.push(`Issued: ${cert.dateIssued}`);
+  if (cert.expires) dates.push(`Expires: ${cert.expires}`);
+
+  document.getElementById("cert-dates").textContent = dates.join(" • ");
+
+  const list = document.getElementById("cert-highlights");
+  list.innerHTML = (cert.highlights || [])
+    .map(h => `<li>${h}</li>`)
+    .join("");
+}
+
+window.nextCert = function() {
+  const certs = window.aboutData.certifications;
+  currentCertIndex = (currentCertIndex + 1) % certs.length;
+  renderCert(currentCertIndex);
+};
+
+window.prevCert = function() {
+  const certs = window.aboutData.certifications;
+  currentCertIndex =
+    (currentCertIndex - 1 + certs.length) % certs.length;
+  renderCert(currentCertIndex);
+};
+
+window.closeCertModal = function() {
+  document.getElementById("cert-modal").classList.add("hidden");
+  document.body.style.overflow = "auto";
+};
