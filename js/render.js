@@ -26,23 +26,23 @@ export function renderHeader() {
     </div>
   `;
 
-  document.getElementById('header-right').innerHTML = `
-    <div class="space-y-6 md:space-y-8 stagger">
+document.getElementById('header-right').innerHTML = `
+    <div class="space-y-3 md:space-y-4 stagger">
       <p class="text-lg md:text-xl lg:text-2xl leading-relaxed opacity-90">
         ${headerData.description}
       </p>
 
-      <div class="flex flex-wrap justify-center md:justify-start items-center gap-x-10 gap-y-4 text-lg stagger">
-        <a href="mailto:${headerData.email}" class="flex items-center gap-3 hover:text-purple-400 transition">
-          <i data-lucide="mail" class="w-6 h-6"></i> ${headerData.email}
+      <div class="flex flex-wrap justify-center md:justify-start items-center gap-x-6 gap-y-2 text-base stagger">
+        <a href="mailto:${headerData.email}" class="flex items-center gap-2 hover:text-purple-400 transition">
+          <i data-lucide="mail" class="w-5 h-5"></i> ${headerData.email}
         </a>
 
-        <a href="tel:${headerData.phone.replace(/[^+\d]/g, '')}" class="flex items-center gap-3 hover:text-purple-400 transition">
-          <i data-lucide="phone" class="w-6 h-6"></i> ${headerData.phone}
+        <a href="tel:${headerData.phone.replace(/[^+\d]/g, '')}" class="flex items-center gap-2 hover:text-purple-400 transition">
+          <i data-lucide="phone" class="w-5 h-5"></i> ${headerData.phone}
         </a>
       </div>
 
-      <div class="flex gap-10 text-4xl stagger items-center">
+      <div class="flex gap-6 text-3xl stagger items-center">
         ${headerData.social.map(s => `
           <a href="${s.url}" target="_blank" rel="noopener noreferrer"
             class="hover:text-purple-400 transition">
@@ -173,7 +173,6 @@ export function renderAbout() {
       tooltip.classList.add("hidden");
     });
 
-    // CLICK → OPEN MODAL
     card.addEventListener("click", () => {
       const index = Number(card.dataset.index);
       openCertModal(index);

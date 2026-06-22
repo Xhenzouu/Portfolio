@@ -1,5 +1,3 @@
-// js/init.js - Initial setup
-
 export function initAOS() {
   AOS.init({ duration: 1000, easing: 'ease-out-cubic', once: true });
 }

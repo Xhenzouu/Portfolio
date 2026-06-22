@@ -1,8 +1,6 @@
-// data.js - Portfolio Content (2026 Edition)
-
 export const headerData = {
   title: "FULL-STACK DEVELOPER",
-  description: `Full-Stack Developer focused on building practical, scalable, and user-centered systems. Experienced in developing web applications using React, Node.js, Express, PostgreSQL, and Python, with hands-on work in workflow automation, backend architecture, and system optimization. Comfortable leading projects, translating requirements into working solutions, and delivering software that solves real operational problems.`,
+  description: `Full-Stack Developer focused on building practical, scalable, and user-centered systems. Experienced in developing web applications, workflow automation, backend architecture, and system optimization. Comfortable leading projects, translating requirements into working solutions, and delivering reliable, maintainable software that solves real operational problems efficiently.`,
   email: "arroyobrix@gmail.com",
   phone: "+63-966-314-8788",
   social: [
@@ -15,28 +13,28 @@ export const headerData = {
 };
 
 export const skillsData = {
-  description: `I build modern full-stack applications with a strong focus on backend systems, database design, workflow automation, and clean user experiences. My work spans community platforms, management systems, and practical software solutions designed to improve operations and reduce manual effort.`,
+  description: `I build modern full-stack applications with a strong focus on backend systems, database design, cloud deployment, and clean user experiences. My work spans community platforms, AI-powered tools, and practical software solutions designed to improve operations and reduce manual effort.`,
 
   categories: [
     {
       title: "Frontend",
       icon: "monitor",
-      skills: "React.js • JavaScript • Responsive UI"
+      skills: "React.js • JavaScript • Bootstrap 5 • Responsive UI"
     },
     {
       title: "Backend",
       icon: "server",
-      skills: "Node.js • Express • Python • REST APIs"
+      skills: "Node.js • Express • PHP (CodeIgniter 4) • Python • REST APIs"
     },
     {
       title: "Database",
       icon: "database",
-      skills: "PostgreSQL • Schema Design • Query Optimization"
+      skills: "PostgreSQL • MySQL • Schema Design • Query Optimization"
     },
     {
-      title: "Development",
-      icon: "code",
-      skills: "Git • Agile • System Design • Debugging"
+      title: "Cloud & DevOps",
+      icon: "cloud",
+      skills: "AWS (EC2, RDS, S3) • Docker • Nginx • PM2 • CI/CD"
     }
   ],
 
@@ -45,7 +43,7 @@ export const skillsData = {
     { icon: "server", skill: "backend" },
     { icon: "database", skill: "postgres" },
     { icon: "git-branch", skill: "git" },
-    { icon: "layout-dashboard", skill: "systems" },
+    { icon: "cloud", skill: "aws" },
     { icon: "brain", skill: "automation" },
     { icon: "smartphone", skill: "mobile" },
     { icon: "paw-print", skill: "lostpet" },
@@ -70,9 +68,9 @@ export const skillsData = {
       title: "Git & Collaboration",
       desc: "Version control, branching workflows, and team collaboration."
     },
-    systems: {
-      title: "Systems Development",
-      desc: "Designing software that improves operational workflows and efficiency."
+    aws: {
+      title: "AWS Cloud",
+      desc: "Deployed full-stack apps on EC2 with RDS, Docker, Nginx, and CI/CD."
     },
     automation: {
       title: "Automation",

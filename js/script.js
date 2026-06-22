@@ -24,11 +24,9 @@ import { aboutData } from './data.js';
 window.aboutData = aboutData;
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize libraries
   initAOS();
   initLucide();
 
-  // Render all content FIRST
   renderHeader();
   renderSkills();
   renderProjects();
@@ -36,16 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
   renderEducation();
   renderFooter();
 
-  // ✅ FIX: run Lucide ONCE after all DOM is rendered
   lucide.createIcons();
 
-  // Initialize interactions
   initCustomCursor();
   initSkillSphere();
   initVideoModal();
   initHeroAnimation();
 
-  // Scroll roadmap (if exists in your project)
   if (typeof initScrollRoadmap === "function") {
     initScrollRoadmap();
   }

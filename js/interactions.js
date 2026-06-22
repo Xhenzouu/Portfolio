@@ -1,18 +1,14 @@
-// js/interactions.js - Interactive features
-
 import { skillsData } from './data.js';
 
 export function initCustomCursor() {
   const cursor = document.querySelector('.cursor');
   if (!cursor) return;
 
-  // Move the cursor
   document.addEventListener('mousemove', e => {
     cursor.style.left = e.clientX + 'px';
     cursor.style.top  = e.clientY + 'px';
   });
 
-  // CSS selectors for all interactive elements
   const interactiveSelectors = [
     'a',
     'button',
@@ -25,18 +21,15 @@ export function initCustomCursor() {
     'input', 'textarea', 'select'
   ];
 
-  // Function to attach hover listeners to elements
   function attachHoverEffect(el) {
     el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
     el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
   }
 
-  // Attach to existing elements
   interactiveSelectors.forEach(selector => {
     document.querySelectorAll(selector).forEach(attachHoverEffect);
   });
 
-  // Observe dynamically added elements (optional)
   const observer = new MutationObserver(mutations => {
     mutations.forEach(mutation => {
       mutation.addedNodes.forEach(node => {
@@ -66,7 +59,6 @@ export function initSkillSphere() {
   container.addEventListener('mousemove', (e) => {
     const icon = e.target.closest('.skill-icon');
 
-    // If NOT hovering an icon → reset
     if (!icon) {
       tooltip.classList.remove('show');
       sphere.classList.remove('paused');
@@ -80,11 +72,9 @@ export function initSkillSphere() {
 
     sphere.classList.add('paused');
 
-    // ✅ Separate title and description for proper styling
     title.textContent = data.title;
     desc.textContent  = data.desc;
 
-    // Tooltip positioning
     const iconRect = icon.getBoundingClientRect();
     const containerRect = container.getBoundingClientRect();
 
@@ -95,7 +85,6 @@ export function initSkillSphere() {
 
     tooltip.classList.add('show');
 
-    // Highlight hovered icon
     if (currentIcon !== icon) {
       resetIcon();
       icon.style.transform =
