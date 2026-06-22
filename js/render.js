@@ -32,20 +32,24 @@ document.getElementById('header-right').innerHTML = `
         ${headerData.description}
       </p>
 
-      <div class="flex flex-wrap justify-center md:justify-start items-center gap-x-6 gap-y-2 text-base stagger">
-        <a href="mailto:${headerData.email}" class="flex items-center gap-2 hover:text-purple-400 transition">
-          <i data-lucide="mail" class="w-5 h-5"></i> ${headerData.email}
+      <!-- Contact: Always side by side -->
+      <div class="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1 text-sm md:text-base stagger">
+        <a href="mailto:${headerData.email}" class="flex items-center gap-2 hover:text-purple-400 transition whitespace-nowrap">
+          <i data-lucide="mail" class="w-4 h-4 md:w-5 md:h-5"></i> ${headerData.email}
         </a>
 
-        <a href="tel:${headerData.phone.replace(/[^+\d]/g, '')}" class="flex items-center gap-2 hover:text-purple-400 transition">
-          <i data-lucide="phone" class="w-5 h-5"></i> ${headerData.phone}
+        <span class="text-gray-600 hidden sm:inline">|</span>
+
+        <a href="tel:${headerData.phone.replace(/[^+\d]/g, '')}" class="flex items-center gap-2 hover:text-purple-400 transition whitespace-nowrap">
+          <i data-lucide="phone" class="w-4 h-4 md:w-5 md:h-5"></i> ${headerData.phone}
         </a>
       </div>
 
-      <div class="flex gap-6 text-3xl stagger items-center">
+      <!-- Social Icons: Vertically centered -->
+      <div class="flex flex-wrap items-center justify-center md:justify-start gap-5 text-2xl md:text-3xl stagger">
         ${headerData.social.map(s => `
           <a href="${s.url}" target="_blank" rel="noopener noreferrer"
-            class="hover:text-purple-400 transition">
+            class="hover:text-purple-400 transition flex items-center justify-center leading-none">
             <i class="fa-brands fa-${s.icon}"></i>
           </a>
         `).join('')}
@@ -136,17 +140,16 @@ export function renderAbout() {
   container.innerHTML = "";
   right.innerHTML = "";
 
-  const left = certs.slice(0, 4);
-  const rightList = certs.slice(4);
+  // Split: first 4 in left column, rest in right column
+  const leftCerts = certs.slice(0, 4);
+  const rightCerts = certs.slice(4);
 
   function createCard(cert, index) {
     return `
       <div class="cert-card group relative p-4 border border-purple-900/30 rounded-xl hover:border-purple-500 transition cursor-pointer"
            data-index="${index}">
-
         <div class="font-semibold text-purple-300">${cert.title}</div>
         <div class="text-sm opacity-70">${cert.issuer}</div>
-
         <!-- tooltip -->
         <div class="cert-tooltip hidden absolute left-1/2 -translate-x-1/2 top-full mt-3 w-80 bg-[#111118] border border-purple-500 rounded-lg p-3 z-50 shadow-xl">
           <img src="${cert.image}" class="w-full rounded mb-2" />
@@ -158,10 +161,21 @@ export function renderAbout() {
     `;
   }
 
-  container.innerHTML = left.map((c, i) => createCard(c, i)).join("");
-  right.innerHTML = rightList.map((c, i) => createCard(c, i + 4)).join("");
+  // Left column: first 4 certs — NO gap between cards
+  container.innerHTML = `
+    <div class="flex flex-col gap-0">
+      ${leftCerts.map((c, i) => createCard(c, i)).join('')}
+    </div>
+  `;
 
-  // hover tooltip logic
+  // Right column: remaining certs — NO gap between cards
+  right.innerHTML = `
+    <div class="flex flex-col gap-0">
+      ${rightCerts.map((c, i) => createCard(c, i + 4)).join('')}
+    </div>
+  `;
+
+  // Hover tooltip logic
   document.querySelectorAll(".cert-card").forEach(card => {
     const tooltip = card.querySelector(".cert-tooltip");
 
