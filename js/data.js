@@ -159,18 +159,19 @@ export const projectsData = [
     ],
     hasDemo: false
   },
+
   {
     image: "assets/images/lost-pet-ai.png",
     title: "Lost Pet Reunion AI",
-    period: "Web App • Dec 2025 – Present",
+    period: "Machine Learning Web Application • 2025 – Present",
     tech: ["Python", "Streamlit", "Machine Learning"],
-    role: "Full-Stack Developer • Dec 2025 – Present",
+    role: "Independent Developer",
     liveUrl: "https://lost-pet-ai.streamlit.app/",
     points: [
-      "Built a machine learning web app that predicts the likelihood of a lost pet being reunited with its owner in Pila, Laguna.",
-      "Supports any pet type and computes days_missing_bucket for better prediction accuracy.",
-      "Interactive, mobile-friendly UI with real-time probability and personalized advice.",
-      "Encourages best practices: posting on Facebook, placing flyers, asking neighbors."
+      "Built a prediction-based web application estimating pet reunion likelihood.",
+      "Developed feature engineering logic to improve prediction quality.",
+      "Designed a simple and mobile-friendly user experience with real-time outputs.",
+      "Combined machine learning with practical community use."
     ],
     hasDemo: true,
     demoText: "Try live demo"
@@ -181,7 +182,7 @@ export const aboutData = {
   bio: `21-year-old developer from the Philippines. I wrote my first line of code at 18 and never stopped learning. 
 I love turning ideas into real, impactful products — from community platforms for 500+ members to AI-powered tools for local benefit.`,
 
-  hobbies: `When I’m not coding, you’ll find me binge-watching fantasy/dystopian series, reading Tolkien, queuing for Dota 2 or Apex Legends, or enjoying a clean, no-nonsense espresso/Americano.`,
+  hobbies: `When I'm not coding, you'll find me binge-watching fantasy/dystopian series, reading Tolkien, queuing for Dota 2 or Apex Legends, or enjoying a clean, no-nonsense espresso/Americano.`,
 
   interests: [
     { icon: "clapperboard", text: "Fantasy & dystopian movies/series" },
