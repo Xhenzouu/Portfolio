@@ -97,7 +97,7 @@ export const skillsData = {
 
 export const projectsData = [
   {
-    image: "assets/images/xirv-logo.png",
+    image: "assets/images/xirv-logo.svg",
     title: "XIRV Systems",
     period: "Enterprise Intelligence Platform • July 2026 – Present",
     tech: ["React", "TypeScript", "Node.js", "Express", "PostgreSQL", "AWS EC2", "RDS", "S3"],
