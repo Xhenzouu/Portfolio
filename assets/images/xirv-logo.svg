@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 80">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00E5FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00B8D4;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00E5FF;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#00B8D4;stop-opacity:0.05" />
+    </linearGradient>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&amp;display=swap');
+    </style>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="40" cy="40" r="32" fill="none" stroke="url(#grad)" stroke-width="2.5"/>
+  <circle cx="40" cy="40" r="22" fill="url(#grad2)"/>
+  
+  <!-- X icon -->
+  <text x="40" y="48" font-family="'Inter', sans-serif" font-weight="900" font-size="32" fill="url(#grad)" text-anchor="middle">X</text>
+  
+  <!-- XIRV text -->
+  <text x="100" y="38" font-family="'Inter', sans-serif" font-weight="700" font-size="28" fill="#00E5FF">XIRV</text>
+  
+  <!-- SYSTEMS text -->
+  <text x="100" y="58" font-family="'Inter', sans-serif" font-weight="400" font-size="13" fill="#00B8D4" letter-spacing="4">SYSTEMS</text>
+</svg>

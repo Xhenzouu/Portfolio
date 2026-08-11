@@ -97,6 +97,21 @@ export const skillsData = {
 
 export const projectsData = [
   {
+    image: "assets/images/xirv-logo.png",
+    title: "XIRV Systems",
+    period: "Enterprise Intelligence Platform • July 2026 – Present",
+    tech: ["React", "TypeScript", "Node.js", "Express", "PostgreSQL", "AWS EC2", "RDS", "S3"],
+    role: "Full-Stack Developer • July 2026 – Present",
+    liveUrl: "http://xirv-frontend.s3-website-ap-southeast-2.amazonaws.com",
+    points: [
+      "Architected a production-ready AI platform with JWT authentication, RBAC, and modular layered architecture for scalability.",
+      "Built an AI-powered RAG system with vector search, embeddings, and an internal gateway for intelligent document retrieval.",
+      "Deployed on AWS with EC2, RDS, S3, and GitHub Actions CI/CD for automated testing and deployment."
+    ],
+    hasDemo: true,
+    demoText: "Live Demo"
+  },
+  {
     image: "assets/images/lynville-homes-8-logo.png",
     title: "Lynville Homes 8",
     period: "Community Management Platform • 2025 – Present",
@@ -144,19 +159,18 @@ export const projectsData = [
     ],
     hasDemo: false
   },
-
   {
     image: "assets/images/lost-pet-ai.png",
     title: "Lost Pet Reunion AI",
-    period: "Machine Learning Web Application • 2025 – Present",
+    period: "Web App • Dec 2025 – Present",
     tech: ["Python", "Streamlit", "Machine Learning"],
-    role: "Independent Developer",
+    role: "Full-Stack Developer • Dec 2025 – Present",
     liveUrl: "https://lost-pet-ai.streamlit.app/",
     points: [
-      "Built a prediction-based web application estimating pet reunion likelihood.",
-      "Developed feature engineering logic to improve prediction quality.",
-      "Designed a simple and mobile-friendly user experience with real-time outputs.",
-      "Combined machine learning with practical community use."
+      "Built a machine learning web app that predicts the likelihood of a lost pet being reunited with its owner in Pila, Laguna.",
+      "Supports any pet type and computes days_missing_bucket for better prediction accuracy.",
+      "Interactive, mobile-friendly UI with real-time probability and personalized advice.",
+      "Encourages best practices: posting on Facebook, placing flyers, asking neighbors."
     ],
     hasDemo: true,
     demoText: "Try live demo"
@@ -164,6 +178,17 @@ export const projectsData = [
 ];
 
 export const aboutData = {
+  bio: `21-year-old developer from the Philippines. I wrote my first line of code at 18 and never stopped learning. 
+I love turning ideas into real, impactful products — from community platforms for 500+ members to AI-powered tools for local benefit.`,
+
+  hobbies: `When I’m not coding, you’ll find me binge-watching fantasy/dystopian series, reading Tolkien, queuing for Dota 2 or Apex Legends, or enjoying a clean, no-nonsense espresso/Americano.`,
+
+  interests: [
+    { icon: "clapperboard", text: "Fantasy & dystopian movies/series" },
+    { icon: "swords",       text: "Dota 2 & Apex Legends" },
+    { icon: "book-open",    text: "Tolkien books & high fantasy" },
+    { icon: "coffee",       text: "Straight espresso / Americano purist" }
+  ],
 
 certifications: [
   {
