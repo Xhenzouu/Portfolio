@@ -1,47 +1,15 @@
-import { 
-  renderHeader, 
-  renderSkills, 
-  renderProjects, 
-  renderAbout, 
-  renderEducation, 
-  renderFooter 
-} from './render.js';
+/**
+ * script.js — Portfolio v2.0, Phase 4
+ *
+ * Thin entry point. Loaded last, after data.js, render.js, interactions.js,
+ * and init.js. Its only job is to trigger the bootstrap defined in init.js.
+ */
+(function () {
+  'use strict';
 
-import { 
-  initCustomCursor, 
-  initSkillSphere, 
-  initVideoModal 
-} from './interactions.js';
-
-import { 
-  initAOS, 
-  initLucide, 
-  initHeroAnimation 
-} from './init.js';
-
-import { aboutData } from './data.js';
-
-window.aboutData = aboutData;
-
-document.addEventListener('DOMContentLoaded', () => {
-  initAOS();
-  initLucide();
-
-  renderHeader();
-  renderSkills();
-  renderProjects();
-  renderAbout();
-  renderEducation();
-  renderFooter();
-
-  lucide.createIcons();
-
-  initCustomCursor();
-  initSkillSphere();
-  initVideoModal();
-  initHeroAnimation();
-
-  if (typeof initScrollRoadmap === "function") {
-    initScrollRoadmap();
+  if (typeof window.init === 'function') {
+    window.init();
+  } else {
+    console.error('[script] window.init is not defined. Make sure init.js loaded before script.js.');
   }
-});
+})();

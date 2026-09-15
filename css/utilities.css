@@ -1,29 +1,68 @@
-/* css/utilities.css - Reusable Utilities */
+/* ==========================================================================
+   utilities.css
+   Small, genuinely-used helpers only. .visually-hidden lives in base.css
+   and is not duplicated here. Component-state visibility (.is-hidden /
+   .is-visible) is distinct from the viewport-based shell swap in
+   layout.css and must not be used to re-implement it.
+   ========================================================================== */
 
-.section-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 4.8rem;
-  font-weight: 900;
-  text-align: center;
-  letter-spacing: -2px;
-  margin: 7rem 0 5rem;
-  background: linear-gradient(to right, #c084fc, #e9d5ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  line-height: 1;
+/* --------------------------------------------------------------------------
+   1. SPACING
+   Tied to the scale already defined in base.css (--space-*).
+   -------------------------------------------------------------------------- */
+.mt-1 { margin-top: var(--space-1); }
+.mt-2 { margin-top: var(--space-2); }
+.mt-4 { margin-top: var(--space-4); }
+.mt-6 { margin-top: var(--space-6); }
+
+.mb-1 { margin-bottom: var(--space-1); }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-6 { margin-bottom: var(--space-6); }
+
+.gap-1 { gap: var(--space-1); }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+
+/* --------------------------------------------------------------------------
+   2. FLEX / GRID HELPERS
+   -------------------------------------------------------------------------- */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.flex-wrap { flex-wrap: wrap; }
+
+.grid { display: grid; }
+
+/* --------------------------------------------------------------------------
+   3. VISIBILITY (component-state — e.g. drawer open/closed, search
+   results empty state). Not to be used for the desktop/mobile shell
+   swap, which is handled purely by viewport width in layout.css.
+   -------------------------------------------------------------------------- */
+.is-hidden {
+  display: none !important;
 }
 
-.gradient-text {
-  background: linear-gradient(to right, #c084fc, #e9d5ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+.is-visible {
+  display: revert;
 }
 
-@media (max-width: 768px) {
-  .section-title {
-    font-size: 3rem;
-    margin: 4rem 0 2.5rem;
-  }
+/* --------------------------------------------------------------------------
+   4. TEXT HELPERS
+   -------------------------------------------------------------------------- */
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

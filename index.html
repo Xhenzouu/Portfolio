@@ -1,142 +1,218 @@
-  <!DOCTYPE html>
-  <html lang="en" data-theme="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Henson Brix A. Arroyo — Full-Stack Developer</title>
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Static fallback values for SEO; renderMeta() overwrites both from
+       data.meta.* at runtime. Keeping real values here means crawlers and
+       a no-JS render both see the correct identity. -->
+  <title>Portfolio — Henson Brix A. Arroyo</title>
+  <meta name="description" content="Portfolio of Henson Brix A. Arroyo — Full-Stack Developer & Aspiring Tech Support Professional" />
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg" />
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              display: ['Playfair Display', 'serif'],
-            },
-          },
-        },
-      }
-    </script>
+  <!-- Theme flash-prevention: read saved theme before first paint -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('portfolio-theme');
+        if (saved === 'light' || saved === 'dark') {
+          document.documentElement.setAttribute('data-theme', saved);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) { /* localStorage unavailable — default theme stands */ }
+    })();
+  </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.js"></script>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/utilities.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="css/styles.css">
+  <a class="skip-link" href="#main-content">Skip to main content</a>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  </head>
+  <!-- ============================================================
+       DESKTOP / WEB SHELL — Windows File Explorer style
+       Hidden on narrow viewports via layout.css breakpoints.
+       ============================================================ -->
+  <div class="explorer-shell" id="explorer-shell">
 
-  <body class="min-h-screen bg-[#0a0a0d] text-gray-200">
+    <!-- Sidebar: flat section list -->
+    <aside class="explorer-sidebar" id="explorer-sidebar" aria-label="Folder navigation">
+      <div class="sidebar-header">
+        <span class="brand-mark" data-icon="layout-grid" aria-hidden="true">▣</span>
+        <!-- Populated by render.js renderMeta() from data.meta.name -->
+        <span class="brand-name"></span>
+      </div>
 
-    <div class="cursor"></div>
+      <nav aria-label="Portfolio sections">
+        <ul class="folder-tree" role="tree" id="folder-tree">
+          <!-- Section rows are rendered by js/render.js renderFolderTree() -->
+        </ul>
+      </nav>
 
-    <!-- HEADER -->
-    <header id="header" class="mt-32 pt-56 pb-32 px-6 lg:mt-40 lg:pt-80 lg:pb-40 hero-animate">
-      <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-        <div id="header-left"></div>
-        <div id="header-right"></div>
+      <div class="sidebar-footer">
+        <button type="button" class="theme-toggle" id="theme-toggle-desktop" aria-pressed="false">
+          <span class="theme-toggle__icon" data-icon="sun" aria-hidden="true"></span>
+          <span class="theme-toggle__label">Toggle theme</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Top toolbar: breadcrumb + search + view toggle -->
+    <header class="explorer-toolbar" id="explorer-toolbar">
+      <button type="button" class="icon-button sidebar-collapse-btn" id="sidebar-collapse-btn" aria-label="Collapse sidebar" aria-expanded="true" aria-controls="explorer-sidebar">
+        <span data-icon="menu" aria-hidden="true"></span>
+      </button>
+
+      <nav aria-label="breadcrumb" class="breadcrumb" id="breadcrumb">
+        <ol class="breadcrumb__list">
+          <!-- Breadcrumb items are rendered by js/render.js renderBreadcrumb() -->
+        </ol>
+      </nav>
+
+      <div class="toolbar-search">
+        <label class="visually-hidden" for="search-input">Search portfolio</label>
+        <span class="toolbar-search__icon" data-icon="search" aria-hidden="true"></span>
+        <input type="search" id="search-input" class="toolbar-search__input" placeholder="Search projects, skills, certifications…" autocomplete="off" />
+      </div>
+
+      <div class="toolbar-actions" role="group" aria-label="View options">
+        <button type="button" class="icon-button view-toggle" id="view-toggle-grid" aria-pressed="true" aria-label="Grid view">
+          <span data-icon="layout-grid" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="icon-button view-toggle" id="view-toggle-list" aria-pressed="false" aria-label="List view">
+          <span data-icon="list" aria-hidden="true"></span>
+        </button>
       </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-6 pb-32">
+    <!-- Main body: dashboard content -->
+    <main class="explorer-main" id="main-content" tabindex="-1">
+      <section class="dashboard-section" aria-labelledby="dashboard-heading">
+        <div class="dashboard-section__header">
+          <h1 id="dashboard-heading">Projects</h1>
+          <p class="dashboard-section__subtitle">[Placeholder subtitle — e.g. "12 projects across 4 categories"]</p>
+          <div class="dashboard-filters" id="dashboard-filters" role="tablist" aria-label="Filter by category">
+            <!-- Chips are rendered by js/render.js renderFilterChips() -->
+          </div>
+        </div>
 
-      <section id="skills" class="my-40 relative overflow-hidden">
-        <h2 class="section-title" data-aos="fade-up">Technical Skills</h2>
-        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-          <div id="skills-left"></div>
-          <div id="skills-right" class="flex justify-center"></div>
+        <div class="dashboard-grid" id="dashboard-grid" role="list">
+          <!-- Cards are rendered by js/render.js from js/data.js. -->
         </div>
       </section>
+    </main>
+  </div>
 
-      <section id="projects" class="my-40">
-        <h2 class="section-title" data-aos="fade-up">Featured Projects</h2>
-        <div class="projects-grid" id="projects-grid"></div>
-      </section>
+  <!-- ============================================================
+       MOBILE SHELL — Google Drive app style
+       Hidden on wide viewports via layout.css breakpoints.
+       ============================================================ -->
+  <div class="drive-shell" id="drive-shell" hidden>
 
-      <section id="about" class="my-40 max-w-6xl mx-auto">
-        <h2 class="section-title mb-12" data-aos="fade-up">
-          Certifications
-        </h2>
+    <header class="drive-topbar">
+      <button type="button" class="icon-button" id="drawer-open-btn" aria-label="Open menu" aria-expanded="false" aria-controls="drive-drawer">
+        <span data-icon="menu" aria-hidden="true"></span>
+      </button>
 
-        <!-- Remove gap on mobile (gap-0 md:gap-16) -->
-        <div class="grid md:grid-cols-2 gap-0 md:gap-16">
-          <div id="about-left"></div>
-          <div id="about-right"></div>
-        </div>
-      </section>
+      <div class="drive-topbar__search">
+        <label class="visually-hidden" for="mobile-search-input">Search portfolio</label>
+        <span data-icon="search" aria-hidden="true"></span>
+        <input type="search" id="mobile-search-input" placeholder="Search" autocomplete="off" />
+      </div>
 
-      <section id="education" class="my-20">
-        <h2 class="section-title" data-aos="fade-up">Education</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto" id="education-grid"></div>
-      </section>
+      <button type="button" class="avatar-button" aria-label="Profile">
+        <!-- Populated by render.js renderMeta() from data.meta.avatarInitials -->
+        <span class="avatar-button__initials" aria-hidden="true"></span>
+      </button>
+    </header>
 
-      <footer id="footer" class="text-center py-20 border-t border-purple-900/30 mt-40"></footer>
+    <nav class="drive-tabs" aria-label="Content type">
+      <!-- Tabs are rendered by js/render.js renderMobileTabs() -->
+    </nav>
+
+    <main class="drive-main" tabindex="-1">
+      <div class="drive-filters" id="drive-filters" role="tablist" aria-label="Filter by category">
+        <!-- Chips are rendered by js/render.js renderFilterChips() -->
+      </div>
+      <div class="drive-grid" id="drive-grid" role="list">
+        <!-- Cards are rendered by js/render.js from js/data.js. -->
+      </div>
     </main>
 
-    <script type="module" src="js/script.js"></script>
+    <button type="button" class="fab" id="fab-button" aria-label="Quick actions">
+      <span data-icon="plus" aria-hidden="true"></span>
+    </button>
 
-    <div id="cert-modal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-6">
+    <nav class="drive-bottom-nav" aria-label="Primary">
+      <button type="button" class="drive-bottom-nav__item is-active" aria-current="page">
+        <span class="drive-bottom-nav__icon" data-icon="home" aria-hidden="true"></span>
+        <span class="drive-bottom-nav__label">Home</span>
+      </button>
+      <button type="button" class="drive-bottom-nav__item">
+        <span class="drive-bottom-nav__icon" data-icon="star" aria-hidden="true"></span>
+        <span class="drive-bottom-nav__label">Starred</span>
+      </button>
+      <button type="button" class="drive-bottom-nav__item">
+        <span class="drive-bottom-nav__icon" data-icon="share-2" aria-hidden="true"></span>
+        <span class="drive-bottom-nav__label">Shared</span>
+      </button>
+      <button type="button" class="drive-bottom-nav__item">
+        <span class="drive-bottom-nav__icon" data-icon="file" aria-hidden="true"></span>
+        <span class="drive-bottom-nav__label">Files</span>
+      </button>
+    </nav>
 
-      <div class="relative w-full max-w-5xl bg-[#0f0f14] rounded-2xl p-6 overflow-auto max-h-[90vh]">
-
-        <!-- CLOSE BUTTON (back inside, top-right of modal box) -->
-        <button
-          onclick="closeCertModal()"
-          class="absolute top-4 right-4 text-white text-2xl hover:text-purple-400 transition"
-        >
-          ✕
-        </button>
-
-        <!-- LEFT ARROW -->
-        <button
-          onclick="prevCert()"
-          class="absolute left-2 top-1/2 -translate-y-1/2 text-white text-3xl hover:text-purple-400 transition"
-        >
-          ‹
-        </button>
-
-        <!-- RIGHT ARROW -->
-        <button
-          onclick="nextCert()"
-          class="absolute right-2 top-1/2 -translate-y-1/2 text-white text-3xl hover:text-purple-400 transition"
-        >
-          ›
-        </button>
-
-        <div class="grid md:grid-cols-2 gap-8">
-
-          <!-- IMAGE -->
-          <div class="flex justify-center items-center h-[420px] bg-black/20 rounded-lg">
-            <img
-              id="cert-image"
-              alt="Certification preview"
-              title="Certification preview"
-              class="max-h-full max-w-full object-contain rounded-lg shadow-xl"
-            />
-          </div>
-
-          <!-- DETAILS -->
-          <div>
-            <h3 id="cert-title" class="text-2xl font-bold mb-2"></h3>
-            <p id="cert-issuer" class="text-purple-300 mb-1"></p>
-            <p id="cert-level" class="text-sm opacity-70 mb-4"></p>
-
-            <div id="cert-dates" class="text-xs opacity-60 mb-6"></div>
-
-            <h4 class="text-lg font-semibold mb-3 text-purple-400">
-              Key Highlights
-            </h4>
-
-            <ul id="cert-highlights" class="space-y-2 text-sm text-gray-300 list-disc pl-5"></ul>
-          </div>
-
+    <!-- Drawer menu (off-canvas) -->
+    <div class="drive-drawer" id="drive-drawer" hidden>
+      <div class="drive-drawer__backdrop" id="drive-drawer-backdrop"></div>
+      <nav class="drive-drawer__panel" aria-label="Menu">
+        <div class="drive-drawer__header">
+          <!-- Populated by render.js renderMeta() from data.meta.avatarInitials -->
+          <span class="avatar-button__initials" aria-hidden="true"></span>
+          <!-- Populated by render.js renderMeta() from data.meta.name -->
+          <span class="drive-drawer__name"></span>
         </div>
+        <ul class="drive-drawer__list">
+          <!-- Drawer links are rendered by js/render.js renderDrawerList() -->
+        </ul>
+        <div class="drive-drawer__footer">
+          <button type="button" class="theme-toggle" id="theme-toggle-mobile" aria-pressed="false">
+            <span class="theme-toggle__icon" data-icon="sun" aria-hidden="true"></span>
+            <span class="theme-toggle__label">Toggle theme</span>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       CARD DETAIL MODAL (shared by both shells)
+       Static shell; content is built by render.renderModalContent(item)
+       and the open/close/focus-trap is handled by interactions.js.
+       ============================================================ -->
+  <div class="modal" id="card-modal" hidden>
+    <div class="modal__backdrop" data-modal-close></div>
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button type="button" class="icon-button modal__close" data-modal-close aria-label="Close details">
+        <span data-icon="x" aria-hidden="true"></span>
+      </button>
+      <div class="modal__content" id="modal-content">
+        <!-- Populated by render.renderModalContent(item) -->
       </div>
     </div>
-  </body>
-  </html>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/interactions.js"></script>
+  <script src="js/init.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

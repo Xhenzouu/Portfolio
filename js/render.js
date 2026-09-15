@@ -1,219 +1,852 @@
-import { 
-  headerData, 
-  skillsData, 
-  projectsData, 
-  aboutData, 
-  educationData, 
-  footerData 
-} from './data.js';
+/* ==========================================================================
+   render.js
+   Reads window.portfolioData + window.portfolioIcons and builds/populates
+   the DOM. Exposes window.render for interactions.js to call.
 
-export function renderHeader() {
-  document.getElementById('header-left').innerHTML = `
-    <div class="text-right md:text-right flex flex-col justify-center stagger">
-      <div class="inline-block">
-        <h1 class="font-display font-black tracking-tighter leading-[0.85] gradient-text"
-            style="font-size: clamp(4rem, 10vw, 9rem);">
-          HENSON BRIX
-        </h1>
-        <p class="font-display font-black tracking-tighter leading-[0.85] gradient-text -mt-2 md:-mt-4"
-           style="font-size: clamp(4rem, 10vw, 9rem);">
-          ARROYO
-        </p>
-      </div>
-      <p class="text-2xl md:text-3xl lg:text-4xl text-purple-300 font-light mt-8 tracking-wide stagger">
-        ${headerData.title}
-      </p>
-    </div>
-  `;
+   Phase 9 changes:
+     - renderContactSection(): new. Builds a Contact section from
+       data.meta.contact, using the same .about-layout wrapper and
+       .about-block styling as About. Email → mailto:, phone → tel: (with
+       spaces/dashes stripped from the href), LinkedIn / GitHub /
+       portfolioUrl → external links with target="_blank"
+       rel="noopener noreferrer". Falsy fields are skipped.
+     - renderModalContent(item, sectionId): new second argument. Looks up
+       SECTION_ITEM_CONFIG[sectionId].thumbVariant and passes it to the
+       modal hero slot, so certifications render their portrait hero
+       with object-fit: contain instead of the default landscape crop.
+       Missing sectionId → no variant → landscape (matches pre-change
+       behavior).
+     - renderSectionHeader(): special case for "contact" → subtitle
+       "Get in touch".
+     - renderDashboard/renderDriveGrid dispatch: contact branch added
+       alongside about.
 
-document.getElementById('header-right').innerHTML = `
-    <div class="space-y-3 md:space-y-4 stagger">
-      <p class="text-lg md:text-xl lg:text-2xl leading-relaxed opacity-90">
-        ${headerData.description}
-      </p>
+   Phase 8.1 follow-up (preserved):
+     - SECTION_ITEM_CONFIG.certifications has thumbVariant: "portrait".
+     - buildThumbSlot() takes a 4th arg (variant).
+     - Guard-block stub list complete.
 
-      <!-- Contact: Always side by side -->
-      <div class="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1 text-sm md:text-base stagger">
-        <a href="mailto:${headerData.email}" class="flex items-center gap-2 hover:text-purple-400 transition whitespace-nowrap">
-          <i data-lucide="mail" class="w-4 h-4 md:w-5 md:h-5"></i> ${headerData.email}
-        </a>
+   Phase 8.1 (preserved):
+     - buildIcon/hydrateIcons/replaceIconSlot/renderThemeToggleIcons.
+     - buildDashboardCard/buildDriveCard(item, config).
+     - renderBreadcrumb uses Lucide chevron-right.
 
-        <span class="text-gray-600 hidden sm:inline">|</span>
+   Phase 7.5 / 7.2 (preserved): renderMeta, renderAboutSection,
+   applyGridMode, flat folder tree, renderFilterChips.
+   ========================================================================== */
 
-        <a href="tel:${headerData.phone.replace(/[^+\d]/g, '')}" class="flex items-center gap-2 hover:text-purple-400 transition whitespace-nowrap">
-          <i data-lucide="phone" class="w-4 h-4 md:w-5 md:h-5"></i> ${headerData.phone}
-        </a>
-      </div>
+(function () {
+  "use strict";
 
-      <!-- Social Icons: Vertically centered -->
-      <div class="flex flex-wrap items-center justify-center md:justify-start gap-5 text-2xl md:text-3xl stagger">
-        ${headerData.social.map(s => `
-          <a href="${s.url}" target="_blank" rel="noopener noreferrer"
-            class="hover:text-purple-400 transition flex items-center justify-center leading-none">
-            <i class="fa-brands fa-${s.icon}"></i>
-          </a>
-        `).join('')}
-      </div>
-    </div>
-  `;
-}
-
-export function renderSkills() {
-  document.getElementById('skills-left').innerHTML = `
-    <div data-aos="fade-right" class="space-y-12">
-      <div class="text-center lg:text-left">
-        <h3 class="text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-6">
-          Full-Stack Developer
-        </h3>
-        <p class="text-xl leading-relaxed opacity-90 max-w-2xl">${skillsData.description}</p>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-16 opacity-70">
-        ${skillsData.categories.map(cat => `
-          <div class="skill-category !text-left">
-            <h4 class="text-xl font-bold flex items-center gap-3 text-purple-300">
-              <i data-lucide="${cat.icon}" class="w-6 h-6"></i> ${cat.title}
-            </h4>
-            <p class="mt-2 text-sm">${cat.skills}</p>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `;
-
-  document.getElementById('skills-right').innerHTML = `
-    <div data-aos="fade-left" class="flex justify-center items-center h-96 lg:h-full relative">
-      <div class="sphere-container">
-        <div class="sphere" id="sphere">
-          ${skillsData.sphereIcons.map((item, index) => `
-            <i data-lucide="${item.icon}"
-               class="skill-icon"
-               data-skill="${item.skill}"
-               style="--i:${index}">
-            </i>
-          `).join('')}
-        </div>
-      </div>
-
-      <div id="skill-tooltip" class="skill-tooltip">
-        <div id="tooltip-title" class="font-bold text-purple-300"></div>
-        <div id="tooltip-desc" class="text-sm opacity-90"></div>
-      </div>
-    </div>
-  `;
-}
-
-export function renderProjects() {
-  document.getElementById('projects-grid').innerHTML = projectsData.map((proj, index) => `
-    <div class="hover-card project-card relative" data-aos="fade-up" data-aos-delay="${index * 100}">
-      <img src="${proj.image}" alt="${proj.title}">
-
-      <div class="project-content">
-        <h3 class="text-3xl font-bold text-white">${proj.title}</h3>
-        <p class="text-purple-300 text-sm">${proj.period}</p>
-        <div class="flex flex-wrap gap-2 mt-3">
-          ${proj.tech.map(tag => `<span class="tech-tag text-xs px-3 py-1">${tag}</span>`).join('')}
-        </div>
-      </div>
-
-      <div class="project-details">
-        <p class="text-purple-300 font-semibold mb-4">${proj.role}</p>
-        <ul class="list-disc pl-6 space-y-3 text-gray-300 text-sm">
-          ${proj.points.map(p => `<li>${p}</li>`).join('')}
-        </ul>
-
-        ${proj.liveUrl ? `
-          <a href="${proj.liveUrl}" target="_blank" class="watch-demo">
-            Live Demo
-          </a>` : ''}
-      </div>
-    </div>
-  `).join('');
-}
-
-export function renderAbout() {
-  const certs = aboutData.certifications || [];
-
-  const container = document.getElementById('about-left');
-  const right = document.getElementById('about-right');
-
-  container.innerHTML = "";
-  right.innerHTML = "";
-
-  // Split: first 4 in left column, rest in right column
-  const leftCerts = certs.slice(0, 4);
-  const rightCerts = certs.slice(4);
-
-  function createCard(cert, index) {
-    return `
-      <div class="cert-card group relative p-4 border border-purple-900/30 rounded-xl hover:border-purple-500 transition cursor-pointer"
-           data-index="${index}">
-        <div class="font-semibold text-purple-300">${cert.title}</div>
-        <div class="text-sm opacity-70">${cert.issuer}</div>
-        <!-- tooltip -->
-        <div class="cert-tooltip hidden absolute left-1/2 -translate-x-1/2 top-full mt-3 w-80 bg-[#111118] border border-purple-500 rounded-lg p-3 z-50 shadow-xl">
-          <img src="${cert.image}" class="w-full rounded mb-2" />
-          <div class="text-sm font-semibold text-purple-300">${cert.title}</div>
-          <div class="text-xs opacity-70 mb-1">${cert.issuer}</div>
-          <div class="text-xs opacity-60">${cert.level || ""}</div>
-        </div>
-      </div>
-    `;
+  if (!window.portfolioData) {
+    console.warn(
+      "[render.js] window.portfolioData is missing. " +
+      "Make sure js/data.js is loaded before js/render.js. Rendering skipped."
+    );
+    window.render = {
+      renderAll: function () {},
+      renderMeta: function () {},
+      hydrateIcons: function () {},
+      renderThemeToggleIcons: function () {},
+      replaceIconSlot: function () {},
+      renderFolderTree: function () {},
+      renderDashboard: function () {},
+      renderDriveGrid: function () {},
+      renderFilterChips: function () {},
+      renderDrawerList: function () {},
+      renderMobileTabs: function () {},
+      renderBreadcrumb: function () {},
+      renderSectionHeader: function () {},
+      renderCounts: function () {},
+      renderSection: function () {},
+      renderModalContent: function () {},
+      renderContactSection: function () {}
+    };
+    return;
   }
 
-  // Left column: first 4 certs — NO gap between cards
-  container.innerHTML = `
-    <div class="flex flex-col gap-0">
-      ${leftCerts.map((c, i) => createCard(c, i)).join('')}
-    </div>
-  `;
+  const data = window.portfolioData;
+  const iconSource = window.portfolioIcons || {};
 
-  // Right column: remaining certs — NO gap between cards
-  right.innerHTML = `
-    <div class="flex flex-col gap-0">
-      ${rightCerts.map((c, i) => createCard(c, i + 4)).join('')}
-    </div>
-  `;
+  const DEFAULT_SECTION_ID = "projects";
+  const COUNTED_SECTIONS = ["projects", "certifications"];
+  const MOBILE_TAB_SECTIONS = ["projects", "certifications", "experience"];
+  const SECTIONS_WITH_CHIPS = ["projects"];
 
-  // Hover tooltip logic
-  document.querySelectorAll(".cert-card").forEach(card => {
-    const tooltip = card.querySelector(".cert-tooltip");
+  const SECTION_ITEM_CONFIG = {
+    projects: {
+      items: () => data.projects,
+      title: (item) => item.name,
+      meta: (item) => [item.category, item.date].filter(Boolean).join(" · "),
+      chipKey: (item) => item.category
+    },
+    experience: {
+      items: () => data.experience,
+      title: (item) => item.role,
+      meta: (item) => [item.org, [item.startDate, item.endDate].filter(Boolean).join("–")]
+        .filter(Boolean).join(" · "),
+      chipKey: (item) => item.org
+    },
+    certifications: {
+      items: () => data.certifications,
+      title: (item) => item.name,
+      meta: (item) => [item.issuer, item.date].filter(Boolean).join(" · "),
+      chipKey: (item) => item.issuer,
+      thumbVariant: "portrait"
+    },
+    trainings: {
+      items: () => data.trainings,
+      title: (item) => item.name,
+      meta: (item) => [item.provider, item.hours != null ? item.hours + "h" : null]
+        .filter(Boolean).join(" · "),
+      chipKey: null
+    },
+    designs: {
+      items: () => data.designs,
+      title: (item) => item.name,
+      meta: (item) => item.type,
+      chipKey: null
+    }
+  };
 
-    card.addEventListener("mouseenter", () => {
-      tooltip.classList.remove("hidden");
+  const CHIP_CONTAINER_IDS = ["dashboard-filters", "drive-filters"];
+  const GRID_MODE_CLASS = { about: "about-layout" };
+
+  // Sections rendered via the About-style stacked layout. Used by
+  // renderDashboard/renderDriveGrid to decide whether to call the
+  // generic card renderer or a section-specific renderer.
+  const STATIC_LAYOUT_SECTIONS = ["about", "contact"];
+
+  // ---------------------------------------------------------------------
+  // DOM helpers
+  // ---------------------------------------------------------------------
+
+  function el(tag, opts) {
+    opts = opts || {};
+    const node = document.createElement(tag);
+    if (opts.className) node.className = opts.className;
+    if (opts.text != null) node.textContent = opts.text;
+    if (opts.attrs) {
+      Object.keys(opts.attrs).forEach((k) => node.setAttribute(k, opts.attrs[k]));
+    }
+    return node;
+  }
+
+  function clearChildren(node) {
+    if (!node) return;
+    while (node.firstChild) node.removeChild(node.firstChild);
+  }
+
+  function getSection(sectionId) {
+    return data.sections.find((s) => s.id === sectionId) || null;
+  }
+
+  function uniqueInOrder(values) {
+    const seen = new Set();
+    const out = [];
+    values.forEach((v) => {
+      if (v != null && !seen.has(v)) { seen.add(v); out.push(v); }
+    });
+    return out;
+  }
+
+  function applyGridMode(gridEl, mode) {
+    if (!gridEl) return;
+    Object.keys(GRID_MODE_CLASS).forEach((k) => gridEl.classList.remove(GRID_MODE_CLASS[k]));
+    if (mode && GRID_MODE_CLASS[mode]) gridEl.classList.add(GRID_MODE_CLASS[mode]);
+  }
+
+  // ---------------------------------------------------------------------
+  // ICONS
+  // ---------------------------------------------------------------------
+
+  const ICON_FALLBACK = "circle";
+  const unknownIconsWarned = {};
+
+  function buildIcon(name, opts) {
+    opts = opts || {};
+    const svgString = iconSource[name];
+    let chosen = name;
+
+    if (!svgString) {
+      if (!unknownIconsWarned[name]) {
+        console.warn('[render.js] Unknown icon "' + name + '", falling back to "' + ICON_FALLBACK + '".');
+        unknownIconsWarned[name] = true;
+      }
+      chosen = ICON_FALLBACK;
+    }
+
+    const raw = iconSource[chosen] || iconSource[ICON_FALLBACK];
+    if (!raw) return null;
+
+    const tpl = document.createElement("template");
+    tpl.innerHTML = raw;
+    const svg = tpl.content.firstElementChild;
+    if (!svg) return null;
+
+    svg.setAttribute("focusable", "false");
+    svg.setAttribute("width", String(opts.size || 20));
+    svg.setAttribute("height", String(opts.size || 20));
+    if (opts.className) svg.setAttribute("class", opts.className);
+    if (opts.ariaHidden === false) svg.removeAttribute("aria-hidden");
+    return svg;
+  }
+
+  function replaceIconSlot(slot, name, opts) {
+    if (!slot) return;
+    const svg = buildIcon(name, opts);
+    if (!svg) return;
+    while (slot.firstChild) slot.removeChild(slot.firstChild);
+    slot.appendChild(svg);
+  }
+
+  function hydrateIcons(root) {
+    const scope = root || document;
+    scope.querySelectorAll("[data-icon]").forEach((slot) => {
+      const name = slot.getAttribute("data-icon");
+      if (!name) return;
+      const wasHidden = slot.getAttribute("aria-hidden") === "true";
+      replaceIconSlot(slot, name, { ariaHidden: wasHidden });
+      slot.removeAttribute("data-icon");
+    });
+  }
+
+  function renderThemeToggleIcons() {
+    const theme = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    const iconName = theme === "dark" ? "moon" : "sun";
+    document.querySelectorAll(".theme-toggle__icon").forEach((slot) => {
+      replaceIconSlot(slot, iconName, { ariaHidden: true });
+    });
+  }
+
+  // ---------------------------------------------------------------------
+  // META
+  // ---------------------------------------------------------------------
+
+  function renderMeta() {
+    const meta = data.meta || {};
+
+    const brandName = document.querySelector(".brand-name");
+    if (brandName) brandName.textContent = meta.name || "";
+
+    const drawerName = document.querySelector(".drive-drawer__name");
+    if (drawerName) drawerName.textContent = meta.name || "";
+
+    const initials = meta.avatarInitials || "";
+    document.querySelectorAll(".avatar-button__initials").forEach((n) => {
+      n.textContent = initials;
     });
 
-    card.addEventListener("mouseleave", () => {
-      tooltip.classList.add("hidden");
+    if (meta.name) document.title = "Portfolio — " + meta.name;
+
+    const descEl = document.querySelector('meta[name="description"]');
+    if (descEl && meta.name) {
+      const tagline = meta.tagline ? " — " + meta.tagline : "";
+      descEl.setAttribute("content", "Portfolio of " + meta.name + tagline);
+    }
+
+    renderThemeToggleIcons();
+  }
+
+  // ---------------------------------------------------------------------
+  // FOLDER TREE
+  // ---------------------------------------------------------------------
+
+  function buildFolderTreeItem(section) {
+    const li = el("li", { className: "folder-tree__item", attrs: { role: "treeitem" } });
+
+    const btn = el("button", {
+      className: "folder-tree__leaf" + (section.id === DEFAULT_SECTION_ID ? " is-active" : ""),
+      attrs: { type: "button", "data-section": section.id }
+    });
+    if (section.id === DEFAULT_SECTION_ID) btn.setAttribute("aria-current", "page");
+
+    const iconSlot = el("span", {
+      className: "folder-tree__icon",
+      attrs: { "aria-hidden": "true" }
+    });
+    const iconNode = buildIcon(section.icon || ICON_FALLBACK, { size: 16 });
+    if (iconNode) iconSlot.appendChild(iconNode);
+
+    const label = el("span", { className: "folder-tree__label", text: section.label });
+
+    btn.appendChild(iconSlot);
+    btn.appendChild(label);
+
+    if (COUNTED_SECTIONS.indexOf(section.id) !== -1) {
+      const countArray = SECTION_ITEM_CONFIG[section.id]
+        ? SECTION_ITEM_CONFIG[section.id].items() || []
+        : [];
+      btn.appendChild(el("span", {
+        className: "folder-tree__count",
+        text: String(countArray.length),
+        attrs: { "data-count": section.id }
+      }));
+    }
+
+    li.appendChild(btn);
+    return li;
+  }
+
+  function renderFolderTree() {
+    const tree = document.getElementById("folder-tree");
+    if (!tree) { console.warn("[render.js] #folder-tree not found in DOM."); return; }
+    clearChildren(tree);
+    data.sections.forEach((s) => tree.appendChild(buildFolderTreeItem(s)));
+  }
+
+  // ---------------------------------------------------------------------
+  // COUNTS / CHIPS
+  // ---------------------------------------------------------------------
+
+  function renderCounts() {
+    COUNTED_SECTIONS.forEach((sectionId) => {
+      const badge = document.querySelector('[data-count="' + sectionId + '"]');
+      if (!badge) return;
+      const config = SECTION_ITEM_CONFIG[sectionId];
+      const count = config ? (config.items() || []).length : 0;
+      badge.textContent = String(count);
+    });
+  }
+
+  function buildChip(label, value, isActive) {
+    const chip = el("button", {
+      className: "filter-chip" + (isActive ? " is-active" : ""),
+      text: label,
+      attrs: { type: "button", role: "tab", "data-filter-value": value }
+    });
+    chip.setAttribute("aria-selected", isActive ? "true" : "false");
+    return chip;
+  }
+
+  function renderFilterChips(sectionId) {
+    const config = SECTION_ITEM_CONFIG[sectionId];
+    const showChips = SECTIONS_WITH_CHIPS.indexOf(sectionId) !== -1;
+
+    CHIP_CONTAINER_IDS.forEach((containerId) => {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      clearChildren(container);
+
+      if (!showChips || !config || !config.chipKey) {
+        container.hidden = true;
+        return;
+      }
+
+      const items = config.items() || [];
+      const values = uniqueInOrder(items.map(config.chipKey));
+
+      container.appendChild(buildChip("All", "all", true));
+      values.forEach((v) => container.appendChild(buildChip(v, v, false)));
+      container.hidden = false;
+    });
+  }
+
+  // ---------------------------------------------------------------------
+  // IMAGE / GLYPH SLOT
+  // ---------------------------------------------------------------------
+
+  function buildThumbSlot(thumbSrc, className, glyph, variant) {
+    const composedClass = variant ? className + " " + className + "--" + variant : className;
+    const slot = el("div", { className: composedClass, attrs: { "aria-hidden": "true" } });
+
+    if (!thumbSrc) {
+      slot.textContent = glyph || "▢";
+      return slot;
+    }
+
+    const img = document.createElement("img");
+    img.src = thumbSrc;
+    img.alt = "";
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.onerror = function () {
+      while (slot.firstChild) slot.removeChild(slot.firstChild);
+      slot.textContent = glyph || "▢";
+    };
+    slot.appendChild(img);
+    return slot;
+  }
+
+  // ---------------------------------------------------------------------
+  // CARDS (dashboard + drive)
+  // ---------------------------------------------------------------------
+
+  function attachCardInteraction(cardEl, item) {
+    cardEl.setAttribute("role", "button");
+    cardEl.setAttribute("tabindex", "0");
+    cardEl.setAttribute("data-item-id", item.id || "");
+    cardEl.classList.add("is-clickable");
+  }
+
+  function buildDashboardCard(item, config) {
+    const card = el("article", { className: "card" });
+
+    const thumb = buildThumbSlot(item.thumb, "card__thumb", "▢", config.thumbVariant);
+
+    const body = el("div", { className: "card__body" });
+    body.appendChild(el("h2", { className: "card__title", text: config.title(item) }));
+    body.appendChild(el("p", { className: "card__meta", text: config.meta(item) }));
+
+    card.appendChild(thumb);
+    card.appendChild(body);
+    attachCardInteraction(card, item);
+    return card;
+  }
+
+  function buildDriveCard(item, config) {
+    const card = el("article", { className: "drive-card" });
+
+    const thumb = buildThumbSlot(item.thumb, "drive-card__thumb", "▢", config.thumbVariant);
+
+    card.appendChild(thumb);
+    card.appendChild(el("div", { className: "drive-card__label", text: config.title(item) }));
+    card.appendChild(el("div", { className: "drive-card__meta", text: config.meta(item) }));
+
+    attachCardInteraction(card, item);
+    return card;
+  }
+
+  // ---------------------------------------------------------------------
+  // ABOUT LAYOUT
+  // ---------------------------------------------------------------------
+
+  function buildAboutBlock(titleText, bodyNode) {
+    const section = el("section", { className: "about-block" });
+    section.appendChild(el("h2", { className: "about-block__title", text: titleText }));
+    const body = el("div", { className: "about-block__body" });
+    body.appendChild(bodyNode);
+    section.appendChild(body);
+    return section;
+  }
+
+  function buildBioBlock() {
+    const wrap = el("div", { className: "about-bio" });
+    ((data.about && data.about.bio) || []).forEach((text) =>
+      wrap.appendChild(el("p", { className: "about-bio__paragraph", text: text }))
+    );
+    return wrap;
+  }
+
+  function buildEducationBlock() {
+    const wrap = el("div", { className: "about-education" });
+    ((data.about && data.about.education) || []).forEach((entry) => {
+      const item = el("div", { className: "about-education__item" });
+      item.appendChild(el("div", { className: "about-education__degree", text: entry.degree || "" }));
+      item.appendChild(el("div", { className: "about-education__institution", text: entry.institution || "" }));
+      item.appendChild(el("div", {
+        className: "about-education__years",
+        text: [entry.startYear, entry.endYear].filter(Boolean).join(" – ")
+      }));
+      wrap.appendChild(item);
+    });
+    return wrap;
+  }
+
+  function buildAwardsBlock() {
+    const wrap = el("div", { className: "about-awards" });
+    ((data.about && data.about.awards) || []).forEach((award) => {
+      const item = el("div", { className: "about-awards__item" });
+      item.appendChild(el("div", { className: "about-awards__name", text: award.name || "" }));
+      item.appendChild(el("div", {
+        className: "about-awards__meta",
+        text: [award.issuer, award.date].filter(Boolean).join(" · ")
+      }));
+      wrap.appendChild(item);
+    });
+    return wrap;
+  }
+
+  function buildSkillsBlock() {
+    const wrap = el("div", { className: "about-skills" });
+    const skills = (data.about && data.about.skills) || {};
+    const GROUP_LABELS = {
+      languages: "Languages",
+      frameworks: "Frameworks",
+      cloudDevops: "Cloud & DevOps",
+      ai: "AI & ML",
+      security: "Security",
+      other: "Other"
+    };
+
+    Object.keys(skills).forEach((key) => {
+      const items = skills[key] || [];
+      if (!items.length) return;
+      const group = el("div", { className: "about-skills__group" });
+      group.appendChild(el("div", {
+        className: "about-skills__label",
+        text: GROUP_LABELS[key] || key
+      }));
+      const list = el("ul", { className: "about-skills__list" });
+      items.forEach((s) => list.appendChild(el("li", { className: "about-skills__item", text: s })));
+      group.appendChild(list);
+      wrap.appendChild(group);
+    });
+    return wrap;
+  }
+
+  function renderAboutSection(gridEl) {
+    if (!gridEl) return;
+    gridEl.appendChild(buildAboutBlock("Bio", buildBioBlock()));
+    gridEl.appendChild(buildAboutBlock("Education", buildEducationBlock()));
+    gridEl.appendChild(buildAboutBlock("Awards", buildAwardsBlock()));
+    gridEl.appendChild(buildAboutBlock("Skills", buildSkillsBlock()));
+  }
+
+  // ---------------------------------------------------------------------
+  // CONTACT LAYOUT (Phase 9)
+  //
+  // Renders one stacked block from data.meta.contact. Email → mailto:,
+  // phone → tel: (href normalized), external URLs → target="_blank".
+  // Falsy fields are skipped, so a blank phone or missing LinkedIn won't
+  // produce a dead link row.
+  // ---------------------------------------------------------------------
+
+  function normalizePhoneHref(raw) {
+    // Keep a leading + (for international dialing) and digits only.
+    // Strips spaces, dashes, parens, dots.
+    return String(raw || "").replace(/[^+\d]/g, "");
+  }
+
+  function buildContactList() {
+    const contact = (data.meta && data.meta.contact) || {};
+    const list = el("ul", { className: "contact-list" });
+
+    const rows = [];
+
+    if (contact.email) {
+      rows.push({
+        label: "Email",
+        display: contact.email,
+        href: "mailto:" + contact.email,
+        external: false
+      });
+    }
+    if (contact.phone) {
+      rows.push({
+        label: "Phone",
+        display: contact.phone,
+        href: "tel:" + normalizePhoneHref(contact.phone),
+        external: false
+      });
+    }
+    if (contact.linkedin) {
+      rows.push({
+        label: "LinkedIn",
+        display: contact.linkedin.replace(/^https?:\/\//, ""),
+        href: contact.linkedin,
+        external: true
+      });
+    }
+    if (contact.github) {
+      rows.push({
+        label: "GitHub",
+        display: contact.github.replace(/^https?:\/\//, ""),
+        href: contact.github,
+        external: true
+      });
+    }
+    if (contact.portfolioUrl) {
+      rows.push({
+        label: "Portfolio",
+        display: contact.portfolioUrl.replace(/^https?:\/\//, ""),
+        href: contact.portfolioUrl,
+        external: true
+      });
+    }
+
+    rows.forEach((row) => {
+      const li = el("li", { className: "contact-list__item" });
+      li.appendChild(el("span", { className: "contact-list__label", text: row.label }));
+
+      const linkAttrs = { href: row.href };
+      if (row.external) {
+        linkAttrs.target = "_blank";
+        linkAttrs.rel = "noopener noreferrer";
+      }
+      const link = el("a", {
+        className: "contact-list__link",
+        text: row.display,
+        attrs: linkAttrs
+      });
+      li.appendChild(link);
+      list.appendChild(li);
     });
 
-    card.addEventListener("click", () => {
-      const index = Number(card.dataset.index);
-      openCertModal(index);
+    return list;
+  }
+
+  function renderContactSection(gridEl) {
+    if (!gridEl) return;
+    gridEl.appendChild(buildAboutBlock("Contact", buildContactList()));
+  }
+
+  // ---------------------------------------------------------------------
+  // GRID RENDERERS
+  // ---------------------------------------------------------------------
+
+  function renderDashboard(sectionId) {
+    const grid = document.getElementById("dashboard-grid");
+    if (!grid) { console.warn("[render.js] #dashboard-grid not found in DOM."); return; }
+    clearChildren(grid);
+    applyGridMode(grid, STATIC_LAYOUT_SECTIONS.indexOf(sectionId) !== -1 ? "about" : "cards");
+
+    if (sectionId === "about")   { renderAboutSection(grid);   return; }
+    if (sectionId === "contact") { renderContactSection(grid); return; }
+
+    const config = SECTION_ITEM_CONFIG[sectionId];
+    if (!config) {
+      console.info('[render.js] Section "' + sectionId + '" has no grid-card representation yet.');
+      return;
+    }
+    (config.items() || []).forEach((item) =>
+      grid.appendChild(buildDashboardCard(item, config))
+    );
+  }
+
+  function renderDriveGrid(sectionId) {
+    const grid = document.getElementById("drive-grid");
+    if (!grid) { console.warn("[render.js] #drive-grid not found in DOM."); return; }
+    clearChildren(grid);
+    applyGridMode(grid, STATIC_LAYOUT_SECTIONS.indexOf(sectionId) !== -1 ? "about" : "cards");
+
+    if (sectionId === "about")   { renderAboutSection(grid);   return; }
+    if (sectionId === "contact") { renderContactSection(grid); return; }
+
+    const config = SECTION_ITEM_CONFIG[sectionId];
+    if (!config) {
+      console.info('[render.js] Section "' + sectionId + '" has no grid-card representation yet.');
+      return;
+    }
+    (config.items() || []).forEach((item) =>
+      grid.appendChild(buildDriveCard(item, config))
+    );
+  }
+
+  // ---------------------------------------------------------------------
+  // DRAWER LIST / MOBILE TABS / BREADCRUMB / SECTION HEADER
+  // ---------------------------------------------------------------------
+
+  function renderDrawerList() {
+    const list = document.querySelector(".drive-drawer__list");
+    if (!list) { console.warn("[render.js] .drive-drawer__list not found in DOM."); return; }
+    clearChildren(list);
+
+    data.sections.forEach((section) => {
+      const li = el("li");
+      const btn = el("button", {
+        className: "drive-drawer__link",
+        text: section.label,
+        attrs: { type: "button", "data-section": section.id }
+      });
+      li.appendChild(btn);
+      list.appendChild(li);
     });
-  });
-}
+  }
 
-export function renderEducation() {
-  document.getElementById('education-grid').innerHTML = educationData.map(edu => `
-    <div class="education-card flex items-start gap-5 p-6">
-      <img src="${edu.logo}" class="w-20 h-20 object-contain">
-      <div>
-        <h3 class="text-2xl font-bold">${edu.degree}</h3>
-        <p class="text-purple-300">${edu.specialization}</p>
-        <p>${edu.school}</p>
-        <p class="opacity-70">${edu.year}</p>
-      </div>
-    </div>
-  `).join('');
-}
+  function renderMobileTabs() {
+    const tabs = document.querySelector(".drive-tabs");
+    if (!tabs) { console.warn("[render.js] .drive-tabs not found in DOM."); return; }
+    clearChildren(tabs);
 
-export function renderFooter() {
-  document.getElementById('footer').innerHTML = `
-    <p class="text-lg mb-8">${footerData.message}</p>
-    <a href="mailto:${footerData.email}" class="bg-purple-600 px-10 py-4 rounded-full">
-      Get in touch
-    </a>
-    <p class="mt-12 text-sm opacity-50">${footerData.copyright}</p>
-  `;
-}
+    MOBILE_TAB_SECTIONS.forEach((sectionId) => {
+      const section = getSection(sectionId);
+      if (!section) return;
+      const isActive = sectionId === DEFAULT_SECTION_ID;
+      const btn = el("button", {
+        className: "drive-tabs__tab" + (isActive ? " is-active" : ""),
+        text: section.label,
+        attrs: { type: "button", "data-section": section.id }
+      });
+      if (isActive) btn.setAttribute("aria-current", "page");
+      tabs.appendChild(btn);
+    });
+  }
+
+  function buildBreadcrumbSeparator() {
+    const li = el("li", { className: "breadcrumb__separator", attrs: { "aria-hidden": "true" } });
+    const svg = buildIcon("chevron-right", { size: 14 });
+    if (svg) li.appendChild(svg);
+    return li;
+  }
+
+  function renderBreadcrumb(sectionId) {
+    const list = document.querySelector("#breadcrumb .breadcrumb__list");
+    if (!list) { console.warn("[render.js] #breadcrumb .breadcrumb__list not found in DOM."); return; }
+    clearChildren(list);
+
+    const rootItem = el("li", { className: "breadcrumb__item" });
+    const rootLink = el("a", {
+      className: "breadcrumb__link",
+      text: "Portfolio",
+      attrs: { href: "#" }
+    });
+    rootItem.appendChild(rootLink);
+    list.appendChild(rootItem);
+
+    const section = getSection(sectionId);
+    if (section) {
+      list.appendChild(buildBreadcrumbSeparator());
+      list.appendChild(el("li", {
+        className: "breadcrumb__item",
+        text: section.label,
+        attrs: { "aria-current": "page" }
+      }));
+    }
+  }
+
+  function renderSectionHeader(sectionId) {
+    const heading = document.getElementById("dashboard-heading");
+    const subtitle = document.querySelector(".dashboard-section__subtitle");
+    const section = getSection(sectionId);
+    if (!section) return;
+
+    if (heading) heading.textContent = section.label;
+
+    if (subtitle) {
+      if (sectionId === "about") {
+        subtitle.textContent = (data.meta && data.meta.tagline) || "";
+      } else if (sectionId === "contact") {
+        subtitle.textContent = "Get in touch";
+      } else {
+        const config = SECTION_ITEM_CONFIG[sectionId];
+        if (config) {
+          subtitle.textContent = (config.items() || []).length + " " + section.label;
+        } else {
+          subtitle.textContent = "[Placeholder subtitle for " + section.label + "]";
+        }
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // MODAL CONTENT (Phase 8.1; sectionId param added Phase 9)
+  //
+  // sectionId is used only to look up a thumbVariant for the modal hero
+  // (certifications → portrait). Missing sectionId → no variant, which
+  // renders the landscape hero that was the default before this change.
+  // ---------------------------------------------------------------------
+
+  function renderModalContent(item, sectionId) {
+    const container = document.getElementById("modal-content");
+    if (!container || !item) return;
+    clearChildren(container);
+
+    if (item.thumb) {
+      const config = sectionId ? SECTION_ITEM_CONFIG[sectionId] : null;
+      const variant = config ? config.thumbVariant : undefined;
+      const hero = buildThumbSlot(item.thumb, "modal__hero", "▢", variant);
+      container.appendChild(hero);
+    }
+
+    const header = el("div", { className: "modal__header" });
+    const titleText = item.name || item.role || "";
+    header.appendChild(el("h2", {
+      className: "modal__title",
+      text: titleText,
+      attrs: { id: "modal-title" }
+    }));
+
+    const metaParts = [];
+    if (item.category) metaParts.push(item.category);
+    if (item.date) metaParts.push(item.date);
+    if (item.org) metaParts.push(item.org);
+    if (item.issuer) metaParts.push(item.issuer);
+    if (item.provider) metaParts.push(item.provider);
+    if (item.startDate || item.endDate) {
+      metaParts.push([item.startDate, item.endDate].filter(Boolean).join("–"));
+    }
+    if (metaParts.length) {
+      header.appendChild(el("p", { className: "modal__meta", text: metaParts.join(" · ") }));
+    }
+    container.appendChild(header);
+
+    if (item.description) {
+      container.appendChild(el("p", { className: "modal__description", text: item.description }));
+    }
+
+    if (Array.isArray(item.highlights) && item.highlights.length) {
+      const wrap = el("div", { className: "modal__highlights" });
+      wrap.appendChild(el("h3", { className: "modal__section-title", text: "Highlights" }));
+      const ul = el("ul", { className: "modal__highlights-list" });
+      item.highlights.forEach((h) =>
+        ul.appendChild(el("li", { className: "modal__highlight", text: h }))
+      );
+      wrap.appendChild(ul);
+      container.appendChild(wrap);
+    }
+
+    if (Array.isArray(item.tech) && item.tech.length) {
+      const wrap = el("div", { className: "modal__tags" });
+      wrap.appendChild(el("h3", { className: "modal__section-title", text: "Tech" }));
+      const list = el("ul", { className: "modal__tag-list" });
+      item.tech.forEach((t) =>
+        list.appendChild(el("li", { className: "modal__tag", text: t }))
+      );
+      wrap.appendChild(list);
+      container.appendChild(wrap);
+    }
+
+    const links = el("div", { className: "modal__links" });
+    if (item.repoUrl) {
+      links.appendChild(el("a", {
+        className: "modal__link",
+        text: "View Repo",
+        attrs: { href: item.repoUrl, target: "_blank", rel: "noopener noreferrer" }
+      }));
+    }
+    if (item.liveUrl) {
+      links.appendChild(el("a", {
+        className: "modal__link modal__link--primary",
+        text: "View Live",
+        attrs: { href: item.liveUrl, target: "_blank", rel: "noopener noreferrer" }
+      }));
+    }
+    if (links.childNodes.length) container.appendChild(links);
+  }
+
+  // ---------------------------------------------------------------------
+  // COMPOSITE
+  // ---------------------------------------------------------------------
+
+  function renderSection(sectionId) {
+    const targetId = getSection(sectionId) ? sectionId : DEFAULT_SECTION_ID;
+    renderDashboard(targetId);
+    renderDriveGrid(targetId);
+    renderFilterChips(targetId);
+    renderBreadcrumb(targetId);
+    renderSectionHeader(targetId);
+  }
+
+  function renderAll() {
+    renderMeta();
+    hydrateIcons();
+    renderFolderTree();
+    renderCounts();
+    renderDrawerList();
+    renderMobileTabs();
+    renderSection(DEFAULT_SECTION_ID);
+  }
+
+  window.render = {
+    renderAll: renderAll,
+    renderMeta: renderMeta,
+    hydrateIcons: hydrateIcons,
+    renderThemeToggleIcons: renderThemeToggleIcons,
+    replaceIconSlot: replaceIconSlot,
+    renderFolderTree: renderFolderTree,
+    renderDashboard: renderDashboard,
+    renderDriveGrid: renderDriveGrid,
+    renderFilterChips: renderFilterChips,
+    renderDrawerList: renderDrawerList,
+    renderMobileTabs: renderMobileTabs,
+    renderBreadcrumb: renderBreadcrumb,
+    renderSectionHeader: renderSectionHeader,
+    renderCounts: renderCounts,
+    renderSection: renderSection,
+    renderModalContent: renderModalContent,
+    renderContactSection: renderContactSection
+  };
+
+  renderAll();
+})();
