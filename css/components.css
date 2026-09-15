@@ -6,25 +6,22 @@
    card borders, or headings.
 
    Phase 9 follow-up (this pass):
-     §6e — .modal__panel cap bumped 85vh → 90vh (more forgiving on
-           mid-size viewports).
-         — .modal__hero--portrait switched from aspect-ratio-driven sizing
-           to a fixed height cap: min(50vh, 400px) desktop, 40vh mobile.
-           This keeps the hero at full panel width and letterboxes the
-           cert inside with object-fit: contain, while leaving title +
-           meta visible without scrolling on typical viewports.
-           Landscape .modal__hero is unchanged (16:9 is short enough
-           that no cap is needed).
+     §6d — Portrait card thumb variants no longer change the box's
+           dimensions. Every card thumb (.card__thumb and
+           .drive-card__thumb) uses aspect-ratio: 16 / 10 uniformly.
+           The --portrait modifier now only affects the child <img>
+           (object-fit: contain vs. cover). Result: every card in every
+           section has identical thumb height, one consistent grid.
+           Cert images letterbox horizontally inside the landscape box;
+           project images fill the box as before.
 
    Phase 9 additions (preserved):
-     §6c — .contact-list block for the Contact section.
-     §6e — .modal__hero--portrait variant (now height-capped).
-
-   Phase 8.1 follow-up additions (preserved):
-     §6d — .card__thumb--portrait / .drive-card__thumb--portrait.
+     §6c — .contact-list block.
+     §6e — .modal__hero--portrait height-capped, panel cap 90vh.
+           (Modal hero still uses a taller portrait box — that's the
+           place where the full cert is read at size.)
 
    Phase 8.1 additions (preserved): §2a, §6d (original), §6e, §7a.
-
    Phase 7.5 additions (preserved): §6c about-layout + About blocks.
    Phase 7.2 additions (preserved): §4a filter chips.
 
@@ -568,10 +565,6 @@
 
 /* --------------------------------------------------------------------------
    6c. ABOUT + CONTACT LAYOUT
-   Both About and Contact render into the same stacked single-column
-   layout via .about-layout, and each section is wrapped in .about-block
-   (shared title + body structure). Contact-specific styling lives in
-   .contact-list* below.
    -------------------------------------------------------------------------- */
 .dashboard-grid.about-layout,
 .drive-grid.about-layout {
@@ -661,10 +654,7 @@
   border: 1px solid var(--color-border-subtle);
 }
 
-/* CONTACT LIST
-   Rows of label + value. Email/phone are plain links; external URLs open
-   in a new tab (handled by render.js). Label column is fixed-width on
-   desktop so values line up vertically; mobile stacks label above value. */
+/* CONTACT LIST */
 .contact-list {
   display: flex;
   flex-direction: column;
@@ -753,9 +743,22 @@
   display: block;
 }
 
-/* Card thumb variants — portrait opt-in for certifications */
+/* Card thumb portrait variants.
+
+   Phase 9 follow-up: the --portrait modifier no longer changes the
+   box's dimensions. Every card thumb in every section uses the same
+   16:10 box so the grid stays uniform. The modifier now only affects
+   how the img inside renders:
+     - default (project thumbnails, landscape)  → object-fit: cover
+     - portrait variant (certifications)        → object-fit: contain,
+       so the whole document is visible with neutral letterboxing on
+       the left/right (background-color on the parent slot shows through).
+
+   The empty --portrait rules below are kept as no-op markers so the
+   modifier class continues to exist in the DOM (render.js still emits
+   it) and future maintainers can see why it's inert. */
 .card__thumb--portrait {
-  aspect-ratio: 4 / 5;
+  /* intentionally empty — box shape inherited from .card__thumb */
 }
 
 .card__thumb--portrait img {
@@ -763,7 +766,7 @@
 }
 
 .drive-card__thumb--portrait {
-  aspect-ratio: 4 / 5;
+  /* intentionally empty — box shape inherited from .drive-card__thumb */
 }
 
 .drive-card__thumb--portrait img {
@@ -798,10 +801,6 @@
   position: relative;
   z-index: 1;
   width: min(90vw, 640px);
-  /* Phase 9 follow-up: cap bumped 85vh → 90vh so mid-size viewports
-     have a little more headroom. 720px hard cap prevents the panel
-     from growing comically large on 4K displays. Panel scrolls
-     internally (overflow-y: auto) if content exceeds the cap. */
   max-height: min(90vh, 720px);
   overflow-y: auto;
   background-color: var(--color-bg-surface);
@@ -844,14 +843,9 @@
   display: block;
 }
 
-/* Modal hero portrait variant.
-   Phase 9 follow-up: switched from aspect-ratio-driven sizing (which
-   made the box demand ~740px of height at full panel width) to a fixed
-   height cap. This keeps the hero at full panel width, caps its height
-   at min(50vh, 400px), and letterboxes the certificate inside with
-   object-fit: contain. Title + meta stay above the fold on typical
-   viewports; the panel scrolls internally only if content exceeds the
-   panel's own 90vh cap. */
+/* Modal hero portrait variant. This is where the full cert is read at
+   size, so the box stays portrait-shaped and height-capped so title +
+   meta remain above the fold. */
 .modal__hero--portrait {
   aspect-ratio: auto;
   height: min(50vh, 400px);
@@ -999,8 +993,6 @@
     padding-top: calc(var(--space-5) + 24px);
   }
 
-  /* Phase 9 follow-up: tighter hero cap on mobile so title + meta
-     stay above the fold inside the 90vh bottom-sheet panel. */
   .modal__hero--portrait {
     height: 40vh;
   }
