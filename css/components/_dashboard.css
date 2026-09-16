@@ -1,0 +1,137 @@
+/* ==========================================================================
+   _dashboard.css
+   Part of components.css. Cascade position: FIFTH.
+
+   §6 dashboard cards (header, cards, list view), §6b empty state
+   (aliased for dashboard + drive grids).
+
+   All rules moved verbatim from the pre-refactor components.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   6. DASHBOARD
+   -------------------------------------------------------------------------- */
+.dashboard-section__header h1 {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-primary);
+}
+
+.dashboard-section__subtitle {
+  margin-top: var(--space-1);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-base), transform var(--transition-base), border-color var(--transition-base);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--color-border-default);
+}
+
+.card__thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 10;
+  background-color: var(--color-bg-surface-alt);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-2xl);
+  border-bottom: 1px solid var(--color-border-subtle);
+  overflow: hidden;
+}
+
+.card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card__body {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.card__title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.card__meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.card:focus-within,
+.card.is-clickable:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.card.is-clickable { cursor: pointer; }
+
+#dashboard-grid.is-list {
+  grid-template-columns: 1fr;
+  gap: var(--space-2);
+}
+
+#dashboard-grid.is-list .card {
+  flex-direction: row;
+  align-items: stretch;
+}
+
+#dashboard-grid.is-list .card:hover { transform: none; }
+
+#dashboard-grid.is-list .card__thumb {
+  aspect-ratio: 1 / 1;
+  width: 96px;
+  flex-shrink: 0;
+  border-bottom: none;
+  border-right: 1px solid var(--color-border-subtle);
+  font-size: var(--font-size-xl);
+}
+
+#dashboard-grid.is-list .card__body {
+  justify-content: center;
+  padding: var(--space-3) var(--space-4);
+}
+
+/* --------------------------------------------------------------------------
+   6b. EMPTY STATE (aliased)
+   -------------------------------------------------------------------------- */
+.dashboard-grid__empty,
+.grid-empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding-block: var(--space-6);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+.dashboard-grid__empty::before,
+.grid-empty::before {
+  content: "⌕";
+  font-size: var(--font-size-2xl);
+  color: var(--color-text-muted);
+}
+
+.drive-grid .grid-empty { padding-block: var(--space-5); }

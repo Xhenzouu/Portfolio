@@ -1,0 +1,139 @@
+/* ==========================================================================
+   _folder-tree.css
+   Part of components.css. Cascade position: THIRD.
+
+   §4 folder tree rows / icons / counts, §4a filter chips.
+
+   DORMANT RULES (kept in place to preserve cascade; see top-level
+   components.css header for the full catalog):
+     §4 — .folder-tree__branch .folder-tree__leaf:hover rule.
+     §4 — .folder-tree__toggle base rule.
+   These selectors match no live DOM since Phase 7.2 (flat tree).
+   Flagged for a cleanup pass once base.css / utilities.css / styles.css
+   can be grepped.
+
+   All rules moved verbatim from the pre-refactor components.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   4. FOLDER TREE
+   -------------------------------------------------------------------------- */
+.folder-tree { padding-block: var(--space-2); }
+
+.folder-tree__toggle,
+.folder-tree__leaf {
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.folder-tree__toggle {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.folder-tree__icon {
+  display: inline-flex;
+  width: 16px;
+  justify-content: center;
+  color: var(--color-text-muted);
+  transition: transform var(--transition-base);
+}
+
+.folder-tree__toggle:hover,
+.folder-tree__leaf:hover {
+  background-color: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.folder-tree__branch .folder-tree__leaf:hover {
+  background-color: var(--accent-100);
+}
+
+.folder-tree__leaf.is-active {
+  background-color: var(--accent-100);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+  box-shadow: inset 2px 0 0 var(--accent-500);
+}
+
+.folder-tree__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding-inline: var(--space-1);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-surface-alt);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.folder-tree__toggle:focus-visible,
+.folder-tree__leaf:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: -2px;
+}
+
+/* --------------------------------------------------------------------------
+   4a. FILTER CHIPS
+   -------------------------------------------------------------------------- */
+.dashboard-filters,
+.drive-filters {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin-top: var(--space-4);
+  padding-bottom: var(--space-1);
+}
+
+.dashboard-filters::-webkit-scrollbar,
+.drive-filters::-webkit-scrollbar { display: none; }
+
+.dashboard-filters[hidden],
+.drive-filters[hidden] { display: none; }
+
+.filter-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  border: none;
+  border-bottom: 2px solid transparent;
+  min-height: 36px;
+  transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.filter-chip:hover {
+  background-color: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.filter-chip.is-active {
+  background-color: var(--accent-100);
+  color: var(--color-text-primary);
+  border-bottom-color: var(--accent-500);
+}
+
+.filter-chip:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  .filter-chip { min-height: 40px; padding-inline: var(--space-3); }
+  .drive-filters { margin-top: 0; padding-top: var(--space-3); }
+}

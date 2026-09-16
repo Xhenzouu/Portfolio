@@ -1,0 +1,125 @@
+/* ==========================================================================
+   _buttons.css
+   Part of components.css. Cascade position: FIRST.
+
+   §1 skip-link visual polish, §2 icon and generic buttons, §2a inline
+   SVG sizing for Lucide icons rendered by render.js.
+
+   All rules moved verbatim from the pre-refactor components.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. SKIP LINK
+   -------------------------------------------------------------------------- */
+.skip-link {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+/* --------------------------------------------------------------------------
+   2. ICON BUTTONS / GENERIC BUTTONS
+   -------------------------------------------------------------------------- */
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  border: 1px solid transparent;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.icon-button:hover {
+  background-color: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.icon-button[aria-pressed="true"],
+.icon-button[aria-expanded="true"] {
+  background-color: var(--color-bg-active);
+  border-color: var(--color-border-subtle);
+  color: var(--color-text-primary);
+}
+
+.icon-button:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   2a. ICONS
+   -------------------------------------------------------------------------- */
+[data-icon] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.folder-tree__icon svg,
+.toolbar-search__icon svg,
+.theme-toggle__icon svg,
+.brand-mark svg,
+.drive-bottom-nav__icon svg,
+.avatar-button svg {
+  display: block;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  border: 1px solid transparent;
+  font-weight: var(--font-weight-medium);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.btn-ghost:hover {
+  background-color: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-default);
+  font-weight: var(--font-weight-medium);
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-bg-hover);
+  border-color: var(--color-border-strong);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  background-color: var(--color-text-primary);
+  color: var(--color-bg-canvas);
+  border: 1px solid var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+  transition: opacity var(--transition-fast);
+}
+
+.btn-primary:hover { opacity: 0.85; }
+
+.btn-ghost:focus-visible,
+.btn-secondary:focus-visible,
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}

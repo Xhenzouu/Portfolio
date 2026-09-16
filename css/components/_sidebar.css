@@ -1,0 +1,116 @@
+/* ==========================================================================
+   _sidebar.css
+   Part of components.css. Cascade position: SECOND.
+
+   §3 sidebar shell (brand mark/name, theme toggle), §3a collapsed
+   sidebar.
+
+   DORMANT RULES (kept in place to preserve cascade; see top-level
+   components.css header for the full catalog):
+     §3a — .folder-tree__branch entry inside the display:none group.
+     §3a — .folder-tree__toggle entries inside the display:none group
+           and the centered icon-rail group.
+   These selectors match no live DOM since Phase 7.2 (flat tree).
+   Flagged for a cleanup pass once base.css / utilities.css / styles.css
+   can be grepped.
+
+   All rules moved verbatim from the pre-refactor components.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   3. SIDEBAR
+   -------------------------------------------------------------------------- */
+.explorer-sidebar {
+  background-color: var(--color-bg-surface);
+  border-right: 1px solid var(--color-border-subtle);
+}
+
+.sidebar-header { border-bottom: 1px solid var(--color-border-subtle); }
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg-surface-alt);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+  flex-shrink: 0;
+}
+
+.brand-mark svg { width: 16px; height: 16px; }
+
+.brand-name {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-footer { border-top: 1px solid var(--color-border-subtle); }
+
+.theme-toggle {
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.theme-toggle__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.theme-toggle__icon svg { width: 16px; height: 16px; }
+
+/* --------------------------------------------------------------------------
+   3a. COLLAPSED SIDEBAR — includes DORMANT selectors (see header)
+   -------------------------------------------------------------------------- */
+.explorer-shell.is-sidebar-collapsed .brand-name,
+.explorer-shell.is-sidebar-collapsed .folder-tree__label,
+.explorer-shell.is-sidebar-collapsed .folder-tree__count,
+.explorer-shell.is-sidebar-collapsed .folder-tree__branch,
+.explorer-shell.is-sidebar-collapsed .theme-toggle__label {
+  display: none;
+}
+
+.explorer-shell.is-sidebar-collapsed .folder-tree__toggle,
+.explorer-shell.is-sidebar-collapsed .folder-tree__leaf,
+.explorer-shell.is-sidebar-collapsed .theme-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding-inline: 0;
+  min-height: 40px;
+  overflow: hidden;
+}
+
+.explorer-shell.is-sidebar-collapsed .folder-tree__icon,
+.explorer-shell.is-sidebar-collapsed .theme-toggle__icon {
+  margin-inline: auto;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.explorer-shell.is-sidebar-collapsed .sidebar-header {
+  justify-content: center;
+  padding-inline: 0;
+  gap: 0;
+}
+
+.explorer-shell.is-sidebar-collapsed .brand-mark { margin-inline: auto; }
+.explorer-shell.is-sidebar-collapsed .sidebar-footer { padding-inline: 0; }

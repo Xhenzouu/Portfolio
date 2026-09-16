@@ -1,0 +1,296 @@
+/* ==========================================================================
+   _drive.css
+   Part of components.css. Cascade position: TENTH.
+
+   §7 mobile tabs, §8 drive shell (topbar, search, avatar, cards, FAB,
+   bottom nav, drawer), §8a mobile rhythm polish.
+
+   DORMANT RULES (kept in place to preserve cascade; see top-level
+   components.css header for the full catalog):
+     §8 — .drive-card__icon rule. Renamed to .drive-card__thumb in
+          Phase 8.1; no element currently renders the old class.
+   Flagged for a cleanup pass once base.css / utilities.css / styles.css
+   can be grepped.
+
+   All rules moved verbatim from the pre-refactor components.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   7. MOBILE TABS
+   -------------------------------------------------------------------------- */
+.drive-tabs__tab {
+  position: relative;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: color var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.drive-tabs__tab:hover { color: var(--color-text-primary); }
+
+.drive-tabs__tab::after {
+  content: "";
+  position: absolute;
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: -1px;
+  height: 2px;
+  background-color: transparent;
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-fast);
+}
+
+.drive-tabs__tab.is-active { color: var(--color-text-primary); }
+.drive-tabs__tab.is-active::after { background-color: var(--accent-500); }
+
+.drive-tabs__tab:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   8. DRIVE SHELL
+   -------------------------------------------------------------------------- */
+.drive-shell { background-color: var(--color-bg-canvas); }
+
+.drive-topbar {
+  background-color: var(--color-bg-surface);
+  border-bottom: 1px solid var(--color-border-subtle);
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.drive-topbar__search {
+  flex: 1 1 auto;
+  background-color: var(--color-bg-surface-alt);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-full);
+  height: 44px;
+  padding-inline: var(--space-3);
+  color: var(--color-text-muted);
+  transition: border-color var(--transition-fast);
+}
+
+.drive-topbar__search:focus-within { border-color: var(--accent-500); }
+
+.drive-topbar__search input {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+}
+
+.drive-topbar__search input::placeholder { color: var(--color-text-muted); }
+
+.drive-topbar__search [data-icon] {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+}
+
+.drive-topbar__search [data-icon] svg { width: 16px; height: 16px; }
+
+.drive-topbar .icon-button { width: 44px; height: 44px; }
+
+.avatar-button {
+  background-color: var(--color-bg-surface-alt);
+  border: 1px solid var(--color-border-subtle);
+  transition: border-color var(--transition-fast);
+  width: 44px;
+  height: 44px;
+}
+
+.avatar-button:hover { border-color: var(--color-border-strong); }
+
+.avatar-button:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.avatar-button__initials {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+}
+
+.drive-tabs {
+  background-color: var(--color-bg-surface);
+  border-bottom: 1px solid var(--color-border-subtle);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.drive-tabs::-webkit-scrollbar { display: none; }
+
+.drive-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  transition: box-shadow var(--transition-base), border-color var(--transition-base), transform var(--transition-fast);
+  min-height: 120px;
+  overflow: hidden;
+}
+
+.drive-card:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--color-border-default);
+}
+
+.drive-card:active {
+  transform: scale(0.98);
+  box-shadow: none;
+}
+
+/* DORMANT: .drive-card__icon was renamed to .drive-card__thumb in 8.1.
+   No element currently renders this class. Flagged for cleanup. */
+.drive-card__icon {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-muted);
+}
+
+.drive-card__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.drive-card__meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.drive-card:focus-within,
+.drive-card.is-clickable:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.drive-card {
+  padding: var(--space-3);
+}
+
+.fab {
+  background-color: var(--color-text-primary);
+  color: var(--color-bg-canvas);
+  box-shadow: var(--shadow-lg);
+  transition: opacity var(--transition-fast), box-shadow var(--transition-base), transform var(--transition-fast);
+  bottom: calc(var(--drive-bottom-nav-height) + var(--space-4) + env(safe-area-inset-bottom, 0px));
+}
+
+.fab svg { width: 22px; height: 22px; }
+
+.fab:hover { opacity: 0.9; }
+.fab:active { transform: scale(0.94); }
+
+.fab:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.drive-bottom-nav {
+  background-color: var(--color-bg-surface);
+  border-top: 1px solid var(--color-border-subtle);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.drive-bottom-nav__item {
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
+  min-height: 44px;
+}
+
+.drive-bottom-nav__item:hover { color: var(--color-text-secondary); }
+.drive-bottom-nav__item.is-active { color: var(--color-text-primary); }
+
+.drive-bottom-nav__icon { font-size: var(--font-size-md); }
+.drive-bottom-nav__icon svg { width: 20px; height: 20px; }
+
+.drive-bottom-nav__label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.drive-bottom-nav__item:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: -2px;
+}
+
+.drive-drawer__backdrop { background-color: rgba(15, 14, 14, 0.4); }
+:root[data-theme="dark"] .drive-drawer__backdrop { background-color: rgba(0, 0, 0, 0.6); }
+
+.drive-drawer__panel {
+  background-color: var(--color-bg-surface);
+  border-right: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-lg);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.drive-drawer__header {
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.drive-drawer__header .avatar-button__initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-surface-alt);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.drive-drawer__name {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.drive-drawer__link {
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.drive-drawer__link:hover {
+  background-color: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.drive-drawer__link:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: -2px;
+}
+
+.drive-drawer__footer {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+/* --------------------------------------------------------------------------
+   8a. MOBILE RHYTHM POLISH
+   -------------------------------------------------------------------------- */
+.drive-main {
+  padding-bottom: calc(
+    var(--drive-bottom-nav-height) +
+    var(--drive-fab-size) +
+    var(--space-4) +
+    var(--space-4) +
+    env(safe-area-inset-bottom, 0px)
+  );
+}
+
+.drive-grid { row-gap: var(--space-3); }
+
+@media (max-width: 400px) {
+  .drive-drawer__panel {
+    max-width: calc(100vw - var(--space-6));
+  }
+}

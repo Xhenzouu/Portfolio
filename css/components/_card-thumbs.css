@@ -1,0 +1,69 @@
+/* ==========================================================================
+   _card-thumbs.css
+   Part of components.css. Cascade position: EIGHTH.
+
+   §6d card interactivity + thumb image. Covers the drive-card thumb
+   base rule, the portrait card thumb variants, and the shared
+   .is-clickable cursor rule.
+
+   Phase 9 follow-up note (verbatim from pre-refactor): the --portrait
+   modifier no longer changes the box's dimensions. Every card thumb in
+   every section uses the same 16:10 box so the grid stays uniform. The
+   modifier now only affects how the img inside renders:
+     - default (project thumbnails, landscape)  → object-fit: cover
+     - portrait variant (certifications)        → object-fit: contain,
+       so the whole document is visible with neutral letterboxing on
+       the left/right (background-color on the parent slot shows through).
+
+   The empty --portrait rules below are kept as no-op markers so the
+   modifier class continues to exist in the DOM (render.js still emits
+   it) and future maintainers can see why it's inert.
+
+   All rules moved verbatim from the pre-refactor components.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   6d. CARD INTERACTIVITY + THUMB IMAGE
+   -------------------------------------------------------------------------- */
+.card.is-clickable,
+.drive-card.is-clickable {
+  cursor: pointer;
+}
+
+.drive-card__thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  background-color: var(--color-bg-surface-alt);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-2xl);
+  border-bottom: 1px solid var(--color-border-subtle);
+  overflow: hidden;
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
+}
+
+.drive-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card__thumb--portrait {
+  /* intentionally empty — box shape inherited from .card__thumb */
+}
+
+.card__thumb--portrait img {
+  object-fit: contain;
+}
+
+.drive-card__thumb--portrait {
+  /* intentionally empty — box shape inherited from .drive-card__thumb */
+}
+
+.drive-card__thumb--portrait img {
+  object-fit: contain;
+}

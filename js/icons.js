@@ -14,19 +14,14 @@
      - 24×24 viewBox
      - fill="none", stroke="currentColor", stroke-width="2"
      - stroke-linecap="round", stroke-linejoin="round"
-     - aria-hidden="true" by default (surrounding buttons/labels carry
-       the accessible name; render.js flips this for standalone icons)
+     - aria-hidden="true" by default
 
-   Phase 8.1 icon set. Add new icons here by pasting their Lucide source
-   SVG — keep the same shape: <svg …>…</svg>, no class, no width/height
-   overrides beyond 24.
+   Add new icons by pasting their Lucide source SVG.
    ========================================================================== */
 
 (function () {
   "use strict";
 
-  // Each icon is a full 24×24 SVG string. Kept as single-line strings to
-  // keep this file diff-friendly; render.js handles the parsing.
   window.portfolioIcons = {
 
     // --- Section icons ---------------------------------------------------
@@ -72,11 +67,14 @@
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg>',
     "chevron-right":
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>',
+    "chevron-left":
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>',
+    "chevron-down":
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>',
+    "external-link":
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>',
 
-    // --- Utility fallback (used by render.js when a requested icon name
-    //     is not present in this map). Rendered as a bare circle so the
-    //     layout stays intact even if data.sections[].icon references
-    //     a name that hasn't been added yet.
+    // --- Utility fallback --------------------------------------------------
     circle:
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>'
   };

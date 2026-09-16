@@ -45,13 +45,13 @@
     <aside class="explorer-sidebar" id="explorer-sidebar" aria-label="Folder navigation">
       <div class="sidebar-header">
         <span class="brand-mark" data-icon="layout-grid" aria-hidden="true">▣</span>
-        <!-- Populated by render.js renderMeta() from data.meta.name -->
+        <!-- Populated by the render pipeline from data.meta.name -->
         <span class="brand-name"></span>
       </div>
 
       <nav aria-label="Portfolio sections">
         <ul class="folder-tree" role="tree" id="folder-tree">
-          <!-- Section rows are rendered by js/render.js renderFolderTree() -->
+          <!-- Section rows are rendered by the render pipeline -->
         </ul>
       </nav>
 
@@ -71,7 +71,7 @@
 
       <nav aria-label="breadcrumb" class="breadcrumb" id="breadcrumb">
         <ol class="breadcrumb__list">
-          <!-- Breadcrumb items are rendered by js/render.js renderBreadcrumb() -->
+          <!-- Breadcrumb items are rendered by the render pipeline -->
         </ol>
       </nav>
 
@@ -98,12 +98,12 @@
           <h1 id="dashboard-heading">Projects</h1>
           <p class="dashboard-section__subtitle">[Placeholder subtitle — e.g. "12 projects across 4 categories"]</p>
           <div class="dashboard-filters" id="dashboard-filters" role="tablist" aria-label="Filter by category">
-            <!-- Chips are rendered by js/render.js renderFilterChips() -->
+            <!-- Chips are rendered by the render pipeline -->
           </div>
         </div>
 
         <div class="dashboard-grid" id="dashboard-grid" role="list">
-          <!-- Cards are rendered by js/render.js from js/data.js. -->
+          <!-- Cards are rendered by the render pipeline -->
         </div>
       </section>
     </main>
@@ -127,21 +127,20 @@
       </div>
 
       <button type="button" class="avatar-button" aria-label="Profile">
-        <!-- Populated by render.js renderMeta() from data.meta.avatarInitials -->
         <span class="avatar-button__initials" aria-hidden="true"></span>
       </button>
     </header>
 
     <nav class="drive-tabs" aria-label="Content type">
-      <!-- Tabs are rendered by js/render.js renderMobileTabs() -->
+      <!-- Tabs are rendered by the render pipeline -->
     </nav>
 
     <main class="drive-main" tabindex="-1">
       <div class="drive-filters" id="drive-filters" role="tablist" aria-label="Filter by category">
-        <!-- Chips are rendered by js/render.js renderFilterChips() -->
+        <!-- Chips are rendered by the render pipeline -->
       </div>
       <div class="drive-grid" id="drive-grid" role="list">
-        <!-- Cards are rendered by js/render.js from js/data.js. -->
+        <!-- Cards are rendered by the render pipeline -->
       </div>
     </main>
 
@@ -173,13 +172,11 @@
       <div class="drive-drawer__backdrop" id="drive-drawer-backdrop"></div>
       <nav class="drive-drawer__panel" aria-label="Menu">
         <div class="drive-drawer__header">
-          <!-- Populated by render.js renderMeta() from data.meta.avatarInitials -->
           <span class="avatar-button__initials" aria-hidden="true"></span>
-          <!-- Populated by render.js renderMeta() from data.meta.name -->
           <span class="drive-drawer__name"></span>
         </div>
         <ul class="drive-drawer__list">
-          <!-- Drawer links are rendered by js/render.js renderDrawerList() -->
+          <!-- Drawer links are rendered by the render pipeline -->
         </ul>
         <div class="drive-drawer__footer">
           <button type="button" class="theme-toggle" id="theme-toggle-mobile" aria-pressed="false">
@@ -194,7 +191,7 @@
   <!-- ============================================================
        CARD DETAIL MODAL (shared by both shells)
        Static shell; content is built by render.renderModalContent(item)
-       and the open/close/focus-trap is handled by interactions.js.
+       and the open/close/focus-trap is handled by interactions/*.
        ============================================================ -->
   <div class="modal" id="card-modal" hidden>
     <div class="modal__backdrop" data-modal-close></div>
@@ -208,10 +205,48 @@
     </div>
   </div>
 
+  <!-- ============================================================
+       IMAGE LIGHTBOX (click-to-zoom for slideshow images)
+       Sibling of the modal so it renders on top when open. Static shell;
+       the image src/alt are set by interactions/_modal.js on open.
+       ============================================================ -->
+  <div class="lightbox" id="image-lightbox" hidden>
+    <div class="lightbox__backdrop" data-lightbox-close></div>
+    <div class="lightbox__panel">
+      <button type="button" class="lightbox__close" data-lightbox-close aria-label="Close zoomed image">
+        <span data-icon="x" aria-hidden="true"></span>
+      </button>
+      <img class="lightbox__image" src="" alt="" />
+    </div>
+  </div>
+
   <script src="js/data.js"></script>
   <script src="js/icons.js"></script>
-  <script src="js/render.js"></script>
-  <script src="js/interactions.js"></script>
+
+  <!-- Render pipeline — partials, then the barrel. The barrel calls
+       window.render.renderAll() after every partial has loaded. -->
+  <script src="js/render/_shell.js"></script>
+  <script src="js/render/_cards.js"></script>
+  <script src="js/render/_chips.js"></script>
+  <script src="js/render/_sections.js"></script>
+  <script src="js/render/_modal.js"></script>
+  <script src="js/render/_drawer.js"></script>
+  <script src="js/render/_bootstrap.js"></script>
+  <script src="js/render/index.js"></script>
+
+  <!-- Interactions pipeline — partials, then the barrel. The barrel
+       calls window.interactions.init() after every partial has loaded. -->
+  <script src="js/interactions/_nav.js"></script>
+  <script src="js/interactions/_theme.js"></script>
+  <script src="js/interactions/_view.js"></script>
+  <script src="js/interactions/_search.js"></script>
+  <script src="js/interactions/_chips.js"></script>
+  <script src="js/interactions/_drawer.js"></script>
+  <script src="js/interactions/_modal.js"></script>
+  <script src="js/interactions/_sidebar.js"></script>
+  <script src="js/interactions/_bootstrap.js"></script>
+  <script src="js/interactions/index.js"></script>
+
   <script src="js/init.js"></script>
   <script src="js/script.js"></script>
 </body>

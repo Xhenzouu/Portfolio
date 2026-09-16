@@ -6,17 +6,18 @@
 
    No ES modules — plain script tag, exposes window.portfolioData.
 
-   Phase 8.1:
-     - 8 project thumb paths corrected from .jpg → .png.
-     - sections[].icon values changed from Unicode glyphs to Lucide names.
+   Designs update:
+     - Fourth design entry added: Card Bank Mobile App Re-Design,
+       a 6-screen portrait mobile design (9:19.5 iPhone frames).
+     - `thumbVariant: "portrait"` on gdrive-redesign and cardbank-redesign
+       (mobile screens). Chairable and Pila Pets have no thumbVariant —
+       landscape default.
+     - Slideshow sizing is intrinsic (viewport wraps the image;
+       image max-height caps the box). No aspectRatio field is used.
 
-   Phase 8.1 follow-up:
-     - Certifications expanded from 6 → 10 entries, all with thumbnails.
-     - 4 new entries' issuer + date placeholders filled in from the
-       certificate images.
-     - Certifications array reordered chronologically (most recent first).
-       IDs are stable identifiers and do not need to be monotonic with
-       array order.
+   Per-item thumbVariant resolution:
+     js/render/_cards.js reads  item.thumbVariant || config.thumbVariant
+     so a section can mix orientations.
    ========================================================================== */
 
 const portfolioData = {
@@ -39,9 +40,7 @@ const portfolioData = {
   },
 
   /* ------------------------------------------------------------------------
-     SECTIONS — ordered, maps 1:1 to sidebar folder tree, drawer, and
-     (a subset of) the mobile tab switcher. icon values are Lucide icon
-     names looked up in window.portfolioIcons by render.js.
+     SECTIONS
      ------------------------------------------------------------------------ */
   sections: [
     { id: "about",           label: "About",           icon: "info",             hasChildren: false },
@@ -54,7 +53,7 @@ const portfolioData = {
   ],
 
   /* ------------------------------------------------------------------------
-     PROJECTS — real content. Thumb paths are .png matching the project id.
+     PROJECTS
      ------------------------------------------------------------------------ */
   projects: [
     {
@@ -64,6 +63,17 @@ const portfolioData = {
       date: "July 2026 – Present",
       description: "A secure enterprise platform with JWT auth, RBAC, secure API endpoints, and modular layered architecture. Includes an AI-powered RAG system with vector search, embeddings, and an internal retrieval gateway. Deployed on AWS with CI/CD.",
       tech: ["React", "TypeScript", "Node.js", "Express", "PostgreSQL", "Prisma", "AWS (EC2, RDS, S3)", "GitHub Actions"],
+      features: [
+        "JWT authentication with refresh token rotation",
+        "Role-based access control (USER, ADMIN, SUPER_ADMIN)",
+        "Knowledge management — document upload, search, categories, tags",
+        "AI Gateway — provider abstraction across OpenAI, Ollama, and Anthropic",
+        "RAG (Retrieval-Augmented Generation) powered by pgvector",
+        "Workflow automation with task management and approvals",
+        "Redis-powered caching and rate limiting",
+        "Audit logging for every action",
+        "52+ tests with Vitest"
+      ],
       repoUrl: "https://github.com/Xhenzouu/xirv-systems",
       liveUrl: null,
       featured: true,
@@ -76,6 +86,16 @@ const portfolioData = {
       date: "March 2025 – December 2025",
       description: "A full-featured HOA platform serving 500+ members with automated notifications and reporting. Provisioned AWS cloud infrastructure with Nginx reverse proxy and PM2, achieving 99.9% uptime. Streamlined core administrative workflows, reducing manual effort by 40%.",
       tech: ["React", "Node.js", "Express", "PostgreSQL", "AWS (EC2, RDS)", "Nginx", "PM2"],
+      features: [
+        "Role-based access for Member, Admin, Public Relations, and Auditor",
+        "Community dashboard with announcements, activities, polls, and projects",
+        "Threaded comments and real-time WebSocket notifications",
+        "CMS for dynamic banner, welcome, about, and affiliation sections",
+        "Admin tools for member, activity, poll, and project management",
+        "Payment tracking and pending-actions approval queue",
+        "SSL/HTTPS with Let's Encrypt and Cloudflare CDN",
+        "GitHub Actions CI/CD pipeline"
+      ],
       repoUrl: "https://github.com/Xhenzouu/lynvillehomes8",
       liveUrl: null,
       featured: true,
@@ -88,6 +108,15 @@ const portfolioData = {
       date: "December 2025",
       description: "A community pet platform with registration, lost reports, adoption listings, and search/filter. Full CRUD operations, authentication, and role-based access (resident/admin). Built as a DICT certification project.",
       tech: ["CodeIgniter 4", "PHP 8.2", "MySQL", "Bootstrap 5"],
+      features: [
+        "Authentication for staff and admin login",
+        "Role-based access control via AuthFilter and AdminFilter",
+        "Admin dashboard with system activity overview",
+        "Resident management — full CRUD for barangay residents",
+        "Pet management — full CRUD for pets linked to their owners",
+        "User management for staff accounts",
+        "Custom views organized by area (admin, auth, residents)"
+      ],
       repoUrl: "https://github.com/Xhenzouu/pila-pets",
       liveUrl: "https://youtu.be/I4n8shvS1ZY",
       featured: false,
@@ -100,6 +129,16 @@ const portfolioData = {
       date: "2025 – 2026",
       description: "A machine learning–powered community project that predicts the likelihood of a lost pet being reunited with its owner in Pila, Laguna. Uses YOLO11 pet detection + DINOv2-small embeddings + FAISS cosine similarity search, plus a RandomForest tabular predictor with a Streamlit UI.",
       tech: ["Python", "Streamlit", "Scikit-learn", "YOLO11", "DINOv2", "FAISS", "PostgreSQL", "Cloudinary"],
+      features: [
+        "RandomForest tabular predictor for pet recovery likelihood",
+        "YOLO11 pet detection with automatic cropping",
+        "DINOv2-small embeddings (384-dim) for visual similarity",
+        "FAISS cosine similarity search across pet images",
+        "PostgreSQL storage with JSONB embeddings",
+        "Streamlit UI designed for non-technical users",
+        "Cloudinary image storage",
+        "Migration scripts for legacy embeddings (v5 → v6)"
+      ],
       repoUrl: "https://github.com/Xhenzouu/lost-pet-ai",
       liveUrl: "https://lost-pet-ai.streamlit.app/",
       featured: true,
@@ -112,6 +151,15 @@ const portfolioData = {
       date: "2023",
       description: "A Windows desktop application for managing sales and inventory of gaming rig parts. Handles login, registration, password retrieval, stock tracking, order creation, order history, archiving, and sales reporting, with SQL Server as the data layer.",
       tech: ["C#", ".NET Framework", "WinForms", "SQL Server", "T-SQL", "ADO.NET"],
+      features: [
+        "Login, registration, and password retrieval for staff accounts",
+        "Stock management for gaming rig parts and accessories",
+        "Order creation with receipt generation at checkout",
+        "Order history and archive for older records",
+        "Sales reporting for day-to-day decisions",
+        "Color-coded stock indicators (green/yellow/red)",
+        "SQL Server data layer via ADO.NET"
+      ],
       repoUrl: "https://github.com/Xhenzouu/GamingRigz",
       liveUrl: null,
       featured: false,
@@ -124,6 +172,18 @@ const portfolioData = {
       date: "2024",
       description: "A full-stack e-commerce platform for furniture and home decor, with user and seller registration, product browsing by category, cart, checkout, and a mobile version in Flutter.",
       tech: ["HTML", "CSS", "JavaScript", "Python (Flask)", "PostgreSQL", "Flutter (Dart)"],
+      features: [
+        "User registration and login with forgot-password + OTP verification",
+        "Seller registration with business permit and valid ID upload",
+        "Admin tools for user management, seller approvals, and commissions",
+        "Category-based browsing (Home Comfort, Garden & Outdoor, Dining, Living, Bedroom)",
+        "Product showcase with discount badges, New tags, and hover overlays",
+        "Shopping cart, checkout flow, and order tracking",
+        "Favorites, product comparison, search, filtering, and pagination",
+        "Live chat and in-app notifications",
+        "Newsletter subscription and #ShareableChairable community collage",
+        "Flutter mobile app sharing the same backend"
+      ],
       repoUrl: "https://github.com/Xhenzouu/Chairable",
       liveUrl: null,
       featured: false,
@@ -136,6 +196,13 @@ const portfolioData = {
       date: "2024",
       description: "A PHP and MySQL web system for managing university events at LSPU — login/registration, full event CRUD, search, and PDF report generation via TCPDF.",
       tech: ["PHP", "MySQL", "TCPDF", "HTML", "CSS"],
+      features: [
+        "Login, register, and forgot-password recovery",
+        "Event creation, editing, and deletion (full CRUD)",
+        "Event search across the records",
+        "PDF report generation via the TCPDF library",
+        "Shared layout via header, footer, and sidebar includes"
+      ],
       repoUrl: "https://github.com/Xhenzouu/lspu-event-management-system",
       liveUrl: null,
       featured: false,
@@ -148,6 +215,13 @@ const portfolioData = {
       date: "2024",
       description: "A CodeIgniter 4 employee management system with authentication, full employee CRUD, a metrics-driven dashboard, and a dark theme UI.",
       tech: ["PHP", "CodeIgniter 4", "MySQL", "Composer", "PHPUnit"],
+      features: [
+        "Authentication with filtered access via AuthFilter",
+        "Metrics-driven admin dashboard",
+        "Full CRUD for employee records",
+        "Dark theme UI throughout",
+        "Database schema included for quick local setup"
+      ],
       repoUrl: "https://github.com/Xhenzouu/employee-management-system",
       liveUrl: null,
       featured: false,
@@ -156,7 +230,7 @@ const portfolioData = {
   ],
 
   /* ------------------------------------------------------------------------
-     EXPERIENCE — most recent first.
+     EXPERIENCE
      ------------------------------------------------------------------------ */
   experience: [
     {
@@ -170,7 +244,8 @@ const portfolioData = {
       highlights: [
         "Built backend modules using Java and tested APIs via Postman for quality assurance.",
         "Developed role-based user interfaces and documented progress reports for project supervisors."
-      ]
+      ],
+      thumb: "assets/images/experience/c8nnect.png"
     },
     {
       id: "exp-002",
@@ -183,7 +258,8 @@ const portfolioData = {
       highlights: [
         "Achieved 40% reduction in manual administrative work through automated workflows and reporting.",
         "Collaborated with HOA officers to gather requirements, provide support, and resolve user issues."
-      ]
+      ],
+      thumb: "assets/images/experience/lynville-homes-8.png"
     },
     {
       id: "exp-003",
@@ -195,19 +271,14 @@ const portfolioData = {
       description: "Managed daily shop operations, handling procurement and inventory for construction materials.",
       highlights: [
         "Coordinated client communications and logistics for truck rental and material delivery services."
-      ]
+      ],
+      thumb: "assets/images/experience/consumo-enterprises.png"
     }
   ],
 
   /* ------------------------------------------------------------------------
-     CERTIFICATIONS — 10 entries, all with thumbnails.
-     Order: most recent first. IDs are stable identifiers and do not need
-     to be monotonic with array order.
-
-     Undated 2025 Cisco certs (cert-005, cert-006) are placed at the end
-     under the assumption that they were completed earlier in 2025 than
-     the dated October–December 2025 DICT certs. User confirmed this
-     matches reality.
+     CERTIFICATIONS — 11 entries, all with thumbnails.
+     Order: most recent first.
      ------------------------------------------------------------------------ */
   certifications: [
     {
@@ -241,6 +312,14 @@ const portfolioData = {
       date: "2026",
       credentialUrl: null,
       thumb: "assets/images/certificates/arroyo-ai-essentials-theory-and-practice-certificate.jpg"
+    },
+    {
+      id: "cert-011",
+      name: "PHP Web Application Framework: CodeIgniter 4 (Intermediate)",
+      issuer: "DICT CALABARZON Regional Office",
+      date: "December 17-18, 2025",
+      credentialUrl: null,
+      thumb: "assets/images/certificates/arroyo-php-webapp-framework-codeigniter4-intermediate-certificate.jpg"
     },
     {
       id: "cert-010",
@@ -293,29 +372,120 @@ const portfolioData = {
   ],
 
   /* ------------------------------------------------------------------------
-     TRAININGS — most recent first. hours: null when undocumented;
-     render.js omits the hours segment from the meta line when null.
+     TRAININGS
      ------------------------------------------------------------------------ */
   trainings: [
-    { id: "train-001", name: "AI Prompting for Automation Level III",                   provider: "TESDA",            hours: 224,  date: "2026" },
-    { id: "train-002", name: "Web Development Using MERN",                              provider: "DICT Pampanga",    hours: null, date: "2026" },
-    { id: "train-003", name: "PHP Web Application Framework: CodeIgniter 4",           provider: "DICT Calabarzon",  hours: 16,   date: "2025" }
-  ],
-
-  /* ------------------------------------------------------------------------
-     DESIGNS — honest placeholder. No real design work to showcase yet.
-     ------------------------------------------------------------------------ */
-  designs: [
     {
-      id: "design-001",
-      name: "[Design Name Placeholder]",
-      type: "[Type Placeholder]",
-      description: "[Description placeholder.]"
+      id: "train-001",
+      name: "AI Prompting for Automation Level III",
+      provider: "TESDA",
+      hours: 224,
+      date: "2026",
+      thumb: "assets/images/trainings/ai-prompting-automation.png"
+    },
+    {
+      id: "train-002",
+      name: "AI Essentials: Theory and Practice",
+      provider: "UPOU MODeL (University of the Philippines Open University)",
+      hours: 16,
+      date: "2026",
+      thumb: "assets/images/trainings/upou-ai-essentials.png"
+    },
+    {
+      id: "train-003",
+      name: "PHP Web Application Framework: CodeIgniter 4",
+      provider: "DICT Calabarzon",
+      hours: 16,
+      date: "2025",
+      thumb: "assets/images/trainings/php-codeigniter4.png"
     }
   ],
 
   /* ------------------------------------------------------------------------
-     ABOUT — bio, education, awards, and grouped skills.
+     DESIGNS — four entries, all with slideshows and Figma links.
+
+     - gdrive-redesign: portrait mobile, thumbVariant "portrait".
+     - chairable-design: landscape desktop, default.
+     - pila-pets-design: landscape desktop, default.
+     - cardbank-redesign: portrait mobile, thumbVariant "portrait".
+
+     Slideshow sizing is intrinsic. No aspectRatio field is used.
+     Design items carry figmaUrl only — no repoUrl / liveUrl.
+     ------------------------------------------------------------------------ */
+  designs: [
+    {
+      id: "gdrive-redesign",
+      name: "Google Drive Mobile Re-Design",
+      type: "Mobile UI / UX",
+      description: "A mobile re-design concept for the Google Drive app, exploring a cleaner folder grid, a simplified bottom navigation, and a more accessible file-management flow. Part of a UI/UX coursework assignment that required selecting an existing app and re-designing its core screens.",
+      date: "2025",
+      images: [
+        "assets/images/designs/gdrive-redesign-1.png",
+        "assets/images/designs/gdrive-redesign-2.png",
+        "assets/images/designs/gdrive-redesign-3.png",
+        "assets/images/designs/gdrive-redesign-4.png",
+        "assets/images/designs/gdrive-redesign-5.png"
+      ],
+      thumbVariant: "portrait",
+      thumb: "assets/images/designs/gdrive-redesign-1.png",
+      figmaUrl: "https://www.figma.com/design/CaXty4fmgF2vcNu3UIVEFq/google-drive--re-design-?node-id=0-1&t=KGMPRU4dVTsKT3A4-1"
+    },
+    {
+      id: "chairable-design",
+      name: "Chairable — E-Commerce Web App",
+      type: "Web UI / UX",
+      description: "High-fidelity design for Chairable, my first full-stack e-commerce system for furniture and home decor. This was also my first project with a synchronized mobile app — products added to the cart on mobile appear instantly in the web cart, using a shared backend. Though the system wasn't deployed publicly, we presented the working prototype including the mobile-web synchronization feature. The design covers the full user journey: landing, shop, product detail, cart sidebar, product comparison, cart, checkout, and contact.",
+      date: "2024",
+      images: [
+        "assets/images/designs/chairable-1-home.png",
+        "assets/images/designs/chairable-2-shop.png",
+        "assets/images/designs/chairable-3-product.png",
+        "assets/images/designs/chairable-4-cart-sidebar.png",
+        "assets/images/designs/chairable-5-comparison.png",
+        "assets/images/designs/chairable-6-cart.png",
+        "assets/images/designs/chairable-7-checkout.png",
+        "assets/images/designs/chairable-8-contact.png"
+      ],
+      thumb: "assets/images/designs/chairable-1-home.png",
+      figmaUrl: "https://www.figma.com/design/RBocDFtirCyUKh9PEgnbVq/chairable?node-id=0-1&t=MpueN9x1vE6B4YOf-1"
+    },
+    {
+      id: "pila-pets-design",
+      name: "Pila Pets — Pet & Resident Registry",
+      type: "Web UI / UX",
+      description: "High-fidelity design for Pila Pets, a barangay pet and resident registry system for Pila, Laguna. The design explores an admin dashboard with live metrics and charts, a searchable pet grid, a resident management table, and a public-facing webpage that tells the community story. The design directly inspired the working CodeIgniter 4 system I later built — you can see the code in the Projects section.",
+      date: "2025",
+      images: [
+        "assets/images/designs/pila-pets-1-dashboard.png",
+        "assets/images/designs/pila-pets-2-pets.png",
+        "assets/images/designs/pila-pets-3-residents.png",
+        "assets/images/designs/pila-pets-4-webpage.png"
+      ],
+      thumb: "assets/images/designs/pila-pets-1-dashboard.png",
+      figmaUrl: "https://www.figma.com/design/agVQI1RvTZctGFOEtc9IRF/PAWS---Pila?node-id=0-1&t=HbXkrsKluCGOjG5O-1"
+    },
+    {
+      id: "cardbank-redesign",
+      name: "Card Bank Mobile App Re-Design",
+      type: "Mobile UI / UX",
+      description: "An academic UI/UX re-design for a digital banking app called Card Bank. The design covers the core user journey — splash and onboarding, sign-in, dashboard, transaction history, transfer flow, and card management. The visual language uses a warm yellow-and-green palette with clean typography to convey approachability and trust.",
+      date: "2025",
+      images: [
+        "assets/images/designs/cardbank-1-splash.png",
+        "assets/images/designs/cardbank-2-signin.png",
+        "assets/images/designs/cardbank-3-dashboard.png",
+        "assets/images/designs/cardbank-4-history.png",
+        "assets/images/designs/cardbank-5-transfer.png",
+        "assets/images/designs/cardbank-6-card.png"
+      ],
+      thumbVariant: "portrait",
+      thumb: "assets/images/designs/cardbank-1-splash.png",
+      figmaUrl: "https://www.figma.com/design/tN6tLGgckMtgt7J9aXAiX7/card-bank-mobile?node-id=0-1&t=sEI2HZaVjThxYZZA-1"
+    }
+  ],
+
+  /* ------------------------------------------------------------------------
+     ABOUT
      ------------------------------------------------------------------------ */
   about: {
     bio: [
