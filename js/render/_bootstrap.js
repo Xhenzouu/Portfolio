@@ -66,7 +66,7 @@
   // can be counted. Designs is excluded because it holds a single
   // project whose name is already unique — a "1" badge would be noise.
   // About and Contact are excluded because they aren't list-backed.
-  const COUNTED_SECTIONS = ["projects", "certifications", "experience", "trainings"];
+  const COUNTED_SECTIONS = ["projects", "certifications", "experience", "designs", "trainings"];
 
   const MOBILE_TAB_SECTIONS = ["projects", "certifications", "experience"];
   const SECTIONS_WITH_CHIPS = ["projects"];

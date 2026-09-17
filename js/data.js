@@ -7,13 +7,16 @@
    No ES modules — plain script tag, exposes window.portfolioData.
 
    Designs update:
-     - Eighth and ninth design entries added: POEA Website Redesign —
-       Desktop (5 landscape screens) and POEA Website Redesign — Mobile
-       Web (2 portrait screens). Both point at the same Figma file.
+     - Tenth design entry added: Lume — Coffee Shop Mobile App, a
+       9-screen portrait design.
      - thumbVariant: "portrait" on gdrive-redesign, cardbank-redesign,
-       clinica-design, and poea-design-mobile. The others have no
-       thumbVariant — landscape default.
+       clinica-design, poea-design-mobile, and lume-design. Others are
+       landscape default.
      - Slideshow sizing is intrinsic. No aspectRatio field is used.
+
+   Sidebar count badges:
+     Designs is now included in COUNTED_SECTIONS (in _bootstrap.js) so
+     the sidebar shows a numeric badge: 10.
 
    Per-item thumbVariant resolution:
      js/render/_cards.js reads  item.thumbVariant || config.thumbVariant
@@ -402,21 +405,15 @@ const portfolioData = {
   ],
 
   /* ------------------------------------------------------------------------
-     DESIGNS — nine entries, all with slideshows and Figma links.
+     DESIGNS — ten entries, all with slideshows and Figma links.
 
-     - gdrive-redesign: portrait mobile, thumbVariant "portrait".
-     - chairable-design: landscape desktop, default.
-     - pila-pets-design: landscape desktop, default.
-     - cardbank-redesign: portrait mobile, thumbVariant "portrait".
-     - lynville-design: landscape desktop, default. Thumb = screen 3.
-     - dental-design: landscape desktop, default. Thumb = screen 3.
-     - clinica-design: portrait mobile, thumbVariant "portrait".
-     - poea-design-desktop: landscape desktop, default.
-     - poea-design-mobile: portrait mobile, thumbVariant "portrait".
+     Portrait mobile (thumbVariant "portrait"):
+       gdrive-redesign, cardbank-redesign, clinica-design,
+       poea-design-mobile, lume-design.
 
-     The two POEA entries share a Figma file but render as separate
-     cards and modals — one landscape (5 desktop pages), one portrait
-     (2 mobile web pages).
+     Landscape desktop (default):
+       chairable-design, pila-pets-design, lynville-design,
+       dental-design, poea-design-desktop.
 
      Slideshow sizing is intrinsic. No aspectRatio field is used.
      Design items carry figmaUrl only — no repoUrl / liveUrl.
@@ -577,11 +574,35 @@ const portfolioData = {
       date: "2025",
       images: [
         "assets/images/designs/poea-6-mobile-frontpage.png",
-        "assets/images/designs/poea-7-mobile-services.png"
+        "assets/images/designs/poea-7-mobile-services.png",
+        "assets/images/designs/poea-8-mobile-ira.png",
+        "assets/images/designs/poea-9-mobile-about.png",
+        "assets/images/designs/poea-10-mobile-contacts.png"
       ],
       thumbVariant: "portrait",
       thumb: "assets/images/designs/poea-6-mobile-frontpage.png",
       figmaUrl: "https://www.figma.com/design/Mfm4FYo5bFc6JNC9lug9LH/poea-redesign-web-mobile?node-id=0-1&t=RDaPTR9wy7qfseX0-1"
+    },
+    {
+      id: "lume-design",
+      name: "Lume — Coffee Shop Mobile App",
+      type: "Mobile UI / UX",
+      description: "A mobile app design for Lume, a specialty coffee shop. The design covers the full customer journey — splash, immersive hero, home with featured items, search results, product detail with customization, cart, and live order tracking. A central part of the exercise was exploring the same core screens across four named color palettes (Monochrome, Complementary, Analogous, and Triadic) to demonstrate a themable design system grounded in color theory.",
+      date: "2025",
+      images: [
+        "assets/images/designs/lume-1-splash.png",
+        "assets/images/designs/lume-2-hero.png",
+        "assets/images/designs/lume-3-home.png",
+        "assets/images/designs/lume-4-search.png",
+        "assets/images/designs/lume-5-product.png",
+        "assets/images/designs/lume-6-cart.png",
+        "assets/images/designs/lume-7-tracking.png",
+        "assets/images/designs/lume-8-home-complimentary.png",
+        "assets/images/designs/lume-9-home-triadic.png"
+      ],
+      thumbVariant: "portrait",
+      thumb: "assets/images/designs/lume-1-splash.png",
+      figmaUrl: "https://www.figma.com/design/3hoEkYbBu5whMy7hxrMebq/lume-coffee-mobile?node-id=0-1&t=LW9j9BxAVLd7vIMZ-1"
     }
   ],
 
