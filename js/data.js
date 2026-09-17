@@ -7,13 +7,13 @@
    No ES modules — plain script tag, exposes window.portfolioData.
 
    Designs update:
-     - Fourth design entry added: Card Bank Mobile App Re-Design,
-       a 6-screen portrait mobile design (9:19.5 iPhone frames).
-     - `thumbVariant: "portrait"` on gdrive-redesign and cardbank-redesign
-       (mobile screens). Chairable and Pila Pets have no thumbVariant —
-       landscape default.
-     - Slideshow sizing is intrinsic (viewport wraps the image;
-       image max-height caps the box). No aspectRatio field is used.
+     - Eighth and ninth design entries added: POEA Website Redesign —
+       Desktop (5 landscape screens) and POEA Website Redesign — Mobile
+       Web (2 portrait screens). Both point at the same Figma file.
+     - thumbVariant: "portrait" on gdrive-redesign, cardbank-redesign,
+       clinica-design, and poea-design-mobile. The others have no
+       thumbVariant — landscape default.
+     - Slideshow sizing is intrinsic. No aspectRatio field is used.
 
    Per-item thumbVariant resolution:
      js/render/_cards.js reads  item.thumbVariant || config.thumbVariant
@@ -402,12 +402,21 @@ const portfolioData = {
   ],
 
   /* ------------------------------------------------------------------------
-     DESIGNS — four entries, all with slideshows and Figma links.
+     DESIGNS — nine entries, all with slideshows and Figma links.
 
      - gdrive-redesign: portrait mobile, thumbVariant "portrait".
      - chairable-design: landscape desktop, default.
      - pila-pets-design: landscape desktop, default.
      - cardbank-redesign: portrait mobile, thumbVariant "portrait".
+     - lynville-design: landscape desktop, default. Thumb = screen 3.
+     - dental-design: landscape desktop, default. Thumb = screen 3.
+     - clinica-design: portrait mobile, thumbVariant "portrait".
+     - poea-design-desktop: landscape desktop, default.
+     - poea-design-mobile: portrait mobile, thumbVariant "portrait".
+
+     The two POEA entries share a Figma file but render as separate
+     cards and modals — one landscape (5 desktop pages), one portrait
+     (2 mobile web pages).
 
      Slideshow sizing is intrinsic. No aspectRatio field is used.
      Design items carry figmaUrl only — no repoUrl / liveUrl.
@@ -468,7 +477,7 @@ const portfolioData = {
       id: "cardbank-redesign",
       name: "Card Bank Mobile App Re-Design",
       type: "Mobile UI / UX",
-      description: "An academic UI/UX re-design for a digital banking app called Card Bank. The design covers the core user journey — splash and onboarding, sign-in, dashboard, transaction history, transfer flow, and card management. The visual language uses a warm yellow-and-green palette with clean typography to convey approachability and trust.",
+      description: "An academic UI/UX re-design for a fictional digital banking app called Card Bank. The design covers the core user journey — splash and onboarding, sign-in, dashboard, transaction history, transfer flow, and card management. The visual language uses a warm yellow-and-green palette with clean typography to convey approachability and trust.",
       date: "2025",
       images: [
         "assets/images/designs/cardbank-1-splash.png",
@@ -481,6 +490,98 @@ const portfolioData = {
       thumbVariant: "portrait",
       thumb: "assets/images/designs/cardbank-1-splash.png",
       figmaUrl: "https://www.figma.com/design/tN6tLGgckMtgt7J9aXAiX7/card-bank-mobile?node-id=0-1&t=sEI2HZaVjThxYZZA-1"
+    },
+    {
+      id: "lynville-design",
+      name: "Lynville Homes 8 — HOA Management System",
+      type: "Web UI / UX",
+      description: "High-fidelity design for a client-driven capstone project — a web-based HOA management system built for Lynville Homes 8. The design went through multiple iterations with the HOA president, my thesis adviser, and a system expert, and covers role-based experiences for Admin, PR Officer, Auditor, Treasurer, and Committee members. This is a mid-development design snapshot; the working system (in the Projects section) includes additional features developed after this design pass, such as application submission and NLP-assisted processing.",
+      date: "2025",
+      images: [
+        "assets/images/designs/lynville-1-signin.png",
+        "assets/images/designs/lynville-2-changepassword.png",
+        "assets/images/designs/lynville-3-dashboard.png",
+        "assets/images/designs/lynville-4-announcements.png",
+        "assets/images/designs/lynville-5-activities.png",
+        "assets/images/designs/lynville-6-projects.png",
+        "assets/images/designs/lynville-7-project-details.png",
+        "assets/images/designs/lynville-8-payments.png",
+        "assets/images/designs/lynville-9-pr-announcements.png",
+        "assets/images/designs/lynville-10-auditor-finances.png"
+      ],
+      thumb: "assets/images/designs/lynville-3-dashboard.png",
+      figmaUrl: "https://www.figma.com/design/PZoNGFQpO3zXCqjacTylce/hoa-management-system?node-id=0-1&t=OgYKoBkJS6Vo8wQv-1"
+    },
+    {
+      id: "dental-design",
+      name: "Dental Clinic Management System",
+      type: "Web UI / UX",
+      description: "UI/UX design for a full dental clinic management platform — designed and led by me as part of a team project with interns. The system serves four roles: Dentist, Patient, Staff, and Admin (plus a Super Admin tier), and covers appointment scheduling, patient records, billing and invoicing, earnings tracking, inventory management, and admin user controls. This was my first experience designing and directing a multi-role enterprise application, coordinating the design system across team members.",
+      date: "2025",
+      images: [
+        "assets/images/designs/dental-1-landing.png",
+        "assets/images/designs/dental-2-login.png",
+        "assets/images/designs/dental-3-dentist-dashboard.png",
+        "assets/images/designs/dental-4-dentist-appointments.png",
+        "assets/images/designs/dental-5-dentist-earnings.png",
+        "assets/images/designs/dental-6-patient-profile.png",
+        "assets/images/designs/dental-7-patient-appointments.png",
+        "assets/images/designs/dental-8-staff-patients.png",
+        "assets/images/designs/dental-9-staff-billing.png",
+        "assets/images/designs/dental-10-admin-users.png"
+      ],
+      thumb: "assets/images/designs/dental-3-dentist-dashboard.png",
+      figmaUrl: "https://www.figma.com/design/nzaFmmLpToDIMR8bhyaoK9/Batch-3-Dental-Clinic?node-id=0-1&t=ZOxxdTbiS3D7HGEK-1"
+    },
+    {
+      id: "clinica-design",
+      name: "Clinica — Dental Clinic Mobile App",
+      type: "Mobile UI / UX",
+      description: "Academic UI/UX exercise: a mobile app design for a dental clinic, produced as a LinkedIn design challenge and graded by my professor. The design covers the full patient journey — splash, onboarding, sign-in, profile setup, appointment booking, confirmation, and medical records — with a focus on clean typography, generous whitespace, and a friendly medical aesthetic. A central part of the exercise was exploring the same core screens across multiple color palettes (brown, green, dark green variants alongside the default blue) to demonstrate a themable design system.",
+      date: "2025",
+      images: [
+        "assets/images/designs/clinica-1-splash.png",
+        "assets/images/designs/clinica-2-onboarding.png",
+        "assets/images/designs/clinica-3-login.png",
+        "assets/images/designs/clinica-4-appointments.png",
+        "assets/images/designs/clinica-5-confirmation.png",
+        "assets/images/designs/clinica-6-profile-brown.png",
+        "assets/images/designs/clinica-7-profile-green.png",
+        "assets/images/designs/clinica-8-profile-darkgreen.png"
+      ],
+      thumbVariant: "portrait",
+      thumb: "assets/images/designs/clinica-1-splash.png",
+      figmaUrl: "https://www.figma.com/design/7xVr9SpQ1rHjJNbVO9ZvX7/clinic-mobile?node-id=0-1&t=VEOK4a6UgQ00TVaR-1"
+    },
+    {
+      id: "poea-design-desktop",
+      name: "POEA Website Redesign — Desktop",
+      type: "Web UI / UX",
+      description: "Academic UI/UX exercise: a full desktop redesign of the POEA (Philippine Overseas Employment Administration) government website. The redesign restructures information architecture, modernizes the visual language, and makes key services — OFW support, LRA licensing, contact, and agency information — easier to find. The 5 selected pages cover the homepage, both major service categories, contact information, and the agency's mission and functions.",
+      date: "2025",
+      images: [
+        "assets/images/designs/poea-1-frontpage.png",
+        "assets/images/designs/poea-2-ofw-services.png",
+        "assets/images/designs/poea-3-lra-services.png",
+        "assets/images/designs/poea-4-contact.png",
+        "assets/images/designs/poea-5-about.png"
+      ],
+      thumb: "assets/images/designs/poea-1-frontpage.png",
+      figmaUrl: "https://www.figma.com/design/Mfm4FYo5bFc6JNC9lug9LH/poea-redesign-web-mobile?node-id=0-1&t=RDaPTR9wy7qfseX0-1"
+    },
+    {
+      id: "poea-design-mobile",
+      name: "POEA Website Redesign — Mobile Web",
+      type: "Mobile Web UI / UX",
+      description: "The mobile web counterpart to the POEA redesign — a responsive adaptation that preserves the same information architecture and content while optimizing for small screens. Shows how the desktop layout collapses gracefully: simplified navigation, stacked content cards, and touch-friendly controls.",
+      date: "2025",
+      images: [
+        "assets/images/designs/poea-6-mobile-frontpage.png",
+        "assets/images/designs/poea-7-mobile-services.png"
+      ],
+      thumbVariant: "portrait",
+      thumb: "assets/images/designs/poea-6-mobile-frontpage.png",
+      figmaUrl: "https://www.figma.com/design/Mfm4FYo5bFc6JNC9lug9LH/poea-redesign-web-mobile?node-id=0-1&t=RDaPTR9wy7qfseX0-1"
     }
   ],
 
