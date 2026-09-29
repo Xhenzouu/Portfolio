@@ -61,22 +61,27 @@
 
   const DEFAULT_SECTION_ID = "projects";
 
-  // Sections that emit a numeric count badge in the sidebar folder tree.
+    // Sections that emit a numeric count badge in the sidebar folder tree.
   // Any section with a SECTION_ITEM_CONFIG entry is "list-backed" and
-  // can be counted. Designs is excluded because it holds a single
-  // project whose name is already unique — a "1" badge would be noise.
-  // About and Contact are excluded because they aren't list-backed.
-  const COUNTED_SECTIONS = ["projects", "certifications", "experience", "designs", "trainings"];
+  // can be counted. About and Contact are excluded because they aren't
+  // list-backed (rendered by dedicated renderers, no numeric count).
+  const COUNTED_SECTIONS = ["projects", "certifications", "experience", "designs", "trainings", "automation"];
 
   const MOBILE_TAB_SECTIONS = ["projects", "certifications", "experience"];
   const SECTIONS_WITH_CHIPS = ["projects"];
 
-  const SECTION_ITEM_CONFIG = {
+    const SECTION_ITEM_CONFIG = {
     projects: {
       items: () => data.projects,
       title: (item) => item.name,
       meta: (item) => [item.category, item.date].filter(Boolean).join(" · "),
       chipKey: (item) => item.category
+    },
+    automation: {
+      items: () => data.automation,
+      title: (item) => item.name,
+      meta: (item) => [item.category, item.date].filter(Boolean).join(" · "),
+      chipKey: null
     },
     experience: {
       items: () => data.experience,

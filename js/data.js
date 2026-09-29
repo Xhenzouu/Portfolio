@@ -47,17 +47,18 @@ const portfolioData = {
      ------------------------------------------------------------------------ */
   sections: [
     { id: "about",           label: "About",           icon: "info",             hasChildren: false },
+    { id: "automation",      label: "Automation",      icon: "workflow",         hasChildren: true  },
     { id: "projects",        label: "Projects",        icon: "folder",           hasChildren: true  },
     { id: "experience",      label: "Experience",      icon: "briefcase",        hasChildren: true  },
     { id: "designs",         label: "Designs",         icon: "palette",          hasChildren: false },
     { id: "trainings",       label: "Trainings",       icon: "graduation-cap",   hasChildren: false },
     { id: "certifications",  label: "Certifications",  icon: "award",            hasChildren: true  },
     { id: "contact",         label: "Contact",         icon: "mail",             hasChildren: false }
-  ],
+  ], 
 
   /* ------------------------------------------------------------------------
      PROJECTS
-     ------------------------------------------------------------------------ */
+     ------------------------------------------------------------------------ */ 
   projects: [
     {
       id: "xirv-systems",
@@ -229,6 +230,106 @@ const portfolioData = {
       liveUrl: null,
       featured: false,
       thumb: "assets/images/projects/employee-management-system.png"
+    }
+  ],
+
+  /* ------------------------------------------------------------------------
+     AUTOMATION — 10 n8n workflow case studies.
+
+     Each entry links to a markdown doc in the n8n-automation-portfolio
+     repo. The modal renders a "Read the workflow doc" button for docUrl,
+     matching the design cards' "View Figma Design" button pattern.
+
+     docUrl paths below are UNVERIFIED placeholders based on a numbered
+     markdown naming convention. See TODO.
+     ------------------------------------------------------------------------ */
+  automation: [    
+    {
+      id: "github-good-first-issue-notifier",
+      name: "GitHub Good First Issue Notifier",
+      category: "Developer Tooling",
+      date: "2026",
+      pattern: "Scheduled poll, filter, email",
+      description: "A scheduled workflow that polls GitHub for issues labelled good first issue, filters them against a curated set of criteria, and sends a digest email. Built to help newcomers find approachable open-source work without manually scanning repositories.",
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/01-github-notifier.md"
+    },
+    {
+      id: "ai-log-classifier",
+      name: "AI Log Classifier",
+      category: "AI Classification",
+      date: "2026",
+      pattern: "Webhook, LLM classify, conditional Telegram alert",
+      description: "A webhook endpoint that receives application logs, routes them through an LLM for severity and category classification, and pushes only high-priority entries to Telegram. Reduces alert noise by filtering routine log lines before they reach the on-call channel.",
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/02-ai-log-classifier.md"
+    },
+    {
+      id: "error-handler",
+      name: "Error Handler",
+      category: "Reliability",
+      date: "2026",
+      pattern: "Cross-workflow failure notification",
+      description: "A shared error handler that other workflows call when they fail. Captures the failing workflow name, the error payload, and a timestamp, then routes a structured notification to the appropriate channel. Provides a single point of failure visibility across the workflow suite.",
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/03-error-handler.md"
+    },
+    {
+      id: "af-homes-inquiry-intake",
+      name: "AF Homes Inquiry Intake",
+      category: "RAG Pipeline",
+      date: "2026",
+      pattern: "RAG pipeline with vector search and grounded reply drafting",
+      description: "An inquiry intake workflow for a real estate agency. Incoming messages are embedded, matched against a vector store of property documents and prior replies, and a grounded draft response is generated. The reply cites the source documents so the agent can verify before sending.",
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/04-af-homes-inquiry-intake.md"    },
+    {
+      id: "ai-lead-qualification-agent",
+      name: "AI Lead Qualification Agent",
+      category: "AI Scoring",
+      date: "2026",
+      pattern: "Deterministic LLM scoring with machine-readable audit trail",
+      description: "A lead qualification workflow that scores inbound leads using a deterministic LLM prompt with a fixed rubric. Every score is written to a structured audit trail including the rubric version, the model used, and the raw reasoning, so scores can be reviewed or replayed.",
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/05-ai-lead-qualification-agent.md"    },
+    {
+      id: "invoice-processing-pipeline",
+      name: "Invoice Processing Pipeline",
+      category: "Document Processing",
+      date: "2026",
+      pattern: "PDF extraction, 3-branch validation, per-status routing",
+      description: "An invoice processing pipeline that extracts structured fields from incoming PDFs, runs validation across three branches (extraction quality, vendor match, amount sanity), and routes each invoice by status: auto-approved, needs review, or rejected with reason. Replaces manual data entry with an auditable flow.",
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/06-invoice-processing-pipeline.md"    },
+    {
+      id: "customer-support-agent",
+      name: "Customer Support Agent",
+      category: "Conversational AI",
+      date: "2026",
+      pattern: "Conversational AI agent with tool calling and persistent memory",
+      description: "A conversational support agent that handles inbound customer questions using tool calling and persistent memory. It can look up order status, retrieve policy documents, and escalate to a human when confidence is low. State is preserved across turns so the customer does not repeat context.",
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/07-customer-support-agent.md"
+    },
+    {
+      id: "human-in-the-loop-approval",
+      name: "Human-in-the-Loop Approval",
+      category: "Approval Workflow",
+      date: "2026",
+      pattern: "AI refinement plus Telegram inline keyboard approval",
+      description: "An approval workflow for AI-generated content. A draft is generated and refined by an LLM, then posted to a Telegram chat with inline keyboard buttons for approve, edit, or reject. The chosen action is written back to the source system and the original requester is notified.",
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/08-human-in-the-loop-approval.md"
+    },
+    {
+      id: "mcp-integration-server",
+      name: "MCP Integration Server",
+      category: "Developer Tooling",
+      date: "2026",
+      pattern: "n8n workflows exposed as MCP tools for Claude Code",
+      description: "An MCP server that exposes selected n8n workflows as tools callable from Claude Code. Lets AI-assisted development sessions invoke project-specific automations without leaving the editor, and provides a clean boundary between the AI client and the underlying workflow logic.",
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/09-mcp-integration-server.md"
+    },
+    {
+      id: "workflow-health-monitor",
+      name: "Workflow Health Monitor",
+      category: "Reliability",
+      date: "2026",
+      pattern: "Cross-workflow failure classification, retry, and Telegram escalation",
+      description: "A monitor that watches the health of every other workflow in the suite. Failures are classified by type (timeout, auth, rate limit, data error), retried automatically when appropriate, and escalated to Telegram with a classification summary when the retry budget is exhausted.",
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/10-workflow-health-monitor.md"
     }
   ],
 

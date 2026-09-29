@@ -260,8 +260,12 @@
     }
     container.appendChild(header);
 
-    if (item.description) {
+        if (item.description) {
       container.appendChild(el("p", { className: "modal__description", text: item.description }));
+    }
+
+    if (item.pattern) {
+      container.appendChild(el("p", { className: "modal__pattern", text: item.pattern }));
     }
 
     if (Array.isArray(item.highlights) && item.highlights.length) {
@@ -299,6 +303,9 @@
     }
     if (item.figmaUrl) {
       links.appendChild(buildModalLink(item.figmaUrl, "View Figma Design"));
+    }
+    if (item.docUrl) {
+      links.appendChild(buildModalLink(item.docUrl, "Read the workflow doc"));
     }
     if (links.childNodes.length) container.appendChild(links);
   }
