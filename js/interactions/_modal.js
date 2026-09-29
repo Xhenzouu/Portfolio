@@ -92,7 +92,7 @@
   function findItemById(id) {
     if (!id || !window.portfolioData) return null;
     const d = window.portfolioData;
-    const arrays = [d.projects, d.experience, d.certifications, d.trainings, d.designs];
+    const arrays = [d.projects, d.automation, d.experience, d.certifications, d.trainings, d.designs];
     for (let i = 0; i < arrays.length; i++) {
       const arr = arrays[i] || [];
       for (let j = 0; j < arr.length; j++) {
