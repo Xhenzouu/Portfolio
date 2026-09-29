@@ -69,6 +69,11 @@
   z-index: var(--z-toolbar);
 }
 
+.breadcrumb {
+  /* Fixed to the widest breadcrumb (Portfolio / Certifications = 189.05px) so the search bar does not shift between sections */
+  flex: 0 0 12rem;
+}
+
 .breadcrumb__list {
   display: flex;
   align-items: center;

@@ -36,7 +36,7 @@ const portfolioData = {
      ------------------------------------------------------------------------ */
   meta: {
     name: "Henson Brix A. Arroyo",
-    tagline: "Full-Stack Developer & Aspiring Tech Support Professional",
+    tagline: "Full-Stack Developer | AI Automation with n8n, LLM, and RAG",
     location: "Sta. Cruz, Laguna, Philippines",
     avatarInitials: "HA",
     contact: {
@@ -769,8 +769,8 @@ const portfolioData = {
      ------------------------------------------------------------------------ */
   about: {
     bio: [
-      "I'm a recent BS Information Technology graduate from Laguna State Polytechnic University with a full-stack development background and hands-on experience supporting live platforms. I built and deployed a community platform serving 500+ members with 99.9% uptime, and I've worked across the stack — React, Node.js, PostgreSQL, AWS — with a growing focus on AI-assisted workflows and cloud deployment.",
-      "I'm currently exploring tech support as a career path, aiming to leverage my development background to troubleshoot from the inside and grow toward cloud engineering, DevOps, or systems administration. I'm based in Sta. Cruz, Laguna, and open to remote, hybrid, or onsite roles across Metro Manila."
+      "Recent BS Information Technology graduate from Laguna State Polytechnic University with a full-stack development background and hands-on experience building and deploying production platforms. Delivered a community management system serving 500+ members with 99.9% uptime, and worked across React, Node.js, PostgreSQL, and AWS with Docker, Nginx, and GitHub Actions CI/CD.",
+      "Focused on AI-assisted workflow automation and cloud deployment. Experienced in designing and operating automation pipelines, integrating LLMs, and applying retrieval-augmented generation to practical business problems. Based in Sta. Cruz, Laguna, and open to remote, hybrid, or onsite roles across Metro Manila."
     ],
     education: [
       {
@@ -791,10 +791,11 @@ const portfolioData = {
     skills: {
       languages: ["JavaScript", "TypeScript", "Python", "PHP", "C#", "Java"],
       frameworks: ["React", "Node.js", "Express", "Flask", "CodeIgniter 4", "Flutter (Dart)"],
-      cloudDevops: ["AWS (EC2, RDS, S3)", "Docker", "Nginx", "PM2", "GitHub Actions", "CI/CD"],
-      ai: ["AI Prompting", "RAG (Retrieval-Augmented Generation)", "Ollama", "OpenAI APIs", "YOLO11", "DINOv2", "FAISS"],
+      cloudDevops: ["AWS (EC2, RDS, S3)", "Docker", "Nginx", "PM2", "GitHub Actions", "CI/CD", "Cloudflare Tunnel", "Vercel"],
+      ai: ["n8n", "AI Automation", "LLM Integration", "RAG (Retrieval-Augmented Generation)", "AI Agents", "Groq", "OpenAI APIs", "Google Gemini Embeddings", "MCP (Model Context Protocol)", "Supabase", "pgvector", "Telegram Bot API", "Prompt Engineering", "YOLO11", "DINOv2", "FAISS"],
       security: ["JWT Authentication", "RBAC", "Secure API Development", "OWASP Basics"],
-      other: ["PostgreSQL", "MySQL", "Git", "GitHub", "RESTful APIs", "Agile/Scrum", "Technical Documentation"]
+      design: ["Figma", "UI/UX Design", "Wireframing", "Prototyping", "Design Systems", "Mobile App Design", "Web App Design", "Color Theory", "Responsive Layouts"],
+      other: ["PostgreSQL", "MySQL", "Git", "GitHub", "RESTful APIs", "Agile/Scrum", "Technical Documentation", "Workflow Orchestration", "Idempotent Design"],
     }
   }
 };

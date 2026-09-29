@@ -69,11 +69,23 @@
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  /* Computed line-height: 24px at 16px root */
+  height: 1.5rem;
 }
 
 .card__meta {
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  /* Computed line-height: 18px at 16px root */
+  height: 1.125rem;
 }
 
 .card:focus-within,

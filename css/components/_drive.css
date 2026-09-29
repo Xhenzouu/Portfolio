@@ -278,13 +278,7 @@
    8a. MOBILE RHYTHM POLISH
    -------------------------------------------------------------------------- */
 .drive-main {
-  padding-bottom: calc(
-    var(--drive-bottom-nav-height) +
-    var(--drive-fab-size) +
-    var(--space-4) +
-    var(--space-4) +
-    env(safe-area-inset-bottom, 0px)
-  );
+  padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
 }
 
 .drive-grid { row-gap: var(--space-3); }
