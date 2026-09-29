@@ -151,6 +151,14 @@
   line-height: 1.65;
 }
 
+.modal__pattern {
+  font-size: 0.875rem;
+  font-style: italic;
+  color: var(--color-text-muted, #888);
+  margin-top: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
 .modal__section-title {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
