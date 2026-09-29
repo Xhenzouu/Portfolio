@@ -41,7 +41,7 @@
     searchMobile: "#mobile-search-input",
     drawerOpenBtn: "#drawer-open-btn",
     fab: "#fab-button, .drive-fab",
-    slideshowImage: ".modal__slideshow-image",
+    slideshowImage: ".modal__slideshow-image, .modal__hero-image",
     lightboxCloseTarget: "[data-lightbox-close]",
     modal: "#card-modal"
   };
@@ -53,8 +53,10 @@
   }
 
   function handleDocumentClick(e) {
-    // 1. Slideshow image → open lightbox. Must run before the modal
-    //    check because the image is inside the modal.
+    // 1. Modal image → open lightbox. Matches both the slideshow
+    //    image (Designs) and the hero image (Automation, Projects,
+    //    Experience, Certifications). Must run before the modal
+    //    check because both images live inside the modal.
     if (e.target.closest(SELECTORS.slideshowImage)) {
       window.__interactions.handleSlideshowImageClick(e);
       return;

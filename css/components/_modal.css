@@ -119,12 +119,26 @@
   display: block;
 }
 
+.modal__hero-image {
+  cursor: zoom-in;
+}
+
 .modal__hero--portrait {
   aspect-ratio: auto;
   height: min(50vh, 400px);
 }
 
 .modal__hero--portrait img {
+  object-fit: contain;
+}
+
+.modal__hero--contain {
+  aspect-ratio: auto;
+  height: min(50vh, 400px);
+  background-color: var(--color-bg-surface-alt);
+}
+
+.modal__hero--contain img {
   object-fit: contain;
 }
 

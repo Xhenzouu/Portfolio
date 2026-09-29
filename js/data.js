@@ -251,7 +251,9 @@ const portfolioData = {
       date: "2026",
       pattern: "Scheduled poll, filter, email",
       description: "A scheduled workflow that polls GitHub for issues labelled good first issue, filters them against a curated set of criteria, and sends a digest email. Built to help newcomers find approachable open-source work without manually scanning repositories.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/01-github-notifier.md"
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/01-github-notifier.md",
+      thumb: "assets/images/automation/01-github-notifier.png",
+      thumbVariant: "contain"
     },
     {
       id: "ai-log-classifier",
@@ -260,7 +262,9 @@ const portfolioData = {
       date: "2026",
       pattern: "Webhook, LLM classify, conditional Telegram alert",
       description: "A webhook endpoint that receives application logs, routes them through an LLM for severity and category classification, and pushes only high-priority entries to Telegram. Reduces alert noise by filtering routine log lines before they reach the on-call channel.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/02-ai-log-classifier.md"
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/02-ai-log-classifier.md",
+      thumb: "assets/images/automation/02-ai-log-classifier.png",
+      thumbVariant: "contain"
     },
     {
       id: "error-handler",
@@ -269,7 +273,9 @@ const portfolioData = {
       date: "2026",
       pattern: "Cross-workflow failure notification",
       description: "A shared error handler that other workflows call when they fail. Captures the failing workflow name, the error payload, and a timestamp, then routes a structured notification to the appropriate channel. Provides a single point of failure visibility across the workflow suite.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/03-error-handler.md"
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/03-error-handler.md",
+      thumb: "assets/images/automation/03-error-handler.png",
+      thumbVariant: "contain"
     },
     {
       id: "af-homes-inquiry-intake",
@@ -278,7 +284,10 @@ const portfolioData = {
       date: "2026",
       pattern: "RAG pipeline with vector search and grounded reply drafting",
       description: "An inquiry intake workflow for a real estate agency. Incoming messages are embedded, matched against a vector store of property documents and prior replies, and a grounded draft response is generated. The reply cites the source documents so the agent can verify before sending.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/04-af-homes-inquiry-intake.md"    },
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/04-af-homes-inquiry-intake.md",
+      thumb: "assets/images/automation/04-af-homes-inquiry-intake.png",
+      thumbVariant: "contain"
+    },
     {
       id: "ai-lead-qualification-agent",
       name: "AI Lead Qualification Agent",
@@ -286,7 +295,10 @@ const portfolioData = {
       date: "2026",
       pattern: "Deterministic LLM scoring with machine-readable audit trail",
       description: "A lead qualification workflow that scores inbound leads using a deterministic LLM prompt with a fixed rubric. Every score is written to a structured audit trail including the rubric version, the model used, and the raw reasoning, so scores can be reviewed or replayed.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/05-ai-lead-qualification-agent.md"    },
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/05-ai-lead-qualification-agent.md",
+      thumb: "assets/images/automation/05-ai-lead-qualification-agent.png",
+      thumbVariant: "contain"
+    },
     {
       id: "invoice-processing-pipeline",
       name: "Invoice Processing Pipeline",
@@ -294,7 +306,10 @@ const portfolioData = {
       date: "2026",
       pattern: "PDF extraction, 3-branch validation, per-status routing",
       description: "An invoice processing pipeline that extracts structured fields from incoming PDFs, runs validation across three branches (extraction quality, vendor match, amount sanity), and routes each invoice by status: auto-approved, needs review, or rejected with reason. Replaces manual data entry with an auditable flow.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/06-invoice-processing-pipeline.md"    },
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/06-invoice-processing-pipeline.md",
+      thumb: "assets/images/automation/06-invoice-processing-pipeline.png",
+      thumbVariant: "contain"
+    },
     {
       id: "customer-support-agent",
       name: "Customer Support Agent",
@@ -302,7 +317,9 @@ const portfolioData = {
       date: "2026",
       pattern: "Conversational AI agent with tool calling and persistent memory",
       description: "A conversational support agent that handles inbound customer questions using tool calling and persistent memory. It can look up order status, retrieve policy documents, and escalate to a human when confidence is low. State is preserved across turns so the customer does not repeat context.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/07-customer-support-agent.md"
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/07-customer-support-agent.md",
+      thumb: "assets/images/automation/07-customer-support-agent.png",
+      thumbVariant: "contain"
     },
     {
       id: "human-in-the-loop-approval",
@@ -311,7 +328,9 @@ const portfolioData = {
       date: "2026",
       pattern: "AI refinement plus Telegram inline keyboard approval",
       description: "An approval workflow for AI-generated content. A draft is generated and refined by an LLM, then posted to a Telegram chat with inline keyboard buttons for approve, edit, or reject. The chosen action is written back to the source system and the original requester is notified.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/08-human-in-the-loop-approval.md"
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/08-human-in-the-loop-approval.md",
+      thumb: "assets/images/automation/08-human-in-the-loop-approval.png",
+      thumbVariant: "contain"
     },
     {
       id: "mcp-integration-server",
@@ -320,7 +339,9 @@ const portfolioData = {
       date: "2026",
       pattern: "n8n workflows exposed as MCP tools for Claude Code",
       description: "An MCP server that exposes selected n8n workflows as tools callable from Claude Code. Lets AI-assisted development sessions invoke project-specific automations without leaving the editor, and provides a clean boundary between the AI client and the underlying workflow logic.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/09-mcp-integration-server.md"
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/09-mcp-integration-server.md",
+      thumb: "assets/images/automation/09-mcp-integration-server.png",
+      thumbVariant: "contain"
     },
     {
       id: "workflow-health-monitor",
@@ -329,7 +350,9 @@ const portfolioData = {
       date: "2026",
       pattern: "Cross-workflow failure classification, retry, and Telegram escalation",
       description: "A monitor that watches the health of every other workflow in the suite. Failures are classified by type (timeout, auth, rate limit, data error), retried automatically when appropriate, and escalated to Telegram with a classification summary when the retry budget is exhausted.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/10-workflow-health-monitor.md"
+      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/10-workflow-health-monitor.md",
+      thumb: "assets/images/automation/10-workflow-health-monitor.png",
+      thumbVariant: "contain"
     }
   ],
 

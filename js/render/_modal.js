@@ -233,8 +233,19 @@
       setupSlideshow(slideshowEl, item.images, item.name || "");
     } else if (item.thumb) {
       const sectionConfig = sectionId ? SECTION_ITEM_CONFIG[sectionId] : null;
-      const variant = sectionConfig ? sectionConfig.thumbVariant : undefined;
+      const sectionVariant = sectionConfig ? sectionConfig.thumbVariant : undefined;
+      const variant = item.thumbVariant || sectionVariant;
       const hero = buildThumbSlot(item.thumb, "modal__hero", "▢", variant);
+      // Make the hero image click-to-zoom. Reuses the same lightbox
+      // machinery the slideshow uses. The handler reads the image's
+      // src and alt, so tag the img with the lightbox metadata before
+      // the interaction layer wires itself up.
+      const heroImg = hero.querySelector("img");
+      if (heroImg) {
+        heroImg.classList.add("modal__hero-image");
+        heroImg.setAttribute("data-lightbox-src", item.thumb);
+        heroImg.setAttribute("data-lightbox-alt", item.name || "");
+      }
       container.appendChild(hero);
     }
 

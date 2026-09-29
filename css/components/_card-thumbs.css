@@ -52,18 +52,21 @@
   display: block;
 }
 
-.card__thumb--portrait {
-  /* intentionally empty — box shape inherited from .card__thumb */
-}
-
 .card__thumb--portrait img {
   object-fit: contain;
 }
 
-.drive-card__thumb--portrait {
-  /* intentionally empty — box shape inherited from .drive-card__thumb */
+.drive-card__thumb--portrait img {
+  object-fit: contain;
 }
 
-.drive-card__thumb--portrait img {
+/* Contain variant — for wide workflow canvases that must not be cropped.
+   Same 16:10 box as every other card thumb, but the image inside is
+   letterboxed instead of cover-cropped so no node is cut off. */
+.card__thumb--contain img {
+  object-fit: contain;
+}
+
+.drive-card__thumb--contain img {
   object-fit: contain;
 }

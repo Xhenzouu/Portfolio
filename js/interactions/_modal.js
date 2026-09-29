@@ -303,11 +303,21 @@
     lastFocusedBeforeLightbox = null;
   }
 
-  function handleSlideshowImageClick(e) {
-    const img = e.target.closest(SELECTORS.slideshowImage);
-    if (!img) return;
-    if (e.target.closest(".modal__slideshow-btn")) return;
-    openLightbox(img.src, img.alt || "");
+    function handleSlideshowImageClick(e) {
+    const slideshowImg = e.target.closest(SELECTORS.slideshowImage);
+      if (slideshowImg) {
+        if (e.target.closest(".modal__slideshow-btn")) return;
+        openLightbox(slideshowImg.src, slideshowImg.alt || "");
+        return;
+      }
+
+      const heroImg = e.target.closest(".modal__hero-image");
+      if (heroImg) {
+        const src = heroImg.getAttribute("data-lightbox-src") || heroImg.src;
+        const alt = heroImg.getAttribute("data-lightbox-alt") || heroImg.alt || "";
+        openLightbox(src, alt);
+      return;
+    }
   }
 
   function handleLightboxCloseClick(e) {
