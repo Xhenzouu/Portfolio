@@ -6,17 +6,23 @@
 
    No ES modules — plain script tag, exposes window.portfolioData.
 
-   Designs update:
-     - Tenth design entry added: Lume — Coffee Shop Mobile App, a
-       9-screen portrait design.
-     - thumbVariant: "portrait" on gdrive-redesign, cardbank-redesign,
-       clinica-design, poea-design-mobile, and lume-design. Others are
-       landscape default.
-     - Slideshow sizing is intrinsic. No aspectRatio field is used.
+   Sections (matches sidebar order):
+     About, Automation, Projects, Experience, Designs, Trainings,
+     Certifications, Contact.
 
-   Sidebar count badges:
-     Designs is now included in COUNTED_SECTIONS (in _bootstrap.js) so
-     the sidebar shows a numeric badge: 10.
+   Automation section: 10 n8n workflow case studies. Each links to a
+   markdown doc in the n8n-automation-portfolio repo. Modal renders a
+   "Read the workflow doc" button for docUrl.
+
+   Designs section: 10 entries. Portrait mobile entries carry
+   thumbVariant "portrait". Slideshow sizing is intrinsic.
+
+   Certifications section: 14 entries. Order: most recent first.
+   Specific-month 2026 dates sort above bare-year 2026 dates within the
+   same year (Option A). Bare-year entries do not reorder.
+
+   Sidebar count badges: COUNTED_SECTIONS in js/render/_bootstrap.js
+   determines which sections show a numeric badge.
 
    Per-item thumbVariant resolution:
      js/render/_cards.js reads  item.thumbVariant || config.thumbVariant
@@ -54,11 +60,11 @@ const portfolioData = {
     { id: "trainings",       label: "Trainings",       icon: "graduation-cap",   hasChildren: false },
     { id: "certifications",  label: "Certifications",  icon: "award",            hasChildren: true  },
     { id: "contact",         label: "Contact",         icon: "mail",             hasChildren: false }
-  ], 
+  ],
 
   /* ------------------------------------------------------------------------
      PROJECTS
-     ------------------------------------------------------------------------ */ 
+     ------------------------------------------------------------------------ */
   projects: [
     {
       id: "xirv-systems",
@@ -243,7 +249,9 @@ const portfolioData = {
      docUrl paths below are UNVERIFIED placeholders based on a numbered
      markdown naming convention. See TODO.
      ------------------------------------------------------------------------ */
-  automation: [    
+  // TODO: verify all 10 docUrl paths against docs/workflows/ in n8n-automation-portfolio.
+  // Update if actual markdown filenames differ. Replace before final commit.
+  automation: [
     {
       id: "github-good-first-issue-notifier",
       name: "GitHub Good First Issue Notifier",
@@ -404,10 +412,36 @@ const portfolioData = {
   ],
 
   /* ------------------------------------------------------------------------
-     CERTIFICATIONS — 11 entries, all with thumbnails.
-     Order: most recent first.
+     CERTIFICATIONS — 14 entries, all with thumbnails.
+     Order: most recent first. Specific-month 2026 dates sort above
+     bare-year 2026 dates within the same year (Option A). Bare-year
+     entries do not reorder.
      ------------------------------------------------------------------------ */
   certifications: [
+    {
+      id: "cert-012",
+      name: "CompTIA AI Essentials",
+      issuer: "CompTIA",
+      date: "September 26, 2026",
+      credentialUrl: null,
+      thumb: "assets/images/certificates/arroyo-comptia-ai-essentials-certificate.jpg"
+    },
+    {
+      id: "cert-013",
+      name: "Certificate of Completion — Internship Program (On-the-Job Training)",
+      issuer: "C8nnect IT Solutions",
+      date: "February 16, 2026 – May 8, 2026",
+      credentialUrl: null,
+      thumb: "assets/images/certificates/arroyo-c8nnect-internship-completion-certification.jpg"
+    },
+    {
+      id: "cert-014",
+      name: "Web Development Using MERN",
+      issuer: "DICT Region III",
+      date: "January 14, 2026",
+      credentialUrl: null,
+      thumb: "assets/images/certificates/arroyo-web-dev-using-mern-stack-certificate.jpg"
+    },
     {
       id: "cert-001",
       name: "Generative AI Foundations",
