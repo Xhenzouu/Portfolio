@@ -318,6 +318,9 @@
     if (item.docUrl) {
       links.appendChild(buildModalLink(item.docUrl, "Read the workflow doc"));
     }
+    if (item.credentialUrl) {
+      links.appendChild(buildModalLink(item.credentialUrl, "Verify Credential"));
+    }
     if (links.childNodes.length) container.appendChild(links);
   }
 
