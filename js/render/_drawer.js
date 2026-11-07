@@ -6,6 +6,11 @@
 
    Cross-partial reads: el, clearChildren, getSection (from _shell).
    All reads inside function bodies.
+
+   DATA ACCESS NOTE:
+   window.portfolioData is NOT captured at parse time. It is read on
+   every call via getData() because this file may be parsed by the
+   render barrel before js/data/index.js finishes loading the partials.
    ========================================================================== */
 
 (function () {
@@ -13,7 +18,9 @@
 
   if (!window.__render) window.__render = {};
 
-  const data = window.portfolioData || {};
+  function getData() {
+    return window.portfolioData || {};
+  }
 
   function el(tag, opts) { return window.__render.el(tag, opts); }
   function clearChildren(node) { return window.__render.clearChildren(node); }
@@ -24,7 +31,8 @@
     if (!list) { console.warn("[render] .drive-drawer__list not found in DOM."); return; }
     clearChildren(list);
 
-    data.sections.forEach((section) => {
+    const sections = getData().sections || [];
+    sections.forEach((section) => {
       const li = el("li");
       const btn = el("button", {
         className: "drive-drawer__link",

@@ -1,10 +1,17 @@
 /**
- * init.js — Portfolio v2.0, Phase 4
+ * init.js — Portfolio v2.0
  *
- * Defines window.init, the single bootstrap entry point. Does NOT call
- * itself — script.js is responsible for invoking window.init() once
- * all scripts have loaded. Internally waits for DOMContentLoaded so it
- * is safe to call regardless of where the <script> tags sit in the page.
+ * Synchronous responsibilities:
+ *   - Apply saved theme before first paint (prevents theme flash)
+ *
+ * Deferred responsibilities:
+ *   - Wait for the render and interactions barrels to finish loading
+ *     their partials and calling their own renderAll()/init().
+ *   - Run anything that needs rendered DOM here.
+ *
+ * The render barrel (js/render/index.js) handles renderAll().
+ * The interactions barrel (js/interactions/index.js) handles init().
+ * This file does NOT call either — that's the barrels' job.
  */
 (function () {
   'use strict';
@@ -30,35 +37,25 @@
       window.interactions.setTheme(theme, { persist: false });
     } else {
       // Fallback so the correct theme still applies even if
-      // interactions.js failed to load.
+      // interactions partials are not loaded yet.
       document.documentElement.setAttribute('data-theme', theme);
-      console.warn('[init] window.interactions.setTheme is unavailable; applied theme attribute directly.');
     }
   }
 
-  function bootstrap() {
-    if (window.render && typeof window.render.renderAll === 'function') {
-      window.render.renderAll();
-    } else {
-      console.warn('[init] window.render.renderAll is unavailable; skipping initial render.');
-    }
+  // Apply theme synchronously. The inline <script> in <head> does this
+  // too, but keeping it here means this file works standalone (e.g.,
+  // in a test harness or if the inline script is blocked).
+  applySavedTheme();
 
-    if (window.interactions && typeof window.interactions.init === 'function') {
-      window.interactions.init();
-    } else {
-      console.warn('[init] window.interactions.init is unavailable; interactions were not wired up.');
-    }
-
-    applySavedTheme();
+  function onReady() {
+    // Everything is rendered and wired. Anything that needs DOM access
+    // goes here. Currently empty — the barrels handle it.
+    console.log('[init] Portfolio fully initialized.');
   }
 
-  function run() {
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', bootstrap);
-    } else {
-      bootstrap();
-    }
+  if (window.__portfolioReady) {
+    onReady();
+  } else {
+    document.addEventListener('portfolio-interactions-ready', onReady, { once: true });
   }
-
-  window.init = run;
 })();

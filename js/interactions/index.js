@@ -1,52 +1,59 @@
 /* ==========================================================================
    js/interactions/index.js — Interactions pipeline barrel
 
-   This file is the single entry point for the interactions pipeline,
-   mirroring the role of css/components.css for the CSS partials. It is
-   loaded LAST among the interactions partials and its only job is to
-   wire up all event handlers by calling window.interactions.init().
+   Injects each interaction partial as a <script> tag in the required
+   order, waits for the render pipeline to finish (via
+   window.__renderReadyPromise from the render barrel), then calls
+   window.interactions.init() and sets window.__portfolioReady = true.
 
-   DO NOT add interaction handlers directly to this file. Add them to the
-   relevant partial below, then list them here.
-
-   PARTIALS (in load order):
-
-     _nav.js         qs/qsa helpers, getActiveSectionId, folder tree
-                     clicks, section navigation, syncActiveSection,
-                     tab clicks, drawer link clicks
-     _theme.js       THEME_STORAGE_KEY, setTheme, toggleTheme,
-                     syncThemeControls, handleThemeToggleClick
-     _view.js        setView, handleViewToggleClick
-     _search.js      SEARCH_DEBOUNCE_MS, EMPTY_STATE_CLASS,
-                     DRIVE_EMPTY_STATE_CLASS, debounce,
-                     getCurrentSearchQuery, toggleEmptyState,
-                     cardMatchesCategory, cardMatchesSearch,
-                     filterGrid, filterCards, syncSearchInputs,
-                     handleSearchInput
-     _chips.js       activeCategory state, syncActiveCategoryUI,
-                     setActiveCategory, handleChipClick
-     _drawer.js      focusFirstFocusable, trapFocus, handleDrawerKeydown,
-                     openDrawer, closeDrawer, handleDrawerOpenClick,
-                     handleDrawerBackdropClick
-     _modal.js       findItemById, openModalForCard, closeModal,
-                     handleCardActivate, handleCardKeydown,
-                     handleModalCloseClick, handleModalKeydown
-     _sidebar.js     toggleSidebarCollapse
-     _bootstrap.js   handleFabClick, handleDocumentClick, init,
-                     window.interactions assembly
-
-   Do not reference this file directly from anywhere except index.html.
+   That final flag is what init.js listens for to know the page is
+   fully wired up.
    ========================================================================== */
 
 (function () {
   "use strict";
 
-  if (window.interactions && typeof window.interactions.init === "function") {
-    window.interactions.init();
-  } else {
-    console.error(
-      "[interactions/index.js] window.interactions.init is unavailable. " +
-      "Make sure all interaction partials loaded before this file."
-    );
+  var PARTIALS = [
+    "js/interactions/_nav.js",
+    "js/interactions/_theme.js",
+    "js/interactions/_view.js",
+    "js/interactions/_search.js",
+    "js/interactions/_chips.js",
+    "js/interactions/_drawer.js",
+    "js/interactions/_modal.js",
+    "js/interactions/_sidebar.js",
+    "js/interactions/_bootstrap.js"
+  ];
+
+  function loadScript(src) {
+    return new Promise(function (resolve) {
+      var script = document.createElement("script");
+      script.src = src;
+      script.async = false;
+      script.onload = function () { resolve(src); };
+      script.onerror = function () {
+        console.error("[interactions barrel] Failed to load: " + src);
+        resolve(src);
+      };
+      document.head.appendChild(script);
+    });
   }
+
+    PARTIALS.reduce(function (chain, src) {
+    return chain.then(function () { return loadScript(src); });
+  }, Promise.resolve()).then(function () {
+    // WAIT FOR RENDER: Ensure the DOM actually has the rendered cards before wiring listeners.
+    return window.__renderReadyPromise || Promise.resolve();
+  }).then(function () {
+    if (window.interactions && typeof window.interactions.init === "function") {
+      window.interactions.init();
+      window.__portfolioReady = true;
+      document.dispatchEvent(new CustomEvent("portfolio-interactions-ready"));
+    } else {
+      console.error(
+        "[interactions/index.js] window.interactions.init is unavailable. " +
+        "Make sure all interaction partials loaded before this file."
+      );
+    }
+  });
 })();

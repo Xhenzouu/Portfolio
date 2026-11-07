@@ -1,15 +1,18 @@
 /**
- * script.js — Portfolio v2.0, Phase 4
+ * script.js — Portfolio v2.0
  *
- * Thin entry point. Loaded last, after data.js, render.js, interactions.js,
- * and init.js. Its only job is to trigger the bootstrap defined in init.js.
+ * Loaded last. Previously called window.init(). Now init.js self-
+ * initializes, so this file only exists as a placeholder for any
+ * top-level logic that must run after all scripts have loaded but
+ * doesn't fit a partial.
+ *
+ * If you have nothing to add, this file can be empty or omitted from
+ * index.html entirely.
  */
 (function () {
   'use strict';
 
-  if (typeof window.init === 'function') {
-    window.init();
-  } else {
-    console.error('[script] window.init is not defined. Make sure init.js loaded before script.js.');
-  }
+  // Intentionally empty. All bootstrap logic lives in the barrels
+  // (js/data/index.js, js/render/index.js, js/interactions/index.js)
+  // and init.js handles the theme + ready-event wiring.
 })();

@@ -210,34 +210,37 @@
     </div>
   </div>
 
-  <script src="js/data.js"></script>
+  <!-- ============================================================
+       SCRIPT LOAD ORDER
+
+       Each barrel injects its own partials asynchronously and chains
+       to the next stage via a shared promise:
+
+         data → render → interactions → init
+
+       That chain is why index.html only needs one tag per pipeline.
+       Do not add partial <script> tags here — add them to the
+       corresponding barrel's PARTIALS array instead.
+
+       Do not add script.js here. Its previous role (calling
+       window.init()) was folded into init.js, which now self-initializes.
+       ============================================================ -->
+
+  <!-- Data layer: injects js/data/_*.js partials then js/data.js aggregator -->
+  <script src="js/data/index.js"></script>
+
+  <!-- Icons (no barrel needed — single file) -->
   <script src="js/icons.js"></script>
 
-  <!-- Render pipeline — partials, then the barrel. The barrel calls
-       window.render.renderAll() after every partial has loaded. -->
-  <script src="js/render/_shell.js"></script>
-  <script src="js/render/_cards.js"></script>
-  <script src="js/render/_chips.js"></script>
-  <script src="js/render/_sections.js"></script>
-  <script src="js/render/_modal.js"></script>
-  <script src="js/render/_drawer.js"></script>
-  <script src="js/render/_bootstrap.js"></script>
+  <!-- Render pipeline: injects js/render/_*.js partials, waits for data,
+       then calls window.render.renderAll() -->
   <script src="js/render/index.js"></script>
 
-  <!-- Interactions pipeline — partials, then the barrel. The barrel
-       calls window.interactions.init() after every partial has loaded. -->
-  <script src="js/interactions/_nav.js"></script>
-  <script src="js/interactions/_theme.js"></script>
-  <script src="js/interactions/_view.js"></script>
-  <script src="js/interactions/_search.js"></script>
-  <script src="js/interactions/_chips.js"></script>
-  <script src="js/interactions/_drawer.js"></script>
-  <script src="js/interactions/_modal.js"></script>
-  <script src="js/interactions/_sidebar.js"></script>
-  <script src="js/interactions/_bootstrap.js"></script>
+  <!-- Interactions pipeline: injects js/interactions/_*.js partials,
+       waits for render, then calls window.interactions.init() -->
   <script src="js/interactions/index.js"></script>
 
+  <!-- Entry point: theme bootstrap + ready-event wiring -->
   <script src="js/init.js"></script>
-  <script src="js/script.js"></script>
 </body>
 </html>

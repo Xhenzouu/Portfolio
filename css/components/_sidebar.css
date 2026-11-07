@@ -99,11 +99,15 @@
   overflow: hidden;
 }
 
+/* Center the icon inside its own wrapper. margin-inline:auto alone
+   is not enough because the wrapper has its own layout context; the
+   flex centering makes it deterministic. */
 .explorer-shell.is-sidebar-collapsed .folder-tree__icon,
 .explorer-shell.is-sidebar-collapsed .theme-toggle__icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-inline: auto;
-  margin-left: 0;
-  margin-right: 0;
 }
 
 .explorer-shell.is-sidebar-collapsed .sidebar-header {

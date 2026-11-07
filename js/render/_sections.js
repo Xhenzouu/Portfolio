@@ -10,7 +10,10 @@
        buildIcon (from _shell)
      - window.__render.buildDashboardCard / buildDriveCard (from _cards)
 
-   All reads happen inside function bodies, never at IIFE init time.
+   DATA ACCESS NOTE:
+   window.portfolioData is NOT captured at parse time. It is read on
+   every call via getData() because this file may be parsed by the render
+   barrel before js/data/index.js finishes loading the partials.
    ========================================================================== */
 
 (function () {
@@ -18,7 +21,9 @@
 
   if (!window.__render) window.__render = {};
 
-  const data = window.portfolioData || {};
+  function getData() {
+    return window.portfolioData || {};
+  }
 
   function el(tag, opts) { return window.__render.el(tag, opts); }
   function clearChildren(node) { return window.__render.clearChildren(node); }
@@ -42,16 +47,18 @@
   }
 
   function buildBioBlock() {
+    const about = getData().about || {};
     const wrap = el("div", { className: "about-bio" });
-    ((data.about && data.about.bio) || []).forEach((text) =>
+    (about.bio || []).forEach((text) =>
       wrap.appendChild(el("p", { className: "about-bio__paragraph", text: text }))
     );
     return wrap;
   }
 
   function buildEducationBlock() {
+    const about = getData().about || {};
     const wrap = el("div", { className: "about-education" });
-    ((data.about && data.about.education) || []).forEach((entry) => {
+    (about.education || []).forEach((entry) => {
       const item = el("div", { className: "about-education__item" });
       item.appendChild(el("div", { className: "about-education__degree", text: entry.degree || "" }));
       item.appendChild(el("div", { className: "about-education__institution", text: entry.institution || "" }));
@@ -65,8 +72,9 @@
   }
 
   function buildAwardsBlock() {
+    const about = getData().about || {};
     const wrap = el("div", { className: "about-awards" });
-    ((data.about && data.about.awards) || []).forEach((award) => {
+    (about.awards || []).forEach((award) => {
       const item = el("div", { className: "about-awards__item" });
       item.appendChild(el("div", { className: "about-awards__name", text: award.name || "" }));
       item.appendChild(el("div", {
@@ -79,8 +87,9 @@
   }
 
   function buildSkillsBlock() {
+    const about = getData().about || {};
     const wrap = el("div", { className: "about-skills" });
-    const skills = (data.about && data.about.skills) || {};
+    const skills = about.skills || {};
     const GROUP_LABELS = {
       languages: "Languages",
       frameworks: "Frameworks",
@@ -123,7 +132,8 @@
   }
 
   function buildContactList() {
-    const contact = (data.meta && data.meta.contact) || {};
+    const meta = getData().meta || {};
+    const contact = meta.contact || {};
     const list = el("ul", { className: "contact-list" });
 
     const rows = [];
@@ -273,7 +283,7 @@
 
     if (subtitle) {
       if (sectionId === "about") {
-        subtitle.textContent = (data.meta && data.meta.tagline) || "";
+        subtitle.textContent = (getData().meta && getData().meta.tagline) || "";
       } else if (sectionId === "contact") {
         subtitle.textContent = "Get in touch";
       } else {

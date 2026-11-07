@@ -364,8 +364,40 @@
   }
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
+/* Auto-collapse the desktop sidebar when the viewport is narrow
+   (e.g., when DevTools is open, or on a small laptop). These rules
+   mirror the .is-sidebar-collapsed class so the collapse is triggered
+   by viewport width, not just by the toggle button. */
+@media (min-width: 769px) and (max-width: 1100px) {
   .explorer-shell {
     grid-template-columns: var(--sidebar-width-collapsed) 1fr;
+  }
+
+  .explorer-shell .brand-name,
+  .explorer-shell .folder-tree__label,
+  .explorer-shell .folder-tree__count,
+  .explorer-shell .theme-toggle__label {
+    display: none;
+  }
+
+  .explorer-shell .folder-tree__leaf,
+  .explorer-shell .folder-tree__toggle,
+  .explorer-shell .theme-toggle {
+    justify-content: center;
+    padding-inline: 0;
+  }
+
+  .explorer-shell .sidebar-header {
+    justify-content: center;
+    padding-inline: 0;
+    gap: 0;
+  }
+
+  .explorer-shell .brand-mark {
+    margin-inline: auto;
+  }
+
+  .explorer-shell .sidebar-footer {
+    padding-inline: 0;
   }
 }

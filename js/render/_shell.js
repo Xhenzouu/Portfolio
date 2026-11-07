@@ -7,18 +7,12 @@
    CALL time (never at IIFE-init time), so load order is safe as long
    as this partial is loaded before any other render partial runs.
 
-   Provides:
-     - DOM helpers: el, clearChildren
-     - Data helpers: getSection, uniqueInOrder
-     - Icons: buildIcon, replaceIconSlot, hydrateIcons,
-              renderThemeToggleIcons
-     - Shell renderers: renderMeta, buildFolderTreeItem,
-                        renderFolderTree, renderCounts
-     - Grid mode helper: applyGridMode
-
-   Config read via window.__render.config. Every config read happens
-   INSIDE a function body, never at IIFE top level. Enforce this
-   discipline in future edits.
+   DATA ACCESS NOTE:
+   window.portfolioData is NOT captured at parse time. It is read on
+   every call via getData(), because this file may be parsed by the
+   render barrel before js/data/index.js finishes loading the partials.
+   Capturing data at parse time caused "Cannot read properties of
+   undefined" errors throughout the render pipeline.
    ========================================================================== */
 
 (function () {
@@ -26,10 +20,15 @@
 
   if (!window.__render) window.__render = {};
 
-  const data = window.portfolioData || {};
   const iconSource = window.portfolioIcons || {};
   const ICON_FALLBACK = "circle";
   const unknownIconsWarned = {};
+
+  // Read window.portfolioData freshly on every call. Do not hoist this
+  // into a const at parse time — see the header note.
+  function getData() {
+    return window.portfolioData || {};
+  }
 
   // ---------------------------------------------------------------------
   // DOM / data helpers
@@ -52,7 +51,8 @@
   }
 
   function getSection(sectionId) {
-    return data.sections.find((s) => s.id === sectionId) || null;
+    const sections = getData().sections || [];
+    return sections.find((s) => s.id === sectionId) || null;
   }
 
   function uniqueInOrder(values) {
@@ -136,7 +136,7 @@
   // ---------------------------------------------------------------------
 
   function renderMeta() {
-    const meta = data.meta || {};
+    const meta = getData().meta || {};
 
     const brandName = document.querySelector(".brand-name");
     if (brandName) brandName.textContent = meta.name || "";
@@ -209,7 +209,8 @@
     const tree = document.getElementById("folder-tree");
     if (!tree) { console.warn("[render] #folder-tree not found in DOM."); return; }
     clearChildren(tree);
-    data.sections.forEach((s) => tree.appendChild(buildFolderTreeItem(s)));
+    const sections = getData().sections || [];
+    sections.forEach((s) => tree.appendChild(buildFolderTreeItem(s)));
   }
 
   // ---------------------------------------------------------------------

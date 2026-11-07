@@ -1,1043 +1,115 @@
 /* ==========================================================================
-   data.js
-   Single source of truth for all portfolio content. Edit THIS file to add
-   or change projects, certifications, experience, etc. — index.html and
-   render.js should never need to change for content updates.
+   js/data.js
+   Aggregator — assembles window.portfolioData from partial globals.
+
+   ROLE IN THE PIPELINE
+
+   This file is the "assembly step" of the data layer. It does not
+   define content. It does not know the load order. It does not touch
+   the DOM. Its entire job is to read the window.__portfolioData_*
+   globals that the partials registered and merge them into the single
+   window.portfolioData object that the render pipeline consumes.
+
+   WHERE THE CONTENT LIVES
+
+   Content lives in the per-domain partials under js/data/:
+
+     js/data/_meta.js            → window.__portfolioData_meta
+     js/data/_sections.js        → window.__portfolioData_sections
+     js/data/_projects.js        → window.__portfolioData_projects
+     js/data/_automation.js      → window.__portfolioData_automation
+     js/data/_dashboards.js      → window.__portfolioData_dashboards
+     js/data/_experience.js      → window.__portfolioData_experience
+     js/data/_certifications.js  → window.__portfolioData_certifications
+     js/data/_trainings.js       → window.__portfolioData_trainings
+     js/data/_designs.js         → window.__portfolioData_designs
+     js/data/_about.js           → window.__portfolioData_about
+
+   To change content, edit the relevant partial. Never edit this file
+   to change content — the only reason to edit js/data.js is to add a
+   new top-level section key to window.portfolioData (which means also
+   adding a partial under js/data/ and listing it in the barrel).
+
+   WHERE THE LOAD ORDER LIVES
+
+   The barrel at js/data/index.js owns the load order. It injects
+   each partial as a <script> tag, waits for every one to fire its
+   load event, then dispatches "portfolio-data-ready". This file
+   listens for that event.
+
+   The downstream render and interactions barrels wait on
+   window.__dataReadyPromise (which the barrel resolves after the
+   event), so by the time renderAll() runs, window.portfolioData is
+   guaranteed to exist and to be fully populated.
+
+   WHY THE EVENT GUARD EXISTS
+
+   Depending on network timing and browser caching, this file may
+   parse before OR after the partials have loaded:
+
+     Case A — partials already loaded (flag set, or globals present):
+       assemble() runs immediately at parse time.
+
+     Case B — partials still loading:
+       The event listener waits for "portfolio-data-ready", then runs
+       assemble().
+
+   Both paths end with window.portfolioData populated. The `|| {}` and
+   `|| []` fallbacks in assemble() mean a missing partial produces an
+   empty section rather than an undefined key, so the render pipeline
+   never throws on a partially-loaded data layer.
+
+   ADDING A NEW SECTION
+
+   To add a new top-level section (e.g., "talks" for a list of speaking
+   engagements), three changes are required:
+
+     1. Create js/data/_talks.js, assigning to
+        window.__portfolioData_talks.
+     2. Add "js/data/_talks.js" to the PARTIALS array in
+        js/data/index.js (in the position that matches the sidebar
+        order you want).
+     3. Add `talks: window.__portfolioData_talks || []` to the object
+        literal in assemble() below.
+
+   Then update js/render/_bootstrap.js to add the section id to
+   SECTION_ITEM_CONFIG, and js/interactions/_modal.js to add the
+   array to findItemById's search list. The render and interactions
+   pipelines handle the rest automatically.
 
    No ES modules — plain script tag, exposes window.portfolioData.
-
-   Sections (matches sidebar order):
-     About, Automation, Dashboards, Projects, Experience, Designs,
-     Trainings, Certifications, Contact.
-
-   Automation section: 20 n8n workflow case studies. The first 10 link to
-   the n8n-automation-portfolio repo (AI/RAG/Agents). The second 10 link to
-   the platform-integration-portfolio repo (Commercial SaaS integrations).
-   Modal renders a "Read the workflow doc" button for docUrl.
-
-   Dashboards section: 10 Lovable apps that serve as the UI layer for the
-   n8n workflow portfolio. Each entry links out to a live demo and a repo.
-   See: https://github.com/Xhenzouu/n8n-ui-suite
-
-   Designs section: 10 entries. Portrait mobile entries carry
-   thumbVariant "portrait". Slideshow sizing is intrinsic.
-
-   Certifications section: 14 entries. Order: most recent first.
-   Specific-month 2026 dates sort above bare-year 2026 dates within the
-   same year (Option A). Bare-year entries do not reorder.
-
-   Sidebar count badges: COUNTED_SECTIONS in js/render/_bootstrap.js
-   determines which sections show a numeric badge.
-
-   Per-item thumbVariant resolution:
-     js/render/_cards.js reads  item.thumbVariant || config.thumbVariant
-     so a section can mix orientations.
    ========================================================================== */
 
-const portfolioData = {
+(function () {
+  "use strict";
 
-  /* ------------------------------------------------------------------------
-     META — identity, tagline, contact info
-     ------------------------------------------------------------------------ */
-  meta: {
-    name: "Henson Brix A. Arroyo",
-    tagline: "Full-Stack Developer | AI Automation with n8n, LLM, and RAG",
-    location: "Sta. Cruz, Laguna, Philippines",
-    avatarInitials: "HA",
-    contact: {
-      email: "arroyobrix@gmail.com",
-      phone: "+63 966 314 8788",
-      linkedin: "https://linkedin.com/in/arroyohensonbrix",
-      github: "https://github.com/Xhenzouu",
-      portfolioUrl: "https://hensonbrix-portfolio.vercel.app"
-    }
-  },
-
-  /* ------------------------------------------------------------------------
-     SECTIONS
-     ------------------------------------------------------------------------ */
-  sections: [
-    { id: "about",           label: "About",           icon: "info",             hasChildren: false },
-    { id: "automation",      label: "Automation",      icon: "workflow",         hasChildren: true  },
-    { id: "dashboards",      label: "Dashboards",      icon: "layout-grid",      hasChildren: false },
-    { id: "projects",        label: "Projects",        icon: "folder",           hasChildren: true  },
-    { id: "experience",      label: "Experience",      icon: "briefcase",        hasChildren: true  },
-    { id: "designs",         label: "Designs",         icon: "palette",          hasChildren: false },
-    { id: "trainings",       label: "Trainings",       icon: "graduation-cap",   hasChildren: false },
-    { id: "certifications",  label: "Certifications",  icon: "award",            hasChildren: true  },
-    { id: "contact",         label: "Contact",         icon: "mail",             hasChildren: false }
-  ],
-
-  /* ------------------------------------------------------------------------
-     PROJECTS
-     ------------------------------------------------------------------------ */
-  projects: [
-    {
-      id: "xirv-systems",
-      name: "XIRV Systems",
-      category: "Full-Stack / AI",
-      date: "July 2026 – Present",
-      description: "A secure enterprise platform with JWT auth, RBAC, secure API endpoints, and modular layered architecture. Includes an AI-powered RAG system with vector search, embeddings, and an internal retrieval gateway. Deployed on AWS with CI/CD.",
-      tech: ["React", "TypeScript", "Node.js", "Express", "PostgreSQL", "Prisma", "AWS (EC2, RDS, S3)", "GitHub Actions"],
-      features: [
-        "JWT authentication with refresh token rotation",
-        "Role-based access control (USER, ADMIN, SUPER_ADMIN)",
-        "Knowledge management — document upload, search, categories, tags",
-        "AI Gateway — provider abstraction across OpenAI, Ollama, and Anthropic",
-        "RAG (Retrieval-Augmented Generation) powered by pgvector",
-        "Workflow automation with task management and approvals",
-        "Redis-powered caching and rate limiting",
-        "Audit logging for every action",
-        "52+ tests with Vitest"
-      ],
-      repoUrl: "https://github.com/Xhenzouu/xirv-systems",
-      liveUrl: null,
-      featured: true,
-      thumb: "assets/images/projects/xirv-systems.png"
-    },
-    {
-      id: "lynville-homes-8",
-      name: "Lynville Homes 8",
-      category: "Full-Stack",
-      date: "March 2025 – December 2025",
-      description: "A full-featured HOA platform serving 500+ members with automated notifications and reporting. Provisioned AWS cloud infrastructure with Nginx reverse proxy and PM2, achieving 99.9% uptime. Streamlined core administrative workflows, reducing manual effort by 40%.",
-      tech: ["React", "Node.js", "Express", "PostgreSQL", "AWS (EC2, RDS)", "Nginx", "PM2"],
-      features: [
-        "Role-based access for Member, Admin, Public Relations, and Auditor",
-        "Community dashboard with announcements, activities, polls, and projects",
-        "Threaded comments and real-time WebSocket notifications",
-        "CMS for dynamic banner, welcome, about, and affiliation sections",
-        "Admin tools for member, activity, poll, and project management",
-        "Payment tracking and pending-actions approval queue",
-        "SSL/HTTPS with Let's Encrypt and Cloudflare CDN",
-        "GitHub Actions CI/CD pipeline"
-      ],
-      repoUrl: "https://github.com/Xhenzouu/lynvillehomes8",
-      liveUrl: null,
-      featured: true,
-      thumb: "assets/images/projects/lynville-homes-8.png"
-    },
-    {
-      id: "pila-pets",
-      name: "Pila Pets",
-      category: "Web / Community",
-      date: "December 2025",
-      description: "A community pet platform with registration, lost reports, adoption listings, and search/filter. Full CRUD operations, authentication, and role-based access (resident/admin). Built as a DICT certification project.",
-      tech: ["CodeIgniter 4", "PHP 8.2", "MySQL", "Bootstrap 5"],
-      features: [
-        "Authentication for staff and admin login",
-        "Role-based access control via AuthFilter and AdminFilter",
-        "Admin dashboard with system activity overview",
-        "Resident management — full CRUD for barangay residents",
-        "Pet management — full CRUD for pets linked to their owners",
-        "User management for staff accounts",
-        "Custom views organized by area (admin, auth, residents)"
-      ],
-      repoUrl: "https://github.com/Xhenzouu/pila-pets",
-      liveUrl: "https://youtu.be/I4n8shvS1ZY",
-      featured: false,
-      thumb: "assets/images/projects/pila-pets.png"
-    },
-    {
-      id: "lost-pet-ai",
-      name: "Lost Pet Reunion AI — Pila, Laguna",
-      category: "ML / AI",
-      date: "2025 – 2026",
-      description: "A machine learning–powered community project that predicts the likelihood of a lost pet being reunited with its owner in Pila, Laguna. Uses YOLO11 pet detection + DINOv2-small embeddings + FAISS cosine similarity search, plus a RandomForest tabular predictor with a Streamlit UI.",
-      tech: ["Python", "Streamlit", "Scikit-learn", "YOLO11", "DINOv2", "FAISS", "PostgreSQL", "Cloudinary"],
-      features: [
-        "RandomForest tabular predictor for pet recovery likelihood",
-        "YOLO11 pet detection with automatic cropping",
-        "DINOv2-small embeddings (384-dim) for visual similarity",
-        "FAISS cosine similarity search across pet images",
-        "PostgreSQL storage with JSONB embeddings",
-        "Streamlit UI designed for non-technical users",
-        "Cloudinary image storage",
-        "Migration scripts for legacy embeddings (v5 → v6)"
-      ],
-      repoUrl: "https://github.com/Xhenzouu/lost-pet-ai",
-      liveUrl: "https://lost-pet-ai.streamlit.app/",
-      featured: true,
-      thumb: "assets/images/projects/lost-pet-ai.png"
-    },
-    {
-      id: "gaming-rigz",
-      name: "GamingRigz",
-      category: "Desktop / POS",
-      date: "2023",
-      description: "A Windows desktop application for managing sales and inventory of gaming rig parts. Handles login, registration, password retrieval, stock tracking, order creation, order history, archiving, and sales reporting, with SQL Server as the data layer.",
-      tech: ["C#", ".NET Framework", "WinForms", "SQL Server", "T-SQL", "ADO.NET"],
-      features: [
-        "Login, registration, and password retrieval for staff accounts",
-        "Stock management for gaming rig parts and accessories",
-        "Order creation with receipt generation at checkout",
-        "Order history and archive for older records",
-        "Sales reporting for day-to-day decisions",
-        "Color-coded stock indicators (green/yellow/red)",
-        "SQL Server data layer via ADO.NET"
-      ],
-      repoUrl: "https://github.com/Xhenzouu/GamingRigz",
-      liveUrl: null,
-      featured: false,
-      thumb: "assets/images/projects/gaming-rigz.png"
-    },
-    {
-      id: "chairable",
-      name: "Chairable",
-      category: "E-Commerce",
-      date: "2024",
-      description: "A full-stack e-commerce platform for furniture and home decor, with user and seller registration, product browsing by category, cart, checkout, and a mobile version in Flutter.",
-      tech: ["HTML", "CSS", "JavaScript", "Python (Flask)", "PostgreSQL", "Flutter (Dart)"],
-      features: [
-        "User registration and login with forgot-password + OTP verification",
-        "Seller registration with business permit and valid ID upload",
-        "Admin tools for user management, seller approvals, and commissions",
-        "Category-based browsing (Home Comfort, Garden & Outdoor, Dining, Living, Bedroom)",
-        "Product showcase with discount badges, New tags, and hover overlays",
-        "Shopping cart, checkout flow, and order tracking",
-        "Favorites, product comparison, search, filtering, and pagination",
-        "Live chat and in-app notifications",
-        "Newsletter subscription and #ShareableChairable community collage",
-        "Flutter mobile app sharing the same backend"
-      ],
-      repoUrl: "https://github.com/Xhenzouu/Chairable",
-      liveUrl: null,
-      featured: false,
-      thumb: "assets/images/projects/chairable.png"
-    },
-    {
-      id: "lspu-events",
-      name: "LSPU Events Management System",
-      category: "Web / Academic",
-      date: "2024",
-      description: "A PHP and MySQL web system for managing university events at LSPU — login/registration, full event CRUD, search, and PDF report generation via TCPDF.",
-      tech: ["PHP", "MySQL", "TCPDF", "HTML", "CSS"],
-      features: [
-        "Login, register, and forgot-password recovery",
-        "Event creation, editing, and deletion (full CRUD)",
-        "Event search across the records",
-        "PDF report generation via the TCPDF library",
-        "Shared layout via header, footer, and sidebar includes"
-      ],
-      repoUrl: "https://github.com/Xhenzouu/lspu-event-management-system",
-      liveUrl: null,
-      featured: false,
-      thumb: "assets/images/projects/lspu-events.png"
-    },
-    {
-      id: "employee-management-system",
-      name: "Employee Management System",
-      category: "Web / HR",
-      date: "2024",
-      description: "A CodeIgniter 4 employee management system with authentication, full employee CRUD, a metrics-driven dashboard, and a dark theme UI.",
-      tech: ["PHP", "CodeIgniter 4", "MySQL", "Composer", "PHPUnit"],
-      features: [
-        "Authentication with filtered access via AuthFilter",
-        "Metrics-driven admin dashboard",
-        "Full CRUD for employee records",
-        "Dark theme UI throughout",
-        "Database schema included for quick local setup"
-      ],
-      repoUrl: "https://github.com/Xhenzouu/employee-management-system",
-      liveUrl: null,
-      featured: false,
-      thumb: "assets/images/projects/employee-management-system.png"
-    }
-  ],
-
-  /* ------------------------------------------------------------------------
-     AUTOMATION — 20 n8n workflow case studies.
-
-     Items 1-10 are from platform-integration-portfolio (Commercial SaaS).
-     Items 11-20 are from n8n-automation-portfolio (AI/RAG/Agents).
-     ------------------------------------------------------------------------ */
-  automation: [
-    // --- PLATFORM INTEGRATION PORTFOLIO (1-10) ---
-    {
-      id: "hubspot-lead-enrichment-pipeline",
-      name: "HubSpot Lead Enrichment Pipeline",
-      category: "CRM / Enrichment",
-      date: "2026",
-      pattern: "Webhook, API enrichment, conditional deal creation",
-      description: "Receives inbound leads via webhook, enriches them with Apify, scores them with Groq (LLM), and creates a HubSpot contact with a conditional deal. Includes a Supabase audit log.",
-      docUrl: "https://github.com/Xhenzouu/platform-integration-portfolio/blob/main/docs/workflows/01-hubspot-lead-enrichment-pipeline.md",
-      thumb: "assets/images/automation/01-hubspot-lead-enrichment-pipeline.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "shopify-order-confirmation-pipeline",
-      name: "Shopify Order Confirmation Pipeline",
-      category: "E-commerce / Webhooks",
-      date: "2026",
-      pattern: "HMAC verification, HTML email, order notes",
-      description: "Receives Shopify order webhooks, verifies HMAC signatures, sends a rich HTML receipt email via Resend, updates the Shopify order note, and logs the transaction to Supabase.",
-      docUrl: "https://github.com/Xhenzouu/platform-integration-portfolio/blob/main/docs/workflows/02-shopify-order-confirmation-pipeline.md",
-      thumb: "assets/images/automation/02-shopify-order-confirmation-pipeline.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "shopify-to-hubspot-customer-sync",
-      name: "Shopify to HubSpot Customer Sync",
-      category: "Scheduled Sync",
-      date: "2026",
-      pattern: "Scheduled sync, cursor pagination, batch upsert",
-      description: "Runs on a schedule to fetch updated Shopify customers via cursor pagination, upserts them into HubSpot with order statistics, and logs sync state and failures in Supabase.",
-      docUrl: "https://github.com/Xhenzouu/platform-integration-portfolio/blob/main/docs/workflows/03-shopify-to-hubspot-customer-sync.md",
-      thumb: "assets/images/automation/03-shopify-to-hubspot-customer-sync.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "airtable-notion-two-way-sync",
-      name: "Airtable ↔ Notion Two-Way Sync",
-      category: "Bidirectional Sync",
-      date: "2026",
-      pattern: "Per-record state, conflict detection",
-      description: "A scheduled workflow that keeps Airtable and Notion in sync bidirectionally. Uses per-record state to detect changes, flags conflicts for manual review, and logs every sync run.",
-      docUrl: "https://github.com/Xhenzouu/platform-integration-portfolio/blob/main/docs/workflows/04-airtable-notion-two-way-sync.md",
-      thumb: "assets/images/automation/04-airtable-notion-two-way-sync.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "stripe-payment-fanout",
-      name: "Stripe Payment Fan-Out",
-      category: "Payments / Fan-Out",
-      date: "2026",
-      pattern: "Webhook, parallel fan-out, partial-failure handling",
-      description: "Verifies Stripe webhook signatures using a companion Node.js process, fans out payment notifications to Slack, Airtable, and Resend in parallel, and logs per-branch outcomes so one failure doesn't crash the others.",
-      docUrl: "https://github.com/Xhenzouu/platform-integration-portfolio/blob/main/docs/workflows/05-stripe-payment-fanout.md",
-      thumb: "assets/images/automation/05-stripe-payment-fanout.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "google-calendar-oauth-slack",
-      name: "Google Calendar → Slack with OAuth",
-      category: "OAuth / Scheduling",
-      date: "2026",
-      pattern: "OAuth 2.0 refresh, token health monitoring, idempotency",
-      description: "Fetches upcoming Google Calendar events on a schedule, handles OAuth token refresh automatically, posts meeting summaries to Slack, and triggers an alert on three consecutive refresh failures.",
-      docUrl: "https://github.com/Xhenzouu/platform-integration-portfolio/blob/main/docs/workflows/06-google-calendar-oauth-slack.md",
-      thumb: "assets/images/automation/06-google-calendar-oauth-slack.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "spreadsheet-import-validation",
-      name: "Spreadsheet Validation Pipeline",
-      category: "File Processing",
-      date: "2026",
-      pattern: "Form upload, schema normalization, staged review",
-      description: "Accepts XLSX/CSV uploads via an n8n Form, normalizes headers to a canonical schema, classifies rows as valid or invalid, and stages them for manual review before a separate commit workflow inserts them.",
-      docUrl: "https://github.com/Xhenzouu/platform-integration-portfolio/blob/main/docs/workflows/07-spreadsheet-import-validation.md",
-      thumb: "assets/images/automation/07-spreadsheet-import-validation.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "canvas-deadline-aggregator",
-      name: "Canvas Deadline Aggregator",
-      category: "Education / API",
-      date: "2026",
-      pattern: "Paginated fan-out, regex categorization, Slack Block Kit",
-      description: "Fetches all active Canvas courses, iterates through paginated assignments, categorizes them by regex (labs, KCs), and posts a daily grouped Slack digest of unsubmitted work to prevent pile-ups.",
-      docUrl: "https://github.com/Xhenzouu/platform-integration-portfolio/blob/main/docs/workflows/08-canvas-deadline-aggregator.md",
-      thumb: "assets/images/automation/08-canvas-deadline-aggregator.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "multi-tenant-payment-notifications",
-      name: "Multi-Tenant Payment Notifications",
-      category: "Multi-Tenant / Dynamic Auth",
-      date: "2026",
-      pattern: "Webhook, dynamic credential routing, tenant isolation",
-      description: "Receives Stripe webhooks, looks up the specific tenant's API key and Slack webhook from Supabase at runtime, fetches the real PaymentIntent, and notifies the tenant without leaking data between accounts.",
-      docUrl: "https://github.com/Xhenzouu/platform-integration-portfolio/blob/main/docs/workflows/09-multi-tenant-payment-notifications.md",
-      thumb: "assets/images/automation/09-multi-tenant-payment-notifications.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "portfolio-health-monitor",
-      name: "Portfolio Health Monitor",
-      category: "Meta-Monitoring",
-      date: "2026",
-      pattern: "Cross-workflow aggregation, stale detection",
-      description: "A daily rollup that queries the audit tables of all 9 previous workflows, normalizes their different status schemas, computes a health score (healthy, attention, stale), and sends a Slack Block Kit digest to the #portfolio-health channel.",
-      docUrl: "https://github.com/Xhenzouu/platform-integration-portfolio/blob/main/docs/workflows/10-portfolio-health-monitor.md",
-      thumb: "assets/images/automation/10-portfolio-health-monitor.png",
-      thumbVariant: "contain"
-    },
-
-    // --- AI AUTOMATION PORTFOLIO (11-20) ---
-    {
-      id: "github-good-first-issue-notifier",
-      name: "GitHub Good First Issue Notifier",
-      category: "Developer Tooling",
-      date: "2026",
-      pattern: "Scheduled poll, filter, email",
-      description: "A scheduled workflow that polls GitHub for issues labelled good first issue, filters them against a curated set of criteria, and sends a digest email. Built to help newcomers find approachable open-source work without manually scanning repositories.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/01-github-notifier.md",
-      thumb: "assets/images/automation/11-github-notifier.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "ai-log-classifier",
-      name: "AI Log Classifier",
-      category: "AI Classification",
-      date: "2026",
-      pattern: "Webhook, LLM classify, conditional Telegram alert",
-      description: "A webhook endpoint that receives application logs, routes them through an LLM for severity and category classification, and pushes only high-priority entries to Telegram. Reduces alert noise by filtering routine log lines before they reach the on-call channel.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/02-ai-log-classifier.md",
-      thumb: "assets/images/automation/12-ai-log-classifier.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "error-handler",
-      name: "Error Handler",
-      category: "Reliability",
-      date: "2026",
-      pattern: "Cross-workflow failure notification",
-      description: "A shared error handler that other workflows call when they fail. Captures the failing workflow name, the error payload, and a timestamp, then routes a structured notification to the appropriate channel. Provides a single point of failure visibility across the workflow suite.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/03-error-handler.md",
-      thumb: "assets/images/automation/13-error-handler.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "af-homes-inquiry-intake",
-      name: "AF Homes Inquiry Intake",
-      category: "RAG Pipeline",
-      date: "2026",
-      pattern: "RAG pipeline with vector search and grounded reply drafting",
-      description: "An inquiry intake workflow for a real estate agency. Incoming messages are embedded, matched against a vector store of property documents and prior replies, and a grounded draft response is generated. The reply cites the source documents so the agent can verify before sending.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/04-af-homes-inquiry-intake.md",
-      thumb: "assets/images/automation/14-af-homes-inquiry-intake.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "ai-lead-qualification-agent",
-      name: "AI Lead Qualification Agent",
-      category: "AI Scoring",
-      date: "2026",
-      pattern: "Deterministic LLM scoring with machine-readable audit trail",
-      description: "A lead qualification workflow that scores inbound leads using a deterministic LLM prompt with a fixed rubric. Every score is written to a structured audit trail including the rubric version, the model used, and the raw reasoning, so scores can be reviewed or replayed.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/05-ai-lead-qualification-agent.md",
-      thumb: "assets/images/automation/15-ai-lead-qualification-agent.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "invoice-processing-pipeline",
-      name: "Invoice Processing Pipeline",
-      category: "Document Processing",
-      date: "2026",
-      pattern: "PDF extraction, 3-branch validation, per-status routing",
-      description: "An invoice processing pipeline that extracts structured fields from incoming PDFs, runs validation across three branches (extraction quality, vendor match, amount sanity), and routes each invoice by status: auto-approved, needs review, or rejected with reason. Replaces manual data entry with an auditable flow.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/06-invoice-processing-pipeline.md",
-      thumb: "assets/images/automation/16-invoice-processing-pipeline.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "customer-support-agent",
-      name: "Customer Support Agent",
-      category: "Conversational AI",
-      date: "2026",
-      pattern: "Conversational AI agent with tool calling and persistent memory",
-      description: "A conversational support agent that handles inbound customer questions using tool calling and persistent memory. It can look up order status, retrieve policy documents, and escalate to a human when confidence is low. State is preserved across turns so the customer does not repeat context.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/07-customer-support-agent.md",
-      thumb: "assets/images/automation/17-customer-support-agent.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "human-in-the-loop-approval",
-      name: "Human-in-the-Loop Approval",
-      category: "Approval Workflow",
-      date: "2026",
-      pattern: "AI refinement plus Telegram inline keyboard approval",
-      description: "An approval workflow for AI-generated content. A draft is generated and refined by an LLM, then posted to a Telegram chat with inline keyboard buttons for approve, edit, or reject. The chosen action is written back to the source system and the original requester is notified.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/08-human-in-the-loop-approval.md",
-      thumb: "assets/images/automation/18-human-in-the-loop-approval.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "mcp-integration-server",
-      name: "MCP Integration Server",
-      category: "Developer Tooling",
-      date: "2026",
-      pattern: "n8n workflows exposed as MCP tools for Claude Code",
-      description: "An MCP server that exposes selected n8n workflows as tools callable from Claude Code. Lets AI-assisted development sessions invoke project-specific automations without leaving the editor, and provides a clean boundary between the AI client and the underlying workflow logic.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/09-mcp-integration-server.md",
-      thumb: "assets/images/automation/19-mcp-integration-server.png",
-      thumbVariant: "contain"
-    },
-    {
-      id: "workflow-health-monitor",
-      name: "Workflow Health Monitor",
-      category: "Reliability",
-      date: "2026",
-      pattern: "Cross-workflow failure classification, retry, and Telegram escalation",
-      description: "A monitor that watches the health of every other workflow in the suite. Failures are classified by type (timeout, auth, rate limit, data error), retried automatically when appropriate, and escalated to Telegram with a classification summary when the retry budget is exhausted.",
-      docUrl: "https://github.com/Xhenzouu/n8n-automation-portfolio/blob/main/docs/workflows/10-workflow-health-monitor.md",
-      thumb: "assets/images/automation/20-workflow-health-monitor.png",
-      thumbVariant: "contain"
-    }
-  ],
-
-  /* ------------------------------------------------------------------------
-     DASHBOARDS — 10 Lovable apps that serve as the UI layer for the
-     n8n workflow portfolio. Each entry links out to a live demo and a repo.
-     See: https://github.com/Xhenzouu/n8n-ui-suite
-     ------------------------------------------------------------------------ */
-    dashboards: [
-    {
-      id: "dash-lead-enrichment",
-      name: "Lead Enrichment Pipeline",
-      workflow: "Workflow 1 — HubSpot Lead Enrichment",
-      description: "Interactive pipeline simulation showing domain normalization, Apify enrichment, Groq scoring, and HubSpot upsert.",
-      tech: ["React", "TypeScript", "Tailwind", "n8n"],
-      liveUrl: "https://lead-enrichment-pipeline.lovable.app",
-      repoUrl: "https://github.com/Xhenzouu/lead-enrichment-pipeline",
-      docUrl: "https://github.com/Xhenzouu/lead-enrichment-pipeline",
-      thumb: "assets/images/dashboards/01-lead-enrichment.png"
-    },
-    {
-      id: "dash-triagedesk",
-      name: "Triagedesk",
-      workflow: "Workflow 2 — Shopify Order Confirmation",
-      description: "Order triage dashboard with HMAC verification status and mock HTML email previews.",
-      tech: ["React", "TypeScript", "Tailwind", "n8n"],
-      liveUrl: "https://triagedesk.lovable.app",
-      repoUrl: "https://github.com/Xhenzouu/triagedesk",
-      docUrl: "https://github.com/Xhenzouu/triagedesk",
-      thumb: "assets/images/dashboards/02-triagedesk.png"
-    },
-    {
-      id: "dash-getsync-command",
-      name: "GetSync Command",
-      workflow: "Workflow 3 — Shopify to HubSpot Sync",
-      description: "Cursor-based sync monitor with per-run audit trail and HubSpot string-property preview.",
-      tech: ["React", "TypeScript", "Tailwind", "n8n"],
-      liveUrl: "https://getsync-command.lovable.app",
-      repoUrl: "https://github.com/Xhenzouu/getsync-command",
-      docUrl: "https://github.com/Xhenzouu/getsync-command",
-      thumb: "assets/images/dashboards/03-getsync-command.png"
-    },
-    {
-      id: "dash-airtable-notion-diff",
-      name: "Airtable Notion Diff",
-      workflow: "Workflow 4 — Airtable ↔ Notion Sync",
-      description: "Split-screen conflict resolver with per-field highlighting and resolution actions.",
-      tech: ["React", "TypeScript", "Tailwind", "n8n"],
-      liveUrl: "https://airtable-notion-diff.lovable.app",
-      repoUrl: "https://github.com/Xhenzouu/airtable-notion-diff",
-      docUrl: "https://github.com/Xhenzouu/airtable-notion-diff",
-      thumb: "assets/images/dashboards/04-airtable-notion-diff.png"
-    },
-    {
-      id: "dash-stripe-fanout",
-      name: "Stripe FanOut",
-      workflow: "Workflow 5 — Stripe Payment Fan-Out",
-      description: "Node-graph simulator for parallel payment fan-out with per-branch failure injection.",
-      tech: ["React", "TypeScript", "Tailwind", "n8n"],
-      liveUrl: "https://stripe-fanout.lovable.app",
-      repoUrl: "https://github.com/Xhenzouu/stripe-fanout",
-      docUrl: "https://github.com/Xhenzouu/stripe-fanout",
-      thumb: "assets/images/dashboards/05-stripe-fanout.png"
-    },
-    {
-      id: "dash-synchealth",
-      name: "SyncHealth",
-      workflow: "Workflow 6 — Google Calendar to Slack (OAuth)",
-      description: "OAuth token lifecycle dashboard with reactive refresh handling and failure threshold alerts.",
-      tech: ["React", "TypeScript", "Tailwind", "n8n"],
-      liveUrl: "https://google-slack-sync.lovable.app",
-      repoUrl: "https://github.com/Xhenzouu/google-slack-sync",
-      docUrl: "https://github.com/Xhenzouu/google-slack-sync",
-      thumb: "assets/images/dashboards/06-synchealth.png"
-    },
-    {
-      id: "dash-data-ingest",
-      name: "Data Ingest",
-      workflow: "Workflow 7 — Spreadsheet Consolidation",
-      description: "CSV ingestion and staged review with valid/suspicious/invalid row classification.",
-      tech: ["React", "TypeScript", "Tailwind", "n8n"],
-      liveUrl: "https://data-ingest.lovable.app",
-      repoUrl: "https://github.com/Xhenzouu/data-ingest",
-      docUrl: "https://github.com/Xhenzouu/data-ingest",
-      thumb: "assets/images/dashboards/07-data-ingest.png"
-    },
-    {
-      id: "dash-canvas-deadlines",
-      name: "Canvas Deadlines",
-      workflow: "Workflow 8 — Canvas Deadline Aggregator",
-      description: "Kanban and list views for Canvas assignments, categorized by regex (Labs, KCs).",
-      tech: ["React", "TypeScript", "Tailwind", "n8n"],
-      liveUrl: "https://canvas-deadlines.lovable.app",
-      repoUrl: "https://github.com/Xhenzouu/canvas-deadlines",
-      docUrl: "https://github.com/Xhenzouu/canvas-deadlines",
-      thumb: "assets/images/dashboards/08-canvas-deadlines.png"
-    },
-    {
-      id: "dash-routeway",
-      name: "Routeway",
-      workflow: "Workflow 9 — Multi-Tenant Payments",
-      description: "Tenant switcher with isolated credentials and per-tenant audit logs.",
-      tech: ["React", "TypeScript", "Tailwind", "n8n"],
-      liveUrl: "https://routeway-multi-tenant.lovable.app",
-      repoUrl: "https://github.com/Xhenzouu/routeway-multi-tenant",
-      docUrl: "https://github.com/Xhenzouu/routeway-multi-tenant",
-      thumb: "assets/images/dashboards/09-routeway.png"
-    },
-    {
-      id: "dash-workflow-health",
-      name: "Workflow Health",
-      workflow: "Workflow 10 — Portfolio Health Monitor",
-      description: "Observability dashboard with KPI cards, ledger view, and Slack digest preview.",
-      tech: ["React", "TypeScript", "Tailwind", "n8n"],
-      liveUrl: "https://workflow-health.lovable.app",
-      repoUrl: "https://github.com/Xhenzouu/workflow-health",
-      docUrl: "https://github.com/Xhenzouu/workflow-health",
-      thumb: "assets/images/dashboards/10-workflow-health.png"
-    }
-  ],
-
-  /* ------------------------------------------------------------------------
-     EXPERIENCE
-     ------------------------------------------------------------------------ */
-  experience: [
-    {
-      id: "exp-001",
-      role: "Team Leader / Full-Stack Developer (Intern)",
-      org: "C8NNECT IT Solutions",
-      startDate: "January 2026",
-      endDate: "May 2026",
-      location: "Bulacan, Philippines",
-      description: "Led a team through a project lifecycle, from research and planning to deployment and delivery.",
-      highlights: [
-        "Built backend modules using Java and tested APIs via Postman for quality assurance.",
-        "Developed role-based user interfaces and documented progress reports for project supervisors."
-      ],
-      thumb: "assets/images/experience/c8nnect.png"
-    },
-    {
-      id: "exp-002",
-      role: "Full-Stack Developer (Project-Based)",
-      org: "Lynville Homes 8 HOA",
-      startDate: "March 2025",
-      endDate: "December 2025",
-      location: "Laguna, Philippines",
-      description: "Designed, built, and deployed a community platform serving 500+ members with 99.9% uptime.",
-      highlights: [
-        "Achieved 40% reduction in manual administrative work through automated workflows and reporting.",
-        "Collaborated with HOA officers to gather requirements, provide support, and resolve user issues."
-      ],
-      thumb: "assets/images/experience/lynville-homes-8.png"
-    },
-    {
-      id: "exp-003",
-      role: "Shop Assistant (Seasonal, Family Business)",
-      org: "Consumo Enterprises",
-      startDate: "2019",
-      endDate: "2024",
-      location: "Laguna, Philippines",
-      description: "Managed daily shop operations, handling procurement and inventory for construction materials.",
-      highlights: [
-        "Coordinated client communications and logistics for truck rental and material delivery services."
-      ],
-      thumb: "assets/images/experience/consumo-enterprises.png"
-    }
-  ],
-
-  /* ------------------------------------------------------------------------
-     CERTIFICATIONS — 15 entries, all with thumbnails.
-     Order: entries with a non-null credentialUrl first, then entries with
-     credentialUrl: null. Within each group, most recent first.
-     IDs are assigned in descending order from the top: position 1 is
-     cert-015, position 15 is cert-001.
-     ------------------------------------------------------------------------ */
-  certifications: [
-    {
-      id: "cert-015",
-      name: "Cybersecurity Professional Level 1 (Entry-Level)",
-      issuer: "DICT Cybersecurity Professionals Portal",
-      date: "October 6, 2026",
-      credentialUrl: "https://cyberpro.dict.gov.ph/verify/CPB-V2R9-EQXE-PYJZ-T9G3",
-      thumb: "assets/images/certificates/arroyo-dict-cybersecurity-professional-l1-badge.png"
-    },
-    {
-      id: "cert-014",
-      name: "CompTIA AI Essentials",
-      issuer: "CompTIA",
-      date: "September 26, 2026",
-      credentialUrl: "https://certification.platform.comptia.org/verifycert/6-3C6-GMUDR",
-      thumb: "assets/images/certificates/arroyo-comptia-ai-essentials-certificate.jpg"
-    },
-    {
-      id: "cert-013",
-      name: "Generative AI Foundations",
-      issuer: "Certiport (Pearson VUE)",
-      date: "2026",
-      credentialUrl: "https://www.credly.com/badges/3cb4c275-ed45-4d90-b8ff-a732643e5ca9/public_url",
-      thumb: "assets/images/certificates/arroyo-generative-ai-foundations-certificate.jpg"
-    },
-    {
-      id: "cert-012",
-      name: "Prompt Like an Engineer",
-      issuer: "Cisco Networking Academy",
-      date: "2026",
-      credentialUrl: "https://www.credly.com/badges/d88efeef-360a-4e2f-8a97-9a70018ce132/public_url",
-      thumb: "assets/images/certificates/arroyo-prompt-like-an-engineer-certificate.jpg"
-    },
-    {
-      id: "cert-011",
-      name: "Introduction to Modern AI",
-      issuer: "Cisco Networking Academy",
-      date: "2026",
-      credentialUrl: "https://www.credly.com/badges/41b5c3d8-64b6-45ba-a518-533f3b1a3a8e/public_url",
-      thumb: "assets/images/certificates/arroyo-introduction-to-modern-ai-certificate.jpg"
-    },
-    {
-      id: "cert-010",
-      name: "AI Essentials: Theory and Practice",
-      issuer: "UPOU MODeL (University of the Philippines Open University)",
-      date: "2026",
-      credentialUrl: "https://model.upou.edu.ph/mod/simplecertificate/view.php?id=26762&action=get",
-      thumb: "assets/images/certificates/arroyo-ai-essentials-theory-and-practice-certificate.jpg"
-    },
-    {
-      id: "cert-009",
-      name: "PHP Web Application Framework: CodeIgniter 4 (Intermediate)",
-      issuer: "DICT CALABARZON Regional Office",
-      date: "December 17-18, 2025",
-      credentialUrl: "https://script.google.com/macros/s/AKfycbxP6XRP66T7ZURd9yRiQluseSoST4sMbAhyNB3G5KSlpxIlwI7bzk9PzJvaSPeIYGGrWg/exec?code=DICTR4A-ILCDBDWIA-2025-0212",
-      thumb: "assets/images/certificates/arroyo-php-webapp-framework-codeigniter4-intermediate-certificate.jpg"
-    },
-    {
-      id: "cert-008",
-      name: "Linux Essentials",
-      issuer: "Cisco Networking Academy",
-      date: "2025",
-      credentialUrl: "https://www.credly.com/badges/d8fb382b-127f-4a34-8649-70c2ee2bb7bc/public_url",
-      thumb: "assets/images/certificates/arroyo-linux-essentials-certificate.jpg"
-    },
-    {
-      id: "cert-007",
-      name: "Operating Systems Basics",
-      issuer: "Cisco Networking Academy",
-      date: "2025",
-      credentialUrl: "https://www.credly.com/badges/d17e9641-9780-4fb7-a1e5-8027e4833d9e/public_url",
-      thumb: "assets/images/certificates/arroyo-linux-os-basics-certificate.jpg"
-    },
-    {
-      id: "cert-006",
-      name: "Certificate of Completion — Internship Program (On-the-Job Training)",
-      issuer: "C8nnect IT Solutions",
-      date: "February 16, 2026 – May 8, 2026",
-      credentialUrl: null,
-      thumb: "assets/images/certificates/arroyo-c8nnect-internship-completion-certification.jpg"
-    },
-    {
-      id: "cert-005",
-      name: "Web Development Using MERN",
-      issuer: "DICT Region III",
-      date: "January 14, 2026",
-      credentialUrl: null,
-      thumb: "assets/images/certificates/arroyo-web-dev-using-mern-stack-certificate.jpg"
-    },
-    {
-      id: "cert-004",
-      name: "Oplan Paskong Sigurado",
-      issuer: "DICT Cybersecurity Bureau",
-      date: "December 12, 2025",
-      credentialUrl: null,
-      thumb: "assets/images/certificates/arroyo-oplan-paskong-sigurado-certificate.jpg"
-    },
-    {
-      id: "cert-003",
-      name: "IoT in Smart Cities",
-      issuer: "DICT I3 — ILCDB",
-      date: "November 24, 2025",
-      credentialUrl: null,
-      thumb: "assets/images/certificates/arroyo-iot-in-smart-cities-certificate.jpg"
-    },
-    {
-      id: "cert-002",
-      name: "Cybersecurity ICT Professionals",
-      issuer: "DICT Region V — Provincial Office of Catanduanes",
-      date: "October 23, 2025",
-      credentialUrl: null,
-      thumb: "assets/images/certificates/arroyo-cybersecurity-ict-professionals-certification.jpg"
-    },
-    {
-      id: "cert-001",
-      name: "Design Thinking Process",
-      issuer: "DICT I3 — ICT Industry Development Bureau",
-      date: "October 18, 2025",
-      credentialUrl: null,
-      thumb: "assets/images/certificates/arroyo-design-thinking-process-certificate.jpg"
-    }
-  ],
-
-  /* ------------------------------------------------------------------------
-     TRAININGS
-     ------------------------------------------------------------------------ */
-  trainings: [
-    {
-      id: "train-001",
-      name: "AI Prompting for Automation Level III",
-      provider: "TESDA",
-      hours: 224,
-      date: "2026",
-      thumb: "assets/images/trainings/ai-prompting-automation.png"
-    },
-    {
-      id: "train-002",
-      name: "AI Essentials: Theory and Practice",
-      provider: "UPOU MODeL (University of the Philippines Open University)",
-      hours: 16,
-      date: "2026",
-      thumb: "assets/images/trainings/upou-ai-essentials.png"
-    },
-    {
-      id: "train-003",
-      name: "PHP Web Application Framework: CodeIgniter 4",
-      provider: "DICT Calabarzon",
-      hours: 16,
-      date: "2025",
-      thumb: "assets/images/trainings/php-codeigniter4.png"
-    }
-  ],
-
-  /* ------------------------------------------------------------------------
-     DESIGNS — ten entries, all with slideshows and Figma links.
-
-     Portrait mobile (thumbVariant "portrait"):
-       gdrive-redesign, cardbank-redesign, clinica-design,
-       poea-design-mobile, lume-design.
-
-     Landscape desktop (default):
-       chairable-design, pila-pets-design, lynville-design,
-       dental-design, poea-design-desktop.
-
-     Slideshow sizing is intrinsic. No aspectRatio field is used.
-     Design items carry figmaUrl only — no repoUrl / liveUrl.
-     ------------------------------------------------------------------------ */
-  designs: [
-    {
-      id: "gdrive-redesign",
-      name: "Google Drive Mobile Re-Design",
-      type: "Mobile UI / UX",
-      description: "A mobile re-design concept for the Google Drive app, exploring a cleaner folder grid, a simplified bottom navigation, and a more accessible file-management flow. Part of a UI/UX coursework assignment that required selecting an existing app and re-designing its core screens.",
-      date: "2025",
-      images: [
-        "assets/images/designs/gdrive-redesign-1.png",
-        "assets/images/designs/gdrive-redesign-2.png",
-        "assets/images/designs/gdrive-redesign-3.png",
-        "assets/images/designs/gdrive-redesign-4.png",
-        "assets/images/designs/gdrive-redesign-5.png"
-      ],
-      thumbVariant: "portrait",
-      thumb: "assets/images/designs/gdrive-redesign-1.png",
-      figmaUrl: "https://www.figma.com/design/CaXty4fmgF2vcNu3UIVEFq/google-drive--re-design-?node-id=0-1&t=KGMPRU4dVTsKT3A4-1"
-    },
-    {
-      id: "chairable-design",
-      name: "Chairable — E-Commerce Web App",
-      type: "Web UI / UX",
-      description: "High-fidelity design for Chairable, my first full-stack e-commerce system for furniture and home decor. This was also my first project with a synchronized mobile app — products added to the cart on mobile appear instantly in the web cart, using a shared backend. Though the system wasn't deployed publicly, we presented the working prototype including the mobile-web synchronization feature. The design covers the full user journey: landing, shop, product detail, cart sidebar, product comparison, cart, checkout, and contact.",
-      date: "2024",
-      images: [
-        "assets/images/designs/chairable-1-home.png",
-        "assets/images/designs/chairable-2-shop.png",
-        "assets/images/designs/chairable-3-product.png",
-        "assets/images/designs/chairable-4-cart-sidebar.png",
-        "assets/images/designs/chairable-5-comparison.png",
-        "assets/images/designs/chairable-6-cart.png",
-        "assets/images/designs/chairable-7-checkout.png",
-        "assets/images/designs/chairable-8-contact.png"
-      ],
-      thumb: "assets/images/designs/chairable-1-home.png",
-      figmaUrl: "https://www.figma.com/design/RBocDFtirCyUKh9PEgnbVq/chairable?node-id=0-1&t=MpueN9x1vE6B4YOf-1"
-    },
-    {
-      id: "pila-pets-design",
-      name: "Pila Pets — Pet & Resident Registry",
-      type: "Web UI / UX",
-      description: "High-fidelity design for Pila Pets, a barangay pet and resident registry system for Pila, Laguna. The design explores an admin dashboard with live metrics and charts, a searchable pet grid, a resident management table, and a public-facing webpage that tells the community story. The design directly inspired the working CodeIgniter 4 system I later built — you can see the code in the Projects section.",
-      date: "2025",
-      images: [
-        "assets/images/designs/pila-pets-1-dashboard.png",
-        "assets/images/designs/pila-pets-2-pets.png",
-        "assets/images/designs/pila-pets-3-residents.png",
-        "assets/images/designs/pila-pets-4-webpage.png"
-      ],
-      thumb: "assets/images/designs/pila-pets-1-dashboard.png",
-      figmaUrl: "https://www.figma.com/design/agVQI1RvTZctGFOEtc9IRF/PAWS---Pila?node-id=0-1&t=HbXkrsKluCGOjG5O-1"
-    },
-    {
-      id: "cardbank-redesign",
-      name: "Card Bank Mobile App Re-Design",
-      type: "Mobile UI / UX",
-      description: "An academic UI/UX re-design for a fictional digital banking app called Card Bank. The design covers the core user journey — splash and onboarding, sign-in, dashboard, transaction history, transfer flow, and card management. The visual language uses a warm yellow-and-green palette with clean typography to convey approachability and trust.",
-      date: "2025",
-      images: [
-        "assets/images/designs/cardbank-1-splash.png",
-        "assets/images/designs/cardbank-2-signin.png",
-        "assets/images/designs/cardbank-3-dashboard.png",
-        "assets/images/designs/cardbank-4-history.png",
-        "assets/images/designs/cardbank-5-transfer.png",
-        "assets/images/designs/cardbank-6-card.png"
-      ],
-      thumbVariant: "portrait",
-      thumb: "assets/images/designs/cardbank-1-splash.png",
-      figmaUrl: "https://www.figma.com/design/tN6tLGgckMtgt7J9aXAiX7/card-bank-mobile?node-id=0-1&t=sEI2HZaVjThxYZZA-1"
-    },
-    {
-      id: "lynville-design",
-      name: "Lynville Homes 8 — HOA Management System",
-      type: "Web UI / UX",
-      description: "High-fidelity design for a client-driven capstone project — a web-based HOA management system built for Lynville Homes 8. The design went through multiple iterations with the HOA president, my thesis adviser, and a system expert, and covers role-based experiences for Admin, PR Officer, Auditor, Treasurer, and Committee members. This is a mid-development design snapshot; the working system (in the Projects section) includes additional features developed after this design pass, such as application submission and NLP-assisted processing.",
-      date: "2025",
-      images: [
-        "assets/images/designs/lynville-1-signin.png",
-        "assets/images/designs/lynville-2-changepassword.png",
-        "assets/images/designs/lynville-3-dashboard.png",
-        "assets/images/designs/lynville-4-announcements.png",
-        "assets/images/designs/lynville-5-activities.png",
-        "assets/images/designs/lynville-6-projects.png",
-        "assets/images/designs/lynville-7-project-details.png",
-        "assets/images/designs/lynville-8-payments.png",
-        "assets/images/designs/lynville-9-pr-announcements.png",
-        "assets/images/designs/lynville-10-auditor-finances.png"
-      ],
-      thumb: "assets/images/designs/lynville-3-dashboard.png",
-      figmaUrl: "https://www.figma.com/design/PZoNGFQpO3zXCqjacTylce/hoa-management-system?node-id=0-1&t=OgYKoBkJS6Vo8wQv-1"
-    },
-    {
-      id: "dental-design",
-      name: "Dental Clinic Management System",
-      type: "Web UI / UX",
-      description: "UI/UX design for a full dental clinic management platform — designed and led by me as part of a team project with interns. The system serves four roles: Dentist, Patient, Staff, and Admin (plus a Super Admin tier), and covers appointment scheduling, patient records, billing and invoicing, earnings tracking, inventory management, and admin user controls. This was my first experience designing and directing a multi-role enterprise application, coordinating the design system across team members.",
-      date: "2025",
-      images: [
-        "assets/images/designs/dental-1-landing.png",
-        "assets/images/designs/dental-2-login.png",
-        "assets/images/designs/dental-3-dentist-dashboard.png",
-        "assets/images/designs/dental-4-dentist-appointments.png",
-        "assets/images/designs/dental-5-dentist-earnings.png",
-        "assets/images/designs/dental-6-patient-profile.png",
-        "assets/images/designs/dental-7-patient-appointments.png",
-        "assets/images/designs/dental-8-staff-patients.png",
-        "assets/images/designs/dental-9-staff-billing.png",
-        "assets/images/designs/dental-10-admin-users.png"
-      ],
-      thumb: "assets/images/designs/dental-3-dentist-dashboard.png",
-      figmaUrl: "https://www.figma.com/design/nzaFmmLpToDIMR8bhyaoK9/Batch-3-Dental-Clinic?node-id=0-1&t=ZOxxdTbiS3D7HGEK-1"
-    },
-    {
-      id: "clinica-design",
-      name: "Clinica — Dental Clinic Mobile App",
-      type: "Mobile UI / UX",
-      description: "Academic UI/UX exercise: a mobile app design for a dental clinic, produced as a LinkedIn design challenge and graded by my professor. The design covers the full patient journey — splash, onboarding, sign-in, profile setup, appointment booking, confirmation, and medical records — with a focus on clean typography, generous whitespace, and a friendly medical aesthetic. A central part of the exercise was exploring the same core screens across multiple color palettes (brown, green, dark green variants alongside the default blue) to demonstrate a themable design system.",
-      date: "2025",
-      images: [
-        "assets/images/designs/clinica-1-splash.png",
-        "assets/images/designs/clinica-2-onboarding.png",
-        "assets/images/designs/clinica-3-login.png",
-        "assets/images/designs/clinica-4-appointments.png",
-        "assets/images/designs/clinica-5-confirmation.png",
-        "assets/images/designs/clinica-6-profile-brown.png",
-        "assets/images/designs/clinica-7-profile-green.png",
-        "assets/images/designs/clinica-8-profile-darkgreen.png"
-      ],
-      thumbVariant: "portrait",
-      thumb: "assets/images/designs/clinica-1-splash.png",
-      figmaUrl: "https://www.figma.com/design/7xVr9SpQ1rHjJNbVO9ZvX7/clinic-mobile?node-id=0-1&t=VEOK4a6UgQ00TVaR-1"
-    },
-    {
-      id: "poea-design-desktop",
-      name: "POEA Website Redesign — Desktop",
-      type: "Web UI / UX",
-      description: "Academic UI/UX exercise: a full desktop redesign of the POEA (Philippine Overseas Employment Administration) government website. The redesign restructures information architecture, modernizes the visual language, and makes key services — OFW support, LRA licensing, contact, and agency information — easier to find. The 5 selected pages cover the homepage, both major service categories, contact information, and the agency's mission and functions.",
-      date: "2025",
-      images: [
-        "assets/images/designs/poea-1-frontpage.png",
-        "assets/images/designs/poea-2-ofw-services.png",
-        "assets/images/designs/poea-3-lra-services.png",
-        "assets/images/designs/poea-4-contact.png",
-        "assets/images/designs/poea-5-about.png"
-      ],
-      thumb: "assets/images/designs/poea-1-frontpage.png",
-      figmaUrl: "https://www.figma.com/design/Mfm4FYo5bFc6JNC9lug9LH/poea-redesign-web-mobile?node-id=0-1&t=RDaPTR9wy7qfseX0-1"
-    },
-    {
-      id: "poea-design-mobile",
-      name: "POEA Website Redesign — Mobile Web",
-      type: "Mobile Web UI / UX",
-      description: "The mobile web counterpart to the POEA redesign — a responsive adaptation that preserves the same information architecture and content while optimizing for small screens. Shows how the desktop layout collapses gracefully: simplified navigation, stacked content cards, and touch-friendly controls.",
-      date: "2025",
-      images: [
-        "assets/images/designs/poea-6-mobile-frontpage.png",
-        "assets/images/designs/poea-7-mobile-services.png",
-        "assets/images/designs/poea-8-mobile-ira.png",
-        "assets/images/designs/poea-9-mobile-about.png",
-        "assets/images/designs/poea-10-mobile-contacts.png"
-      ],
-      thumbVariant: "portrait",
-      thumb: "assets/images/designs/poea-6-mobile-frontpage.png",
-      figmaUrl: "https://www.figma.com/design/Mfm4FYo5bFc6JNC9lug9LH/poea-redesign-web-mobile?node-id=0-1&t=RDaPTR9wy7qfseX0-1"
-    },
-    {
-      id: "lume-design",
-      name: "Lume — Coffee Shop Mobile App",
-      type: "Mobile UI / UX",
-      description: "A mobile app design for Lume, a specialty coffee shop. The design covers the full customer journey — splash, immersive hero, home with featured items, search results, product detail with customization, cart, and live order tracking. A central part of the exercise was exploring the same core screens across four named color palettes (Monochrome, Complementary, Analogous, and Triadic) to demonstrate a themable design system grounded in color theory.",
-      date: "2025",
-      images: [
-        "assets/images/designs/lume-1-splash.png",
-        "assets/images/designs/lume-2-hero.png",
-        "assets/images/designs/lume-3-home.png",
-        "assets/images/designs/lume-4-search.png",
-        "assets/images/designs/lume-5-product.png",
-        "assets/images/designs/lume-6-cart.png",
-        "assets/images/designs/lume-7-tracking.png",
-        "assets/images/designs/lume-8-home-complimentary.png",
-        "assets/images/designs/lume-9-home-triadic.png"
-      ],
-      thumbVariant: "portrait",
-      thumb: "assets/images/designs/lume-1-splash.png",
-      figmaUrl: "https://www.figma.com/design/3hoEkYbBu5whMy7hxrMebq/lume-coffee-mobile?node-id=0-1&t=LW9j9BxAVLd7vIMZ-1"
-    }
-  ],
-
-  /* ------------------------------------------------------------------------
-     ABOUT
-     ------------------------------------------------------------------------ */
-  about: {
-    bio: [
-      "Recent BS Information Technology graduate from Laguna State Polytechnic University with a full-stack development background and hands-on experience building and deploying production platforms. Delivered a community management system serving 500+ members with 99.9% uptime, and worked across React, Node.js, PostgreSQL, and AWS with Docker, Nginx, and GitHub Actions CI/CD.",
-      "Focused on AI-assisted workflow automation and cloud deployment. Experienced in designing and operating automation pipelines, integrating LLMs, and applying retrieval-augmented generation to practical business problems. Based in Sta. Cruz, Laguna, and open to remote, hybrid, or onsite roles across Metro Manila."
-    ],
-    education: [
-      {
-        institution: "Laguna State Polytechnic University",
-        degree: "BS Information Technology",
-        startYear: "2022",
-        endYear: "2026"
-      }
-    ],
-    awards: [
-      {
-        id: "award-001",
-        name: "Best Thesis in Information Technology",
-        issuer: "Laguna State Polytechnic University",
-        date: "2026"
-      }
-    ],
-    skills: {
-      languages: ["JavaScript", "TypeScript", "Python", "PHP", "C#", "Java"],
-      frameworks: ["React", "Node.js", "Express", "Flask", "CodeIgniter 4", "Flutter (Dart)"],
-      cloudDevops: ["AWS (EC2, RDS, S3)", "Docker", "Nginx", "PM2", "GitHub Actions", "CI/CD", "Cloudflare Tunnel", "Vercel"],
-      ai: ["n8n", "AI Automation", "LLM Integration", "RAG (Retrieval-Augmented Generation)", "AI Agents", "Groq", "OpenAI APIs", "Google Gemini Embeddings", "MCP (Model Context Protocol)", "Supabase", "pgvector", "Telegram Bot API", "Prompt Engineering", "YOLO11", "DINOv2", "FAISS"],
-      security: ["JWT Authentication", "RBAC", "Secure API Development", "OWASP Basics"],
-      design: ["Figma", "UI/UX Design", "Wireframing", "Prototyping", "Design Systems", "Mobile App Design", "Web App Design", "Color Theory", "Responsive Layouts"],
-      other: ["PostgreSQL", "MySQL", "Git", "GitHub", "RESTful APIs", "Agile/Scrum", "Technical Documentation", "Workflow Orchestration", "Idempotent Design"],
-    }
+  // Merge partials into the single object the render pipeline reads.
+  // Fallback (`|| {}` / `|| []`) keeps the shape stable even if a
+  // partial failed to load — better to render an empty section than
+  // to throw during renderAll().
+  function assemble() {
+    window.portfolioData = {
+      meta:           window.__portfolioData_meta           || {},
+      sections:       window.__portfolioData_sections       || [],
+      projects:       window.__portfolioData_projects       || [],
+      automation:     window.__portfolioData_automation     || [],
+      dashboards:     window.__portfolioData_dashboards     || [],
+      experience:     window.__portfolioData_experience     || [],
+      certifications: window.__portfolioData_certifications || [],
+      trainings:      window.__portfolioData_trainings      || [],
+      designs:        window.__portfolioData_designs        || [],
+      about:          window.__portfolioData_about          || {}
+    };
   }
-};
 
-window.portfolioData = portfolioData;
+  // Timing guard — see "WHY THE EVENT GUARD EXISTS" above.
+  if (
+    window.__dataReady ||
+    window.__portfolioData_meta ||
+    window.__portfolioData_sections
+  ) {
+    assemble();
+  } else {
+    document.addEventListener("portfolio-data-ready", assemble, { once: true });
+  }
+})();

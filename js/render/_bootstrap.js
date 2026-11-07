@@ -8,7 +8,13 @@
      - renderSection()
      - renderAll()
      - The public window.render API assembly
-     - The top-level guard for missing window.portfolioData
+
+   IMPORTANT: The data guard runs at renderAll() call time, not at
+   parse time. This file is loaded asynchronously by js/render/index.js
+   which itself waits for window.__dataReadyPromise before calling
+   renderAll(). Doing the guard at parse time caused a race condition
+   where _bootstrap.js loaded before js/data.js finished assembling
+   window.portfolioData, and the whole render pipeline became a no-op.
 
    Load order requirement: _shell, _cards, _chips, _sections, _modal,
    _drawer must all have run before this file. Every partial's
@@ -21,38 +27,15 @@
 
   if (!window.__render) window.__render = {};
 
-  // ---------------------------------------------------------------------
-  // Guard
-  // ---------------------------------------------------------------------
+  // NOTE: The `data` reference is deferred. It used to be
+  //   const data = window.portfolioData;
+  // at parse time, which broke whenever the data barrel resolved after
+  // this file. Instead, each SECTION_ITEM_CONFIG entry reads
+  // window.portfolioData at call time via the getters below.
 
-  if (!window.portfolioData) {
-    console.warn(
-      "[render] window.portfolioData is missing. " +
-      "Make sure js/data.js is loaded before js/render/*. Rendering skipped."
-    );
-    window.render = {
-      renderAll: function () {},
-      renderMeta: function () {},
-      hydrateIcons: function () {},
-      renderThemeToggleIcons: function () {},
-      replaceIconSlot: function () {},
-      renderFolderTree: function () {},
-      renderDashboard: function () {},
-      renderDriveGrid: function () {},
-      renderFilterChips: function () {},
-      renderDrawerList: function () {},
-      renderMobileTabs: function () {},
-      renderBreadcrumb: function () {},
-      renderSectionHeader: function () {},
-      renderCounts: function () {},
-      renderSection: function () {},
-      renderModalContent: function () {},
-      renderContactSection: function () {}
-    };
-    return;
+  function getData() {
+    return window.portfolioData || {};
   }
-
-  const data = window.portfolioData;
 
   // ---------------------------------------------------------------------
   // Config — read by other partials via window.__render.config inside
@@ -72,46 +55,46 @@
 
     const SECTION_ITEM_CONFIG = {
     projects: {
-      items: () => data.projects,
+      items: () => getData().projects || [],
       title: (item) => item.name,
       meta: (item) => [item.category, item.date].filter(Boolean).join(" · "),
       chipKey: (item) => item.category
     },
     automation: {
-      items: () => data.automation,
+      items: () => getData().automation || [],
       title: (item) => item.name,
       meta: (item) => [item.category, item.date].filter(Boolean).join(" · "),
       chipKey: null
     },
     dashboards: {
-      items: () => data.dashboards,
+      items: () => getData().dashboards || [],
       title: (item) => item.name,
       meta: (item) => [item.workflow].filter(Boolean).join(" · "),
       chipKey: null
     },
     experience: {
-      items: () => data.experience,
+      items: () => getData().experience || [],
       title: (item) => item.role,
       meta: (item) => [item.org, [item.startDate, item.endDate].filter(Boolean).join("–")]
         .filter(Boolean).join(" · "),
       chipKey: (item) => item.org
     },
     certifications: {
-      items: () => data.certifications,
+      items: () => getData().certifications || [],
       title: (item) => item.name,
       meta: (item) => [item.issuer, item.date].filter(Boolean).join(" · "),
       chipKey: (item) => item.issuer,
       thumbVariant: "portrait"
     },
     trainings: {
-      items: () => data.trainings,
+      items: () => getData().trainings || [],
       title: (item) => item.name,
       meta: (item) => [item.provider, item.hours != null ? item.hours + "h" : null]
         .filter(Boolean).join(" · "),
       chipKey: null
     },
     designs: {
-      items: () => data.designs,
+      items: () => getData().designs || [],
       title: (item) => item.name,
       meta: (item) => item.type,
       chipKey: null,
@@ -155,6 +138,19 @@
   }
 
   function renderAll() {
+    // Call-time guard. If the data barrel hasn't finished yet, do not
+    // silently no-op — warn so the cause is obvious in the console, and
+    // leave the DOM as-is (the render barrel will retry if it fires
+    // again after data resolves, but with the promise chain in
+    // js/render/index.js that shouldn't happen).
+    if (!window.portfolioData) {
+      console.warn(
+        "[render] renderAll() called before window.portfolioData was assembled. " +
+        "Check that js/data/index.js is listed before js/render/index.js in index.html."
+      );
+      return;
+    }
+
     window.__render.renderMeta();
     window.__render.hydrateIcons();
     window.__render.renderFolderTree();
