@@ -34,15 +34,6 @@
      - Double-click toggles 1x / 2x.
      - resetLightboxZoom() runs on open (clean state) and on close.
      - All wheel/mouse/dblclick listeners are removed on close.
-
-   MOBILE DOUBLE-TAP CAVEAT:
-     Double-tap-to-zoom relies on the browser synthesizing a "dblclick"
-     event from two quick taps. Most mobile browsers do this when
-     touch-action: manipulation is set on the image (see _modal.css),
-     but it is not universally reliable. If double-tap does not fire in
-     practice on a target device, add explicit touchstart-based
-     double-tap detection as a follow-up. Pinch-to-zoom is not
-     implemented in this pass and would require its own touch handlers.
    ========================================================================== */
 
 (function () {
@@ -92,7 +83,17 @@
   function findItemById(id) {
     if (!id || !window.portfolioData) return null;
     const d = window.portfolioData;
-    const arrays = [d.projects, d.automation, d.experience, d.certifications, d.trainings, d.designs];
+    // Every section that renders cards with data-item-id must appear here.
+    // Order does not matter; ids are unique across sections.
+    const arrays = [
+      d.projects,
+      d.automation,
+      d.dashboards,
+      d.experience,
+      d.certifications,
+      d.trainings,
+      d.designs
+    ];
     for (let i = 0; i < arrays.length; i++) {
       const arr = arrays[i] || [];
       for (let j = 0; j < arr.length; j++) {
@@ -258,8 +259,6 @@
     img.src = src || "";
     img.alt = alt || "";
 
-    // Clean zoom/pan state on open. Without this, a second open could
-    // inherit transforms from the previous image.
     resetLightboxZoom();
 
     savedBodyOverflow = document.body.style.overflow;
@@ -303,19 +302,19 @@
     lastFocusedBeforeLightbox = null;
   }
 
-    function handleSlideshowImageClick(e) {
+  function handleSlideshowImageClick(e) {
     const slideshowImg = e.target.closest(SELECTORS.slideshowImage);
-      if (slideshowImg) {
-        if (e.target.closest(".modal__slideshow-btn")) return;
-        openLightbox(slideshowImg.src, slideshowImg.alt || "");
-        return;
-      }
+    if (slideshowImg) {
+      if (e.target.closest(".modal__slideshow-btn")) return;
+      openLightbox(slideshowImg.src, slideshowImg.alt || "");
+      return;
+    }
 
-      const heroImg = e.target.closest(".modal__hero-image");
-      if (heroImg) {
-        const src = heroImg.getAttribute("data-lightbox-src") || heroImg.src;
-        const alt = heroImg.getAttribute("data-lightbox-alt") || heroImg.alt || "";
-        openLightbox(src, alt);
+    const heroImg = e.target.closest(".modal__hero-image");
+    if (heroImg) {
+      const src = heroImg.getAttribute("data-lightbox-src") || heroImg.src;
+      const alt = heroImg.getAttribute("data-lightbox-alt") || heroImg.alt || "";
+      openLightbox(src, alt);
       return;
     }
   }

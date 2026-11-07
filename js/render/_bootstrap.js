@@ -65,7 +65,7 @@
   // Any section with a SECTION_ITEM_CONFIG entry is "list-backed" and
   // can be counted. About and Contact are excluded because they aren't
   // list-backed (rendered by dedicated renderers, no numeric count).
-  const COUNTED_SECTIONS = ["projects", "certifications", "experience", "designs", "trainings", "automation"];
+  const COUNTED_SECTIONS = ["projects", "certifications", "experience", "designs", "trainings", "automation", "dashboards"];
 
   const MOBILE_TAB_SECTIONS = ["projects", "certifications", "experience"];
   const SECTIONS_WITH_CHIPS = ["projects"];
@@ -81,6 +81,12 @@
       items: () => data.automation,
       title: (item) => item.name,
       meta: (item) => [item.category, item.date].filter(Boolean).join(" · "),
+      chipKey: null
+    },
+    dashboards: {
+      items: () => data.dashboards,
+      title: (item) => item.name,
+      meta: (item) => [item.workflow].filter(Boolean).join(" · "),
       chipKey: null
     },
     experience: {

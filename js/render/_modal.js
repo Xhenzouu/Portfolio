@@ -11,17 +11,6 @@
      - Else if `thumb`          → hero image.
      - Else                     → nothing.
 
-   SLIDESHOW SIZING:
-     Intrinsic sizing. The viewport wraps the image; the image is capped
-     at max-height in CSS. No aspectRatio parameter is used — the image's
-     intrinsic aspect ratio drives the box shape. This handles portrait
-     and landscape screenshots with a single code path.
-
-   LINKS ROW:
-     Single variant (no primary/secondary distinction). All links render
-     through buildModalLink(href, text) with .modal__link class,
-     external-link icon, and label text.
-
    Cross-partial reads:
      - window.__render.el / clearChildren / buildIcon (from _shell)
      - window.__render.buildThumbSlot (from _cards)
@@ -41,33 +30,21 @@
     return window.__render.buildThumbSlot(thumbSrc, className, glyph, variant);
   }
 
-  // ---------------------------------------------------------------------
-  // Modal link builder — one shape for every external link button.
-  // ---------------------------------------------------------------------
-
   function buildModalLink(href, text) {
     const link = el("a", {
       className: "modal__link",
       attrs: { href: href, target: "_blank", rel: "noopener noreferrer" }
     });
-
     const icon = buildIcon("external-link", { size: 14 });
     if (icon) link.appendChild(icon);
-
     link.appendChild(document.createTextNode(text));
     return link;
   }
 
-  // ---------------------------------------------------------------------
-  // Core Features block (<details>/<summary>)
-  // ---------------------------------------------------------------------
-
   function buildFeaturesBlock(features) {
     const details = el("details", { className: "modal__features" });
-
     const summary = el("summary", { className: "modal__section-title" });
     summary.appendChild(document.createTextNode("Core Features"));
-
     const iconSlot = el("span", {
       className: "modal__features-icon",
       attrs: { "aria-hidden": "true" }
@@ -75,30 +52,18 @@
     const chevron = buildIcon("chevron-down", { size: 16 });
     if (chevron) iconSlot.appendChild(chevron);
     summary.appendChild(iconSlot);
-
     details.appendChild(summary);
-
     const ul = el("ul", { className: "modal__highlights-list" });
     features.forEach((f) =>
       ul.appendChild(el("li", { className: "modal__highlight", text: f }))
     );
     details.appendChild(ul);
-
     return details;
   }
 
-  // ---------------------------------------------------------------------
-  // Slideshow (used by items with an `images` array)
-  //
-  // Two-argument signature. Sizing is handled entirely by CSS via
-  // intrinsic image dimensions + max-height on the image.
-  // ---------------------------------------------------------------------
-
   function buildSlideshow(images, itemName) {
     const wrap = el("div", { className: "modal__slideshow" });
-
     const viewport = el("div", { className: "modal__slideshow-viewport" });
-
     const img = document.createElement("img");
     img.className = "modal__slideshow-image";
     img.src = images[0];
@@ -144,15 +109,12 @@
       dots.appendChild(dot);
     });
     wrap.appendChild(dots);
-
     return wrap;
   }
 
   function setupSlideshow(slideshowEl, images, itemName) {
     if (!slideshowEl || !images || !images.length) return;
-
     let currentIndex = 0;
-
     const img = slideshowEl.querySelector(".modal__slideshow-image");
     const prevBtn = slideshowEl.querySelector(".modal__slideshow-btn--prev");
     const nextBtn = slideshowEl.querySelector(".modal__slideshow-btn--next");
@@ -165,8 +127,6 @@
       const alt = itemName + " — screen " + (currentIndex + 1) + " of " + images.length;
       img.src = src;
       img.alt = alt;
-      // Update lightbox metadata so a click on the current image opens
-      // the correct screenshot.
       img.setAttribute("data-lightbox-src", src);
       img.setAttribute("data-lightbox-alt", alt);
       dots.forEach((dot, i) => {
@@ -187,7 +147,6 @@
 
     prevBtn.addEventListener("click", prev);
     nextBtn.addEventListener("click", next);
-
     dots.forEach((dot) => {
       dot.addEventListener("click", () => {
         const idx = parseInt(dot.getAttribute("data-index"), 10);
@@ -199,7 +158,6 @@
     const target = modal || slideshowEl;
     const keyHandler = function (e) {
       if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-      // If the lightbox is open, arrow keys belong to it, not the slideshow.
       const lightbox = document.getElementById("image-lightbox");
       if (lightbox && !lightbox.hidden) return;
       const t = e.target;
@@ -209,13 +167,8 @@
       else next();
     };
     target.addEventListener("keydown", keyHandler);
-
     render();
   }
-
-  // ---------------------------------------------------------------------
-  // Modal content
-  // ---------------------------------------------------------------------
 
   function renderModalContent(item, sectionId) {
     const config = window.__render.config || {};
@@ -236,10 +189,6 @@
       const sectionVariant = sectionConfig ? sectionConfig.thumbVariant : undefined;
       const variant = item.thumbVariant || sectionVariant;
       const hero = buildThumbSlot(item.thumb, "modal__hero", "▢", variant);
-      // Make the hero image click-to-zoom. Reuses the same lightbox
-      // machinery the slideshow uses. The handler reads the image's
-      // src and alt, so tag the img with the lightbox metadata before
-      // the interaction layer wires itself up.
       const heroImg = hero.querySelector("img");
       if (heroImg) {
         heroImg.classList.add("modal__hero-image");
@@ -271,7 +220,7 @@
     }
     container.appendChild(header);
 
-        if (item.description) {
+    if (item.description) {
       container.appendChild(el("p", { className: "modal__description", text: item.description }));
     }
 
