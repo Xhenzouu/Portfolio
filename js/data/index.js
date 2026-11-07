@@ -68,6 +68,7 @@
     // partial in the chain. Just flip the ready flag and fire the event.
     window.__dataReady = true;
     document.dispatchEvent(new CustomEvent("portfolio-data-ready"));
+    document.documentElement.classList.remove("is-loading");
     return window.portfolioData;
   });
 })();

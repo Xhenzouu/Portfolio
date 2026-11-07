@@ -15,6 +15,24 @@
        horizontal scroll, chip row sits above the grid in both shells).
    ========================================================================== */
 
+/* ==========================================================================
+   BOOTSTRAP / ANTI-FOUC
+   Hide the page until the data and render barrels finish.
+   ========================================================================== */
+html.is-loading body {
+  visibility: hidden;
+}
+
+html:not(.is-loading) body {
+  visibility: visible;
+  animation: fade-in 0.3s ease-in;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* --------------------------------------------------------------------------
    1. DESKTOP EXPLORER SHELL — CSS Grid
    -------------------------------------------------------------------------- */
