@@ -9,7 +9,11 @@ const iconShapes = {
   palette: <><path d="M12 3a9 9 0 1 0 0 18h1a2 2 0 0 0 1-3.7 1.5 1.5 0 0 1 .8-2.8H17a4 4 0 0 0 4-4c0-4.1-4-7.5-9-7.5Z"/><path d="M7.5 10h.01M10 7h.01M15 8h.01"/></>,
   'graduation-cap': <><path d="m2 10 10-6 10 6-10 6zM6 13v5c4 3 8 3 12 0v-5M22 10v6"/></>,
   award: <><circle cx="12" cy="8" r="5"/><path d="m8 12-1 9 5-3 5 3-1-9"/></>,
-  mail: <><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></>
+  mail: <><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></>,
+  phone: <><path d="M5 3h4l2 5-2.5 1.5a14 14 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2C10 20 4 14 3 5a2 2 0 0 1 2-2Z"/></>,
+  link: <><path d="M10 13a5 5 0 0 0 7.1 0l3-3A5 5 0 0 0 13 2.9l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.1 0l-3 3A5 5 0 0 0 11 21.1l1.7-1.7"/></>,
+  github: <><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 6v-3.9a3.4 3.4 0 0 0-.9-2.7c3-.3 6.2-1.5 6.2-6.8a5.3 5.3 0 0 0-1.4-3.7 4.9 4.9 0 0 0-.1-3.7s-1.2-.4-3.9 1.4a13.4 13.4 0 0 0-7.1 0C5.1.8 3.9 1.2 3.9 1.2a4.9 4.9 0 0 0-.1 3.7 5.3 5.3 0 0 0-1.4 3.7c0 5.3 3.2 6.5 6.2 6.8a3.4 3.4 0 0 0-.9 2.7V22"/></>,
+  globe: <><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></>
 };
 
 function SectionIcon({ name }) {
@@ -59,7 +63,19 @@ export function AboutView({ about }) {
 
 export function SectionRenderer({ sectionId, items, about, meta, onOpen, onPreview, view }) {
   if (sectionId === 'about') return <AboutView about={about} />;
-  if (sectionId === 'contact') return <address className="contact-list">{Object.entries(meta.contact || {}).map(([label, href]) => <a key={label} href={href.includes('@') ? `mailto:${href}` : href} target={href.includes('@') ? undefined : '_blank'} rel="noreferrer">{label}: {href}</a>)}</address>;
+  if (sectionId === 'contact') {
+    const contact = meta.contact || {};
+    const rows = [
+      { key: 'email', label: 'Email', value: contact.email, icon: 'mail', href: contact.email && `mailto:${contact.email}` },
+      { key: 'phone', label: 'Phone', value: contact.phone, icon: 'phone', href: contact.phone && `tel:${contact.phone.replace(/[^+\d]/g, '')}` },
+      { key: 'linkedin', label: 'LinkedIn', value: contact.linkedin, icon: 'link', external: true },
+      { key: 'github', label: 'GitHub', value: contact.github, icon: 'github', external: true },
+      { key: 'portfolioUrl', label: 'Portfolio', value: contact.portfolioUrl, icon: 'globe', external: true }
+    ].filter(row => row.value).map(row => ({ ...row, href: row.href || (row.external && /^https:\/\//i.test(row.value) ? row.value : undefined) }));
+    return <div className="contact-list">{rows.map(row => <a className="contact-card" key={row.key} href={row.href} target={row.external ? '_blank' : undefined} rel={row.external ? 'noopener noreferrer' : undefined} aria-label={`${row.label}: ${row.value}`}>
+      <span className="contact-card__icon"><SectionIcon name={row.icon} /></span><span className="contact-card__content"><span className="contact-card__label">{row.label}</span><span className="contact-card__value">{row.value.replace(/^https?:\/\//i, '')}</span></span><span className="contact-card__arrow" aria-hidden="true">↗</span>
+    </a>)}</div>;
+  }
   const sectionClass = `section-view section-view--${sectionId}`;
   return <div className={sectionClass}><Cards items={items} onOpen={onOpen} view={view} /></div>;
 }
