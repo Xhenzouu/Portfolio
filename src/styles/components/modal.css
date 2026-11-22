@@ -197,6 +197,7 @@
   line-height: 1.55;
   padding-left: var(--space-4);
   position: relative;
+  overflow-wrap: anywhere;
 }
 
 .modal__highlight::before {
@@ -264,12 +265,14 @@
 
 .modal__slideshow-image {
   display: block;
-  max-width: 100%;
-  max-height: 55vh;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   cursor: zoom-in;
+}
+
+.modal__slideshow-viewport .modal__slideshow-image {
+  object-fit: contain;
 }
 
 .modal__slideshow-btn {
@@ -278,13 +281,14 @@
   transform: translateY(-50%);
   width: 36px;
   height: 36px;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-full);
   background-color: var(--color-bg-surface);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border-default);
+  line-height: 1;
   cursor: pointer;
   transition: background-color var(--transition-fast), border-color var(--transition-fast);
   z-index: 1;
@@ -305,8 +309,15 @@
 
 .modal__slideshow-dots {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-2);
   justify-content: center;
+}
+
+.modal__slideshow-count {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  line-height: 1;
 }
 
 .modal__slideshow-dot {
@@ -591,7 +602,7 @@
   }
 
   .modal__slideshow-viewport {
-    max-width: 240px;
+    max-width: 100%;
   }
 
   .modal__slideshow-image {

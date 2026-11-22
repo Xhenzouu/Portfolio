@@ -46,7 +46,7 @@
 
     // Sections that emit a numeric count badge in the sidebar folder tree.
   // Any section with a SECTION_ITEM_CONFIG entry is "list-backed" and
-  // can be counted. About and Contact are excluded because they aren't
+  // can be counted. About is excluded because it isn't
   // list-backed (rendered by dedicated renderers, no numeric count).
   const COUNTED_SECTIONS = ["projects", "certifications", "experience", "designs", "trainings", "automation", "dashboards"];
 
@@ -108,7 +108,7 @@
 
   const CHIP_CONTAINER_IDS = ["dashboard-filters", "drive-filters"];
   const GRID_MODE_CLASS = { about: "about-layout" };
-  const STATIC_LAYOUT_SECTIONS = ["about", "contact"];
+  const STATIC_LAYOUT_SECTIONS = ["about"];
 
   window.__render.config = {
     DEFAULT_SECTION_ID,
@@ -180,7 +180,6 @@
     renderSectionHeader: window.__render.renderSectionHeader,
     renderCounts: window.__render.renderCounts,
     renderSection: renderSection,
-    renderModalContent: window.__render.renderModalContent,
-    renderContactSection: window.__render.renderContactSection
+    renderModalContent: window.__render.renderModalContent
   };
 })();

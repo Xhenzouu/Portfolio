@@ -6,8 +6,8 @@
 
 const data = {
     bio: [
-      "Recent BS Information Technology graduate from Laguna State Polytechnic University with a full-stack development background and hands-on experience building and deploying production platforms. Delivered a community management system serving 500+ members with 99.9% uptime, and worked across React, Node.js, PostgreSQL, and AWS with Docker, Nginx, and GitHub Actions CI/CD.",
-      "Focused on AI-assisted workflow automation and cloud deployment. Experienced in designing and operating automation pipelines, integrating LLMs, and applying retrieval-augmented generation to practical business problems. Based in Sta. Cruz, Laguna, and open to remote, hybrid, or onsite roles across Metro Manila."
+      "I eliminate manual administrative bottlenecks and brittle operations by shipping fault-tolerant, full-stack web platforms. From replacing spreadsheet-heavy workflows for 500+ community members to deploying multi-tenant booking and clinic management systems on AWS, I focus on reliable software built with React, Node.js, PostgreSQL, Docker, Nginx, and automated CI/CD pipelines.",
+      "Beyond core web applications, I turn repetitive operational tasks into autonomous systems—designing event-driven n8n pipelines, LLM integrations, and retrieval-augmented generation (RAG) workflows that cut response times and manual data entry. BS Information Technology graduate from Laguna State Polytechnic University, based in Sta. Cruz, Laguna and open to remote, hybrid, or onsite engineering roles across Metro Manila."
     ],
     education: [
       {

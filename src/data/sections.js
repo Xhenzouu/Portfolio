@@ -11,7 +11,6 @@ const data = [
     { id: "experience",      label: "Experience",      icon: "briefcase",        hasChildren: true  },
     { id: "designs",         label: "Designs",         icon: "palette",          hasChildren: false },
     { id: "trainings",       label: "Trainings",       icon: "graduation-cap",   hasChildren: false },
-    { id: "certifications",  label: "Certifications",  icon: "award",            hasChildren: true  },
-    { id: "contact",         label: "Contact",         icon: "mail",             hasChildren: false }
+    { id: "certifications",  label: "Certifications",  icon: "award",            hasChildren: true  }
   ];
 export default data;

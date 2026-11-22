@@ -147,6 +147,14 @@ html:not(.is-loading) body {
   margin-bottom: var(--space-6);
 }
 
+.dashboard-section {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+}
+
+.dashboard-section--about { max-width: 1040px; }
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

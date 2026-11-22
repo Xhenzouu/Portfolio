@@ -18,8 +18,8 @@
      js/render/_cards.js       buildThumbSlot, attachCardInteraction,
                                buildDashboardCard, buildDriveCard
      js/render/_chips.js       buildChip, renderFilterChips
-     js/render/_sections.js    About + Contact block builders,
-                               renderAboutSection, renderContactSection,
+     js/render/_sections.js    About block builders,
+                               renderAboutSection,
                                renderDashboard, renderDriveGrid,
                                renderSectionHeader, renderBreadcrumb
      js/render/_modal.js       renderModalContent (including the

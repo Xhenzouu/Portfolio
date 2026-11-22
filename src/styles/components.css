@@ -23,8 +23,7 @@
      _folder-tree.css   §4 folder tree, §4a filter chips
      _toolbar.css       §5 toolbar (breadcrumb, search, view toggle)
      _dashboard.css     §6 dashboard cards, §6b empty state
-     _about.css         §6c about-layout + about blocks (up to Contact)
-     _contact.css       §6c contact-list block
+     _about.css         §6c about-layout + about blocks
      _card-thumbs.css   §6d card interactivity + thumb variants
      _modal.css         §6e modal (backdrop, panel, hero, portrait variant)
      _drive.css         §7 mobile tabs, §8 drive shell, §8a mobile rhythm
@@ -55,7 +54,6 @@
 @import url("components/toolbar.css");
 @import url("components/dashboard.css");
 @import url("components/about.css");
-@import url("components/contact.css");
 @import url("components/card-thumbs.css");
 @import url("components/modal.css");
 @import url("components/drive.css");

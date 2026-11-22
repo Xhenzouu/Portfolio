@@ -124,63 +124,6 @@
   }
 
   // ---------------------------------------------------------------------
-  // Contact
-  // ---------------------------------------------------------------------
-
-  function normalizePhoneHref(raw) {
-    return String(raw || "").replace(/[^+\d]/g, "");
-  }
-
-  function buildContactList() {
-    const meta = getData().meta || {};
-    const contact = meta.contact || {};
-    const list = el("ul", { className: "contact-list" });
-
-    const rows = [];
-
-    if (contact.email) {
-      rows.push({ label: "Email", display: contact.email, href: "mailto:" + contact.email, external: false });
-    }
-    if (contact.phone) {
-      rows.push({ label: "Phone", display: contact.phone, href: "tel:" + normalizePhoneHref(contact.phone), external: false });
-    }
-    if (contact.linkedin) {
-      rows.push({ label: "LinkedIn", display: contact.linkedin.replace(/^https?:\/\//, ""), href: contact.linkedin, external: true });
-    }
-    if (contact.github) {
-      rows.push({ label: "GitHub", display: contact.github.replace(/^https?:\/\//, ""), href: contact.github, external: true });
-    }
-    if (contact.portfolioUrl) {
-      rows.push({ label: "Portfolio", display: contact.portfolioUrl.replace(/^https?:\/\//, ""), href: contact.portfolioUrl, external: true });
-    }
-
-    rows.forEach((row) => {
-      const li = el("li", { className: "contact-list__item" });
-      li.appendChild(el("span", { className: "contact-list__label", text: row.label }));
-
-      const linkAttrs = { href: row.href };
-      if (row.external) {
-        linkAttrs.target = "_blank";
-        linkAttrs.rel = "noopener noreferrer";
-      }
-      const link = el("a", {
-        className: "contact-list__link",
-        text: row.display,
-        attrs: linkAttrs
-      });
-      li.appendChild(link);
-      list.appendChild(li);
-    });
-
-    return list;
-  }
-
-  function renderContactSection(gridEl) {
-    if (!gridEl) return;
-    gridEl.appendChild(buildAboutBlock("Contact", buildContactList()));
-  }
-
-  // ---------------------------------------------------------------------
   // Grid renderers
   // ---------------------------------------------------------------------
 
@@ -194,8 +137,7 @@
     clearChildren(grid);
     applyGridMode(grid, STATIC_LAYOUT_SECTIONS.indexOf(sectionId) !== -1 ? "about" : "cards");
 
-    if (sectionId === "about")   { renderAboutSection(grid);   return; }
-    if (sectionId === "contact") { renderContactSection(grid); return; }
+    if (sectionId === "about") { renderAboutSection(grid); return; }
 
     const sectionConfig = SECTION_ITEM_CONFIG[sectionId];
     if (!sectionConfig) {
@@ -217,8 +159,7 @@
     clearChildren(grid);
     applyGridMode(grid, STATIC_LAYOUT_SECTIONS.indexOf(sectionId) !== -1 ? "about" : "cards");
 
-    if (sectionId === "about")   { renderAboutSection(grid);   return; }
-    if (sectionId === "contact") { renderContactSection(grid); return; }
+    if (sectionId === "about") { renderAboutSection(grid); return; }
 
     const sectionConfig = SECTION_ITEM_CONFIG[sectionId];
     if (!sectionConfig) {
@@ -284,8 +225,6 @@
     if (subtitle) {
       if (sectionId === "about") {
         subtitle.textContent = (getData().meta && getData().meta.tagline) || "";
-      } else if (sectionId === "contact") {
-        subtitle.textContent = "Get in touch";
       } else {
         const cfg = SECTION_ITEM_CONFIG[sectionId];
         if (cfg) {
@@ -304,8 +243,6 @@
   window.__render.buildSkillsBlock = buildSkillsBlock;
   window.__render.renderAboutSection = renderAboutSection;
   window.__render.normalizePhoneHref = normalizePhoneHref;
-  window.__render.buildContactList = buildContactList;
-  window.__render.renderContactSection = renderContactSection;
   window.__render.renderDashboard = renderDashboard;
   window.__render.renderDriveGrid = renderDriveGrid;
   window.__render.buildBreadcrumbSeparator = buildBreadcrumbSeparator;

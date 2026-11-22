@@ -1,78 +1,209 @@
-/* ==========================================================================
-   _about.css
-   Part of components.css. Cascade position: SIXTH.
-
-   §6c about-layout + about blocks (Bio / Education / Awards / Skills).
-  Covers the portion of §6c up to the "CONTACT LIST" divider in
-   the pre-refactor file. Contact-list rules live in _contact.css.
-
-   All rules moved verbatim from the pre-refactor components.css.
-   ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   6c. ABOUT LAYOUT (portion — see _contact.css for the Contact block)
-   -------------------------------------------------------------------------- */
-.dashboard-grid.about-layout,
-.drive-grid.about-layout {
-  grid-template-columns: 1fr;
-  gap: var(--space-6);
-  max-width: 720px;
+.about-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  width: 100%;
+  max-width: 1040px;
+  margin-inline: auto;
 }
+
+.about-contact-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.about-contact-pill {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.about-contact-pill svg {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  color: var(--color-text-muted);
+}
+
+a.about-contact-pill:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-default);
+}
+
+.about-contact-pill:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.about-intro-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+}
+
+.about-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.about-status__dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  background: #54a879;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #54a879 16%, transparent);
+}
+
+.about-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.about-actions button { white-space: nowrap; }
+.about-actions svg { width: 16px; height: 16px; }
 
 .about-block {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.about-bio-card,
+.about-detail-card,
+.about-skills-section {
+  padding: var(--space-5);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .about-block__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-primary);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  padding-bottom: var(--space-2);
-  border-bottom: 1px solid var(--color-border-subtle);
 }
 
+.about-block__title svg { width: 18px; height: 18px; color: var(--color-text-muted); }
 .about-block__body { display: flex; flex-direction: column; }
 
 .about-bio__paragraph {
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
-  line-height: 1.65;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
 }
 
 .about-bio__paragraph + .about-bio__paragraph { margin-top: var(--space-3); }
 
-.about-education { display: flex; flex-direction: column; gap: var(--space-4); }
-.about-education__item { display: flex; flex-direction: column; gap: 2px; }
-.about-education__degree {
-  color: var(--color-text-primary);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
-}
-.about-education__institution {
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-}
-.about-education__years {
-  color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
+.about-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
 }
 
+.about-metric {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  min-height: 96px;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.about-metric__value {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-semibold);
+}
+
+.about-metric__label {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.about-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.about-education,
 .about-awards { display: flex; flex-direction: column; gap: var(--space-3); }
-.about-awards__item { display: flex; flex-direction: column; gap: 2px; }
+.about-education__item,
+.about-awards__item { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-1); }
+
+.about-education__degree,
 .about-awards__name {
   color: var(--color-text-primary);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-semibold);
-}
-.about-awards__meta {
-  color: var(--color-text-muted);
-  font-size: var(--font-size-xs);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 
-.about-skills { display: flex; flex-direction: column; gap: var(--space-4); }
-.about-skills__group { display: flex; flex-direction: column; gap: var(--space-2); }
+.about-education__institution,
+.about-awards__meta {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.about-education__years { color: var(--color-text-muted); font-size: var(--font-size-xs); }
+
+.about-skills {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.about-skills__group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--color-bg-surface-alt);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+}
+
 .about-skills__label {
   color: var(--color-text-muted);
   font-size: var(--font-size-xs);
@@ -80,22 +211,37 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-.about-skills__list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
+
+.about-skills__list { display: flex; flex-wrap: wrap; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
+
 .about-skills__item {
   display: inline-flex;
   align-items: center;
+  max-width: 100%;
   padding: var(--space-1) var(--space-3);
-  border-radius: var(--radius-full);
-  background-color: var(--color-bg-surface-alt);
   color: var(--color-text-secondary);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-full);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
-  border: 1px solid var(--color-border-subtle);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 900px) {
+  .about-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 560px) {
+  .about-details-grid,
+  .about-skills { grid-template-columns: minmax(0, 1fr); }
+  .about-bio-card,
+  .about-detail-card,
+  .about-skills-section { padding: var(--space-4); }
+  .about-metric { min-height: 88px; padding: var(--space-3); }
+}
+
+@media (max-width: 360px) {
+  .about-metrics { grid-template-columns: minmax(0, 1fr); }
 }
