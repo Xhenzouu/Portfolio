@@ -1,0 +1,10 @@
+export { default as meta } from './meta.js';
+export { default as sections } from './sections.js';
+export { default as about } from './about.js';
+export { default as experience } from './experience.js';
+export { default as projects } from './projects.js';
+export { default as dashboards } from './dashboards.js';
+export { default as automation } from './automation.js';
+export { default as designs } from './designs.js';
+export { default as certifications } from './certifications.js';
+export { default as trainings } from './trainings.js';

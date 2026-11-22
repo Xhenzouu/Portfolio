@@ -49,13 +49,13 @@
    Each partial's header comment notes which of its rules are dormant.
    ========================================================================== */
 
-@import url("components/_buttons.css");
-@import url("components/_sidebar.css");
-@import url("components/_folder-tree.css");
-@import url("components/_toolbar.css");
-@import url("components/_dashboard.css");
-@import url("components/_about.css");
-@import url("components/_contact.css");
-@import url("components/_card-thumbs.css");
-@import url("components/_modal.css");
-@import url("components/_drive.css");
+@import url("components/buttons.css");
+@import url("components/sidebar.css");
+@import url("components/folder-tree.css");
+@import url("components/toolbar.css");
+@import url("components/dashboard.css");
+@import url("components/about.css");
+@import url("components/contact.css");
+@import url("components/card-thumbs.css");
+@import url("components/modal.css");
+@import url("components/drive.css");

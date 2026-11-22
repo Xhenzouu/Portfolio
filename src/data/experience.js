@@ -3,10 +3,7 @@
    Experience section data. Consumed by js/data.js aggregator.
    ========================================================================== */
 
-(function () {
-  "use strict";
-
-  window.__portfolioData_experience = [
+const data = [
     {
       id: "exp-001",
       role: "Team Leader / Full-Stack Developer (Intern)",
@@ -49,4 +46,4 @@
       thumb: "assets/images/experience/consumo-enterprises.png"
     }
   ];
-})();
+export default data;

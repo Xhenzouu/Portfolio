@@ -3,10 +3,7 @@
    Identity, tagline, contact info. Consumed by js/data.js aggregator.
    ========================================================================== */
 
-(function () {
-  "use strict";
-
-  window.__portfolioData_meta = {
+const data = {
     name: "Henson Brix A. Arroyo",
     tagline: "Full-Stack Developer | AI Automation with n8n, LLM, and RAG",
     location: "Sta. Cruz, Laguna, Philippines",
@@ -18,5 +15,5 @@
       github: "https://github.com/Xhenzouu",
       portfolioUrl: "https://hensonbrix-portfolio.vercel.app"
     }
-  };
-})();
+};
+export default data;

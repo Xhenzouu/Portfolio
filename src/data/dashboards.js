@@ -4,10 +4,7 @@
    for the n8n workflow portfolio. Consumed by js/data.js aggregator.
    ========================================================================== */
 
-(function () {
-  "use strict";
-
-  window.__portfolioData_dashboards = [
+const data = [
     {
       id: "dash-lead-enrichment",
       name: "Lead Enrichment Pipeline",
@@ -119,4 +116,4 @@
       thumb: "assets/images/dashboards/10-workflow-health.png"
     }
   ];
-})();
+export default data;

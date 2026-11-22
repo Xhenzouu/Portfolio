@@ -11,10 +11,7 @@
      dental-design, poea-design-desktop.
    ========================================================================== */
 
-(function () {
-  "use strict";
-
-  window.__portfolioData_designs = [
+const data = [
     {
       id: "gdrive-redesign",
       name: "Google Drive Mobile Re-Design",
@@ -201,4 +198,4 @@
       figmaUrl: "https://www.figma.com/design/3hoEkYbBu5whMy7hxrMebq/lume-coffee-mobile?node-id=0-1&t=LW9j9BxAVLd7vIMZ-1"
     }
   ];
-})();
+export default data;

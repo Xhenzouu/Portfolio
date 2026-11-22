@@ -3,10 +3,7 @@
    Trainings section data. Consumed by js/data.js aggregator.
    ========================================================================== */
 
-(function () {
-  "use strict";
-
-  window.__portfolioData_trainings = [
+const data = [
     {
       id: "train-001",
       name: "AI Prompting for Automation Level III",
@@ -32,4 +29,4 @@
       thumb: "assets/images/trainings/php-codeigniter4.png"
     }
   ];
-})();
+export default data;

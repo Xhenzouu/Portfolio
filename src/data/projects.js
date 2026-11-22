@@ -3,10 +3,7 @@
    Projects section data. Consumed by js/data.js aggregator.
    ========================================================================== */
 
-(function () {
-  "use strict";
-
-  window.__portfolioData_projects = [
+const data = [
     {
       id: "xirv-systems",
       name: "XIRV Systems",
@@ -28,7 +25,7 @@
       repoUrl: "https://github.com/Xhenzouu/xirv-systems",
       liveUrl: null,
       featured: true,
-      thumb: "assets/images/projects/xirv-systems.png"
+      thumb: "/assets/images/projects/xirv-systems.png"
     },
     {
       id: "lynville-homes-8",
@@ -50,7 +47,7 @@
       repoUrl: "https://github.com/Xhenzouu/lynvillehomes8",
       liveUrl: null,
       featured: true,
-      thumb: "assets/images/projects/lynville-homes-8.png"
+      thumb: "/assets/images/projects/lynville-homes-8.png"
     },
     {
       id: "pila-pets",
@@ -71,7 +68,7 @@
       repoUrl: "https://github.com/Xhenzouu/pila-pets",
       liveUrl: "https://youtu.be/I4n8shvS1ZY",
       featured: false,
-      thumb: "assets/images/projects/pila-pets.png"
+      thumb: "/assets/images/projects/pila-pets.png"
     },
     {
       id: "lost-pet-ai",
@@ -93,7 +90,7 @@
       repoUrl: "https://github.com/Xhenzouu/lost-pet-ai",
       liveUrl: "https://lost-pet-ai.streamlit.app/",
       featured: true,
-      thumb: "assets/images/projects/lost-pet-ai.png"
+      thumb: "/assets/images/projects/lost-pet-ai.png"
     },
     {
       id: "gaming-rigz",
@@ -114,7 +111,7 @@
       repoUrl: "https://github.com/Xhenzouu/GamingRigz",
       liveUrl: null,
       featured: false,
-      thumb: "assets/images/projects/gaming-rigz.png"
+      thumb: "/assets/images/projects/gaming-rigz.png"
     },
     {
       id: "chairable",
@@ -138,7 +135,7 @@
       repoUrl: "https://github.com/Xhenzouu/Chairable",
       liveUrl: null,
       featured: false,
-      thumb: "assets/images/projects/chairable.png"
+      thumb: "/assets/images/projects/chairable.png"
     },
     {
       id: "lspu-events",
@@ -157,7 +154,7 @@
       repoUrl: "https://github.com/Xhenzouu/lspu-event-management-system",
       liveUrl: null,
       featured: false,
-      thumb: "assets/images/projects/lspu-events.png"
+      thumb: "/assets/images/projects/lspu-events.png"
     },
     {
       id: "employee-management-system",
@@ -176,7 +173,20 @@
       repoUrl: "https://github.com/Xhenzouu/employee-management-system",
       liveUrl: null,
       featured: false,
-      thumb: "assets/images/projects/employee-management-system.png"
+      thumb: "/assets/images/projects/employee-management-system.png"
+    },
+    {
+      id: "bookmuna",
+      name: "BookMuna",
+      category: "Full-Stack / SaaS",
+      date: "2026",
+      description: "Multi-tenant appointment-booking and scheduling platform built for local Philippine service businesses (clinics, barbershops, and cafes).",
+      tech: ["React", "TypeScript", "Tailwind CSS", "Node.js", "PostgreSQL", "Google Cloud", "Google Sign-In / OAuth"],
+      features: ["Multi-tenant appointment booking and scheduling for local Philippine service businesses"],
+      repoUrl: null,
+      liveUrl: "https://bookmuna.com",
+      featured: true,
+      thumb: "/assets/images/bookmuna-banner.png"
     }
-  ];
-})();
+];
+export default data;

@@ -12,6 +12,8 @@ desktop.ini
 # Logs and temp
 *.log
 *.tmp
+node_modules/
+dist/
 
 # Environment files (defensive — none today)
 .env

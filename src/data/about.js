@@ -4,10 +4,7 @@
    js/data.js aggregator.
    ========================================================================== */
 
-(function () {
-  "use strict";
-
-  window.__portfolioData_about = {
+const data = {
     bio: [
       "Recent BS Information Technology graduate from Laguna State Polytechnic University with a full-stack development background and hands-on experience building and deploying production platforms. Delivered a community management system serving 500+ members with 99.9% uptime, and worked across React, Node.js, PostgreSQL, and AWS with Docker, Nginx, and GitHub Actions CI/CD.",
       "Focused on AI-assisted workflow automation and cloud deployment. Experienced in designing and operating automation pipelines, integrating LLMs, and applying retrieval-augmented generation to practical business problems. Based in Sta. Cruz, Laguna, and open to remote, hybrid, or onsite roles across Metro Manila."
@@ -38,4 +35,4 @@
       other: ["PostgreSQL", "MySQL", "Git", "GitHub", "RESTful APIs", "Agile/Scrum", "Technical Documentation", "Workflow Orchestration", "Idempotent Design"]
     }
   };
-})();
+export default data;

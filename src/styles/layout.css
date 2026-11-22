@@ -149,9 +149,14 @@ html:not(.is-loading) body {
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--space-4);
+  align-items: stretch;
 }
+
+@media (max-width: 1200px) { .dashboard-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .dashboard-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .dashboard-grid { grid-template-columns: minmax(0, 1fr); } }
 
 /* Folder tree structural layout.
    The __toggle rules are DORMANT (flat tree). Kept per Phase 7.2 guardrail. */

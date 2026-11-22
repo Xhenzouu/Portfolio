@@ -7,10 +7,7 @@
    Items 11-20 are from n8n-automation-portfolio (AI/RAG/Agents).
    ========================================================================== */
 
-(function () {
-  "use strict";
-
-  window.__portfolioData_automation = [
+const data = [
     // --- PLATFORM INTEGRATION PORTFOLIO (1-10) ---
     {
       id: "hubspot-lead-enrichment-pipeline",
@@ -235,4 +232,4 @@
       thumbVariant: "contain"
     }
   ];
-})();
+export default data;

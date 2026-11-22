@@ -6,10 +6,7 @@
    credentialUrl: null. Within each group, most recent first.
    ========================================================================== */
 
-(function () {
-  "use strict";
-
-  window.__portfolioData_certifications = [
+const data = [
     {
       id: "cert-015",
       name: "Cybersecurity Professional Level 1 (Entry-Level)",
@@ -131,4 +128,4 @@
       thumb: "assets/images/certificates/arroyo-design-thinking-process-certificate.jpg"
     }
   ];
-})();
+export default data;

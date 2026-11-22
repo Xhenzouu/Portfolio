@@ -345,6 +345,25 @@
   align-items: center;
   justify-content: flex-start;
   gap: var(--space-2);
+  min-height: 24px;
+  margin: 0;
+  padding: var(--space-2) 0;
+}
+
+.modal__features > summary::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  margin-left: var(--space-1);
+  margin-right: 0;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform var(--transition-fast);
+}
+
+.modal__features[open] > summary::after {
+  transform: translateY(2px) rotate(225deg);
 }
 
 .modal__features > summary::-webkit-details-marker {
@@ -441,6 +460,24 @@
   justify-content: center;
 }
 
+.lightbox--enter .lightbox__backdrop { animation: lightbox-fade-in 220ms ease-out both; }
+.lightbox--enter .lightbox__panel { animation: lightbox-glide-in 280ms cubic-bezier(.2,.75,.25,1) both; }
+
+@keyframes lightbox-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes lightbox-glide-in {
+  from { opacity: 0; transform: translateY(18px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox--enter .lightbox__backdrop,
+  .lightbox--enter .lightbox__panel { animation-duration: 1ms; }
+}
+
 .lightbox[hidden] { display: none; }
 
 .lightbox__backdrop {
@@ -456,11 +493,13 @@
 .lightbox__panel {
   position: relative;
   z-index: 1;
-  max-width: 92vw;
-  max-height: 92vh;
+  width: 92vw;
+  height: 92vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  contain: paint;
 }
 
 .lightbox__image {
@@ -477,6 +516,13 @@
   user-select: none;
   -webkit-user-drag: none;
   touch-action: manipulation;
+  transform: scale(1);
+  transform-origin: center center;
+}
+
+.lightbox__image.is-zoomed {
+  transform: scale(1.75);
+  cursor: zoom-out;
 }
 
 /* During drag-pan, remove the transition so each mousemove is applied
@@ -504,7 +550,7 @@
   border-radius: var(--radius-full);
   cursor: pointer;
   color: var(--color-text-primary);
-  z-index: 2;
+  z-index: 3;
   box-shadow: var(--shadow-md);
   transition: background-color var(--transition-fast), border-color var(--transition-fast);
 }
